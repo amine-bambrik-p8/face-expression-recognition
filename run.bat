@@ -1,0 +1,1 @@
+python main.py configs/fer2013_exp_0.json
