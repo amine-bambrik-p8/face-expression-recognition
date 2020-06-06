@@ -197,7 +197,7 @@ class LeNet5Agent(BaseAgent):
         img_grid = torchvision.utils.make_grid(images)
         # write to tensorboard
         self.summary_writer.add_image('four_fer_images', img_grid)
-        self.writer.close()
+        self.summary_writer.close()
         self.logger.info("Please wait while finalizing the operation.. Thank you")
         self.save_checkpoint()
         self.data_loader.finalize()
