@@ -57,7 +57,11 @@ class BaseAgent:
         :return:
         """
         raise NotImplementedError
-
+    def test(self):
+        """Run test data through model
+        :return:
+        """
+        raise NotImplementedError
     def finalize(self):
         """
         Finalizes all the operations of the 2 Main classes of the process, the operator and the data loader

@@ -27,7 +27,7 @@ from tensorboardX import SummaryWriter
 cudnn.benchmark = True
 
 
-class LeNet5Agent(BaseAgent):
+class GenericAgent(BaseAgent):
 
     def __init__(self, config):
         super().__init__(config)
@@ -39,7 +39,7 @@ class LeNet5Agent(BaseAgent):
         self.data_loader = globals()[config.data_loader](config)
 
         # define loss
-        self.loss = nn.NLLLoss()
+        self.loss = nn.[config.loss_function]()
 
         # define optimizer
         self.optimizer = optim.SGD(self.model.parameters(), lr=self.config.learning_rate, momentum=self.config.momentum)
@@ -108,6 +108,7 @@ class LeNet5Agent(BaseAgent):
         :return:
         """
         state = {
+            'accuracy':self.best_accuracy,
             'epoch': self.current_epoch,
             'iteration': self.current_iteration,
             'state_dict': self.model.state_dict(),
@@ -136,10 +137,13 @@ class LeNet5Agent(BaseAgent):
         Main training loop
         :return:
         """
+        best_accuracy = 0.0
         for epoch in range(1, self.config.max_epoch + 1):
             self.train_one_epoch(epoch)
-            self.validate()
-
+            accuracy = self.validate()
+            if best_accuracy < accuracy:
+                self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% accuracy % best_accuracy)
+                self.save_checkpoint()
             self.current_epoch += 1
     def train_one_epoch(self,epoch):
         """
@@ -181,11 +185,26 @@ class LeNet5Agent(BaseAgent):
                 test_loss += self.loss(output, target).item()  # sum up batch loss
                 pred = output.max(1, keepdim=True)[1]  # get the index of the max log-probability
                 correct += pred.eq(target.view_as(pred)).sum().item()
-
         test_loss /= len(self.data_loader.valid_loader)
         self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, self.data_loader.valid_size,
             100.0*correct / self.data_loader.valid_size))
+        return 100.0*correct / self.data_loader.valid_size
+    def test(self):
+        self.model.eval()
+        test_loss = 0
+        correct = 0
+        with torch.no_grad():
+            for data, target in self.data_loader.test_loader:
+                data, target = data.to(self.device), target.to(self.device)
+                output = self.model(data)
+                test_loss += self.loss(output, target).item()  # sum up batch loss
+                pred = output.max(1, keepdim=True)[1]  # get the index of the max log-probability
+                correct += pred.eq(target.view_as(pred)).sum().item()
+        test_loss /= len(self.data_loader.test_loader)
+        self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+            test_loss, correct, self.data_loader.test_size,
+            100.0*correct / self.data_loader.test_size))
     def finalize(self):
         """
         Finalizes all the operations of the 2 Main classes of the process, the operator and the data loader
@@ -198,7 +217,7 @@ class LeNet5Agent(BaseAgent):
         # write to tensorboard
         self.summary_writer.add_image('four_fer_images', img_grid)
         self.summary_writer.close()
+        self.test()
         self.logger.info("Please wait while finalizing the operation.. Thank you")
-        self.save_checkpoint()
         self.data_loader.finalize()
         pass
