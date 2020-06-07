@@ -8,7 +8,7 @@ import shutil
 import random
 
 import torch
-from torch.nn import 
+from torch.nn import *
 from torch.backends import cudnn
 from torch.autograd import Variable
 import torch.optim as optim
