@@ -8,7 +8,7 @@ import shutil
 import random
 
 import torch
-from torch import nn
+from torch.nn import 
 from torch.backends import cudnn
 from torch.autograd import Variable
 import torch.optim as optim
@@ -39,7 +39,7 @@ class GenericAgent(BaseAgent):
         self.data_loader = globals()[config.data_loader](config)
 
         # define loss
-        self.loss = nn[config.loss_function]()
+        self.loss = globals()[config.loss_function]()
 
         # define optimizer
         self.optimizer = optim.SGD(self.model.parameters(), lr=self.config.learning_rate, momentum=self.config.momentum)
