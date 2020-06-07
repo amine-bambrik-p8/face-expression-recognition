@@ -141,7 +141,7 @@ class GenericAgent(BaseAgent):
         for epoch in range(1, self.config.max_epoch + 1):
             self.train_one_epoch(epoch)
             accuracy = self.validate()
-            if best_accuracy < accuracy:
+            if self.best_accuracy < accuracy:
                 self.best_accuracy = accuracy
                 self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (accuracy, self.best_accuracy))
                 self.save_checkpoint()
