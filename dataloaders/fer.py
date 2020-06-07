@@ -26,7 +26,8 @@ class FERDataLoader:
                                 transforms.ToTensor(),
                                 transforms.Normalize([0.5],[0.5])
                 ])
-            test_transform = transform=transforms.Compose([
+            test_transform = transforms.Compose([
+                    transforms.Grayscale(1),
                     transforms.ToTensor(),
                     transforms.Normalize((0.5),(0.5))
                 ])
