@@ -142,7 +142,7 @@ class GenericAgent(BaseAgent):
             self.train_one_epoch(epoch)
             accuracy = self.validate()
             if best_accuracy < accuracy:
-                self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% accuracy % best_accuracy)
+                self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (accuracy, best_accuracy))
                 self.save_checkpoint()
             self.current_epoch += 1
     def train_one_epoch(self,epoch):
