@@ -1,8 +1,8 @@
 {
-    "exp_name": "fer2013_exp_0",
+    "exp_name": "fer2013_exp_bn",
     "agent": "GenericAgent",
     "mode": "train",
-    "model":"LeNetVGG",
+    "model":"LeNetVGGBN",
     "cuda": true,
     "gpu_device": 0,
     "seed": 1,
@@ -20,7 +20,7 @@
     "beta1": 0.5,
     "beta2": 0.999,
   
-    "max_epoch": 50,
+    "max_epoch": 10,
   
     "log_interval": 10,
   
@@ -31,7 +31,7 @@
     "data_loader_workers": 2,
     "pin_memory": true,
     "async_loading": true,
-    "summary_dir":"./experiments/fer2013_exp_0/summaries",
+    "summary_dir":"./experiments/fer2013_exp_bn/summaries",
     "data_mode": "imgs",
     "train_datafolder": "./data/FER/train",
     "test_datafolder": "./data/FER/test"
