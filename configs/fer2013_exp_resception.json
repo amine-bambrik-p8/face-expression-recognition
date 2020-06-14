@@ -16,11 +16,11 @@
     "loss_function":"NLLLoss",
     "momentum": 0.5,
   
-    "weight_decay": 1,
+    "weight_decay": 0,
     "beta1": 0.5,
     "beta2": 0.999,
   
-    "max_epoch": 10,
+    "max_epoch": 80,
   
     "log_interval": 10,
   
