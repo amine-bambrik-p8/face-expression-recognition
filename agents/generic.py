@@ -20,7 +20,7 @@ from agents.base import BaseAgent
 from models import *
 from dataloaders import *
 
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 # from utils.metrics import AverageMeter, AverageMeterList
 # from utils.misc import print_cuda_statistics
 
@@ -42,7 +42,7 @@ class GenericAgent(BaseAgent):
         self.loss = globals()[config.loss_function]()
 
         # define optimizer
-        self.optimizer = optim.SGD(self.model.parameters(), lr=self.config.learning_rate, momentum=self.config.momentum)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.config.learning_rate,betas=(self.config.beta1,self.config.beta2),weight_decay=self.config.weight_decay)
 
         # initialize counter
         self.current_epoch = 0
@@ -217,6 +217,7 @@ class GenericAgent(BaseAgent):
         img_grid = torchvision.utils.make_grid(images)
         # write to tensorboard
         self.summary_writer.add_image('four_fer_images', img_grid)
+        self.summary_writer.add_graph(self.model, images)
         self.summary_writer.close()
         self.test()
         self.logger.info("Please wait while finalizing the operation.. Thank you")

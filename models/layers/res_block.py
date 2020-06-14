@@ -1,12 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from functools import partial
-
-class Conv2dAuto(nn.Conv2d):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.padding =  (self.kernel_size[0] // 2, self.kernel_size[1] // 2) # dynamic add padding based on the kernel_size
-        
+from models.layers.conv_auto import Conv2dAuto
 conv3x3 = partial(Conv2dAuto, kernel_size=3, bias=False)      
 
 conv = conv3x3(in_channels=32, out_channels=64)
@@ -46,7 +41,7 @@ class ResNetResidualBlock(ResidualBlock):
         self.shortcut = nn.Sequential(
             nn.Conv2d(self.in_channels, self.expanded_channels, kernel_size=1,
                       stride=self.downsampling, bias=False),
-            nn.BatchNorm2d(self.expanded_channels)) if self.should_apply_shortcut else None        
+            nn.BatchNorm2d(self.expanded_channels)) if self.should_apply_shortcut else nn.Identity()        
     @property
     def expanded_channels(self):
         return self.out_channels * self.expansion

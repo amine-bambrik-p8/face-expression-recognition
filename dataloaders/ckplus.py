@@ -22,8 +22,9 @@ class CKPlusDataLoader:
             dataset = torchvision.datasets.ImageFolder(
                 root=self.config.data_folder,
                 transform=transforms.Compose([
+                    transforms.Grayscale(1),
                     transforms.ToTensor(),
-                    transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))
+                    transforms.Normalize((0.5),(0.5))
                 ])
             )
             num_train = len(dataset)

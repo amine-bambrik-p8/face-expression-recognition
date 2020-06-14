@@ -1,0 +1,39 @@
+{
+    "exp_name": "fer2013_exp_inception",
+    "agent": "GenericAgent",
+    "mode": "train",
+    "model":"LeNetInception",
+    "cuda": true,
+    "gpu_device": 0,
+    "seed": 1,
+    "valid_size":0.2,
+    "some_model_attribute": 0,
+  
+    "batch_size": 16,
+    "test_batch_size": 1000,
+  
+    "learning_rate": 0.0003,
+    "loss_function":"NLLLoss",
+    "momentum": 0.5,
+  
+    "weight_decay": 0,
+    "beta1": 0.5,
+    "beta2": 0.999,
+  
+    "max_epoch": 10,
+  
+    "log_interval": 10,
+  
+    "validate_every": 2,
+  
+    "checkpoint_file": "checkpoint.pth.tar",
+    "data_loader": "FERDataLoader",
+    "data_loader_workers": 2,
+    "pin_memory": true,
+    "async_loading": true,
+    "summary_dir":"./experiments/fer2013_exp_inception/summaries",
+    "data_mode": "imgs",
+    "train_datafolder": "./data/FER/train",
+    "test_datafolder": "./data/FER/test"
+
+}
