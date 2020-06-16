@@ -16,7 +16,6 @@ import torchvision
 import torch.nn.functional as F
 
 from agents.base import BaseAgent
-
 from models import *
 from dataloaders import *
 
@@ -164,7 +163,7 @@ class GenericAgent(BaseAgent):
                 running_loss=running_loss / self.config.log_interval
                 self.summary_writer.add_scalar('training_loss',
                             running_loss,
-                            self.current_epoch * len(self.data_loader.train_loader) + batch_idx)
+                            self.current_epoch)
                 self.logger.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     self.current_epoch,self.config.batch_size * batch_idx,  self.data_loader.train_size,
                            100.0*self.config.batch_size * batch_idx / self.data_loader.train_size, running_loss))
@@ -189,7 +188,7 @@ class GenericAgent(BaseAgent):
         accuracy = 100.0*correct / self.data_loader.valid_size
         self.summary_writer.add_scalar('validation_loss',
                             test_loss,
-                            self.current_epoch * len(self.data_loader.valid_loader) + batch_idx)
+                            self.current_epoch )
         self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, self.data_loader.valid_size,
             accuracy))
