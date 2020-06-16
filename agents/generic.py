@@ -42,7 +42,7 @@ class GenericAgent(BaseAgent):
         self.loss = globals()[config.loss_function]()
 
         # define optimizer
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.config.learning_rate,betas=(self.config.beta1,self.config.beta2),weight_decay=self.config.weight_decay)
+        self.optimizer = optim.SGD(self.model.parameters(), lr=self.config.learning_rate,weight_decay=self.config.weight_decay)
 
         # initialize counter
         self.current_epoch = 0
@@ -87,7 +87,7 @@ class GenericAgent(BaseAgent):
         try:
             self.logger.info("Loading checkpoint '{}'".format(filename))
             checkpoint = torch.load(filename)
-
+            self.best_metric = checkpoint['accuracy']
             self.current_epoch = checkpoint['epoch']
             self.current_iteration = checkpoint['iteration']
             self.model.load_state_dict(checkpoint['state_dict'])
@@ -108,7 +108,7 @@ class GenericAgent(BaseAgent):
         :return:
         """
         state = {
-            'accuracy':self.best_accuracy,
+            'accuracy':self.best_metric,
             'epoch': self.current_epoch,
             'iteration': self.current_iteration,
             'state_dict': self.model.state_dict(),
@@ -137,16 +137,15 @@ class GenericAgent(BaseAgent):
         Main training loop
         :return:
         """
-        self.best_accuracy = 0.0
         for epoch in range(1, self.config.max_epoch + 1):
-            self.train_one_epoch(epoch)
+            self.train_one_epoch()
             accuracy = self.validate()
-            if self.best_accuracy < accuracy:
-                self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (accuracy, self.best_accuracy))
-                self.best_accuracy = accuracy
+            if self.best_metric < accuracy:
+                self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (accuracy, self.best_metric))
+                self.best_metric = accuracy
                 self.save_checkpoint()
             self.current_epoch += 1
-    def train_one_epoch(self,epoch):
+    def train_one_epoch(self):
         """
         One epoch of training
         :return:
@@ -165,7 +164,7 @@ class GenericAgent(BaseAgent):
                 running_loss=running_loss / self.config.log_interval
                 self.summary_writer.add_scalar('training_loss',
                             running_loss,
-                            epoch * len(self.data_loader.train_loader) + batch_idx)
+                            self.current_epoch * len(self.data_loader.train_loader) + batch_idx)
                 self.logger.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     self.current_epoch,self.config.batch_size * batch_idx,  self.data_loader.train_size,
                            100.0*self.config.batch_size * batch_idx / self.data_loader.train_size, running_loss))
@@ -187,10 +186,14 @@ class GenericAgent(BaseAgent):
                 pred = output.max(1, keepdim=True)[1]  # get the index of the max log-probability
                 correct += pred.eq(target.view_as(pred)).sum().item()
         test_loss /= len(self.data_loader.valid_loader)
+        accuracy = 100.0*correct / self.data_loader.valid_size
+        self.summary_writer.add_scalar('validation_loss',
+                            test_loss,
+                            self.current_epoch * len(self.data_loader.valid_loader) + batch_idx)
         self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, self.data_loader.valid_size,
-            100.0*correct / self.data_loader.valid_size))
-        return 100.0*correct / self.data_loader.valid_size
+            accuracy))
+        return accuracy
     def test(self):
         self.model.eval()
         test_loss = 0
@@ -203,9 +206,11 @@ class GenericAgent(BaseAgent):
                 pred = output.max(1, keepdim=True)[1]  # get the index of the max log-probability
                 correct += pred.eq(target.view_as(pred)).sum().item()
         test_loss /= len(self.data_loader.test_loader)
+        accuracy = 100.0*correct / self.data_loader.test_size
         self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, self.data_loader.test_size,
-            100.0*correct / self.data_loader.test_size))
+            accuracy))
+        return accuracy
     def finalize(self):
         """
         Finalizes all the operations of the 2 Main classes of the process, the operator and the data loader
@@ -216,7 +221,7 @@ class GenericAgent(BaseAgent):
         # create grid of images
         img_grid = torchvision.utils.make_grid(images)
         # write to tensorboard
-        self.summary_writer.add_image('four_fer_images', img_grid)
+        self.summary_writer.add_image('one_batch_of_fer_images(%d)' % self.config.batch_size, img_grid)
         self.summary_writer.add_graph(self.model, images)
         self.summary_writer.close()
         self.test()

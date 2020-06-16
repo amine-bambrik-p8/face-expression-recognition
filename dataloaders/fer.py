@@ -24,12 +24,10 @@ class FERDataLoader:
                                 transforms.RandomRotation(30),
                                 transforms.RandomHorizontalFlip(p=0.5),
                                 transforms.ToTensor(),
-                                transforms.Normalize([0.5],[0.5])
                 ])
             test_transform = transforms.Compose([
                     transforms.Grayscale(1),
                     transforms.ToTensor(),
-                    transforms.Normalize((0.5),(0.5))
                 ])
             train_dataset = torchvision.datasets.ImageFolder(
                 root=self.config.train_datafolder,

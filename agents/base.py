@@ -44,14 +44,14 @@ class BaseAgent:
         """
         raise NotImplementedError
 
-    def train_one_epoch(self):
+    def train_one_epoch(self,epoch):
         """
         One epoch of training
         :return:
         """
         raise NotImplementedError
 
-    def validate(self):
+    def validate(self,epoch):
         """
         One cycle of model validation
         :return:
