@@ -5,7 +5,7 @@ from utils.config import *
 from setup import process_config
 from setup import setup_logging
 
-from agents import *;
+from agents import *
 
 
 

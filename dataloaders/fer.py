@@ -9,59 +9,41 @@ from torchvision import datasets, transforms
 import numpy as np
 from torch.utils.data import DataLoader, TensorDataset, Dataset
 from torch.utils.data.sampler import SubsetRandomSampler
+from dataloaders.transforms import *
 
-class FERDataLoader:
+class ImageFERDataLoader:
     def __init__(self, config):
         """
         :param config:
         """
         self.config = config
-        if self.config.data_mode == "download":
-            raise NotImplementedError("This mode is not implemented YET")
-        elif self.config.data_mode == "imgs":
-            train_transform = transforms.Compose([
-                                transforms.Grayscale(1),
-                                transforms.RandomRotation(30),
-                                transforms.RandomHorizontalFlip(p=0.5),
-                                transforms.ToTensor(),
-                ])
-            test_transform = transforms.Compose([
-                    transforms.Grayscale(1),
-                    transforms.ToTensor(),
-                ])
-            train_dataset = torchvision.datasets.ImageFolder(
-                root=self.config.train_datafolder,
-                transform=train_transform
+        test_transform_m = globals()[config.test_transform]
+        train_transform_m = globals()[config.train_transform]
+        train_transform = getattr(train_transform_m,"transform")()
+        test_transform = getattr(test_transform_m,"transform")()
+        train_dataset = torchvision.datasets.ImageFolder(
+            root=self.config.train_datafolder,
+            transform=train_transform
+        )
+        test_dataset = torchvision.datasets.ImageFolder(
+            root=self.config.test_datafolder,
+            transform=test_transform,
             )
-            test_dataset = torchvision.datasets.ImageFolder(
-                root=self.config.test_datafolder,
-                transform=test_transform
-                )
-            num_train = len(train_dataset)
-            self.valid_size = int(num_train * self.config.valid_size)
-            self.train_size = num_train - self.valid_size
-            self.test_size = len(test_dataset)
-            valid_idx,train_idx, = torch.utils.data.random_split(range(num_train),[
-                self.valid_size,
-                self.train_size
-                ]
-            )
-            
-            train_sampler = SubsetRandomSampler(train_idx.indices)
-            valid_sampler = SubsetRandomSampler(valid_idx.indices)        
-            self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,sampler=train_sampler)
-            self.test_loader = torch.utils.data.DataLoader(test_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers)
-            self.valid_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,sampler=valid_sampler)
-            self.classes =sorted(("angry","disgust","fear","happy","sad","surprise","neutral"))
-            
-        elif self.config.data_mode == "numpy":
-            raise NotImplementedError("This mode is not implemented YET")
-
-        elif config.data_mode == "random":
-            raise NotImplementedError("This mode is not implemented YET")
-
-        else:
-            raise Exception("Please specify in the json a specified mode in data_mode")
+        num_train = len(train_dataset)
+        self.valid_size = int(num_train * self.config.valid_size)
+        self.train_size = num_train - self.valid_size
+        self.test_size = len(test_dataset)
+        valid_idx,train_idx, = torch.utils.data.random_split(range(num_train),[
+            self.valid_size,
+            self.train_size
+            ]
+        )
+        train_sampler = SubsetRandomSampler(train_idx.indices)
+        valid_sampler = SubsetRandomSampler(valid_idx.indices)
+        self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,sampler=train_sampler)
+        self.test_loader = torch.utils.data.DataLoader(test_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
+        self.valid_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,sampler=valid_sampler)
+        self.classes =sorted(("angry","disgust","fear","happy","sad","surprise","neutral"))
 
     def plot_samples_per_epoch(self, batch, epoch):
         """
