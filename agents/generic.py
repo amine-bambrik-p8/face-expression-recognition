@@ -191,7 +191,7 @@ class GenericAgent(BaseAgent):
         total_running_loss /= len(self.data_loader.train_loader)
         accuracy = 100* correct / total
         self.logger.info('\Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-            valid_loss, correct, total,
+            total_running_loss, correct, total,
             accuracy))
         return (total_running_loss,accuracy)
     def validate(self):
