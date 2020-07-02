@@ -3,9 +3,9 @@ import torch.nn.functional as F
 def dec_block(in_f, out_f):
     return nn.Sequential(
         nn.Linear(in_f, out_f),
+        nn.ReLU(),
         nn.Dropout(0.1),
-        nn.BatchNorm1d(out_f),
-        nn.ReLU()
+        nn.BatchNorm1d(out_f)
     )
 class BasicDecoderBNDO(nn.Module):
     def __init__(self, dec_sizes, n_classes):
