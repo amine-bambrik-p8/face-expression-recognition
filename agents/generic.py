@@ -179,8 +179,8 @@ class GenericAgent(BaseAgent):
                 _,pred = output.max(1)  # get the index of the max log-probability
                 correct += pred.eq(target).sum().item()
                 total += target.size(0)
-                self.predictions = np.append(self.predictions,pred.numpy())
-                self.labels = np.append(self.labels,target.numpy())
+                self.predictions = np.append(self.predictions,pred.cpu().numpy())
+                self.labels = np.append(self.labels,target.cpu().numpy())
             if batch_idx % self.config.log_interval == self.config.log_interval-1:
                 running_loss=running_loss / self.config.log_interval
                 self.logger.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
