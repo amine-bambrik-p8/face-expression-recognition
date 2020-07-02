@@ -19,6 +19,7 @@ from agents.base import BaseAgent
 from models import *
 from dataloaders import *
 from agents.optimizers import *
+from torch.utils.tensorboard import SummaryWriter
 
 cudnn.benchmark = True
 
@@ -47,7 +48,8 @@ class GenericAgent(BaseAgent):
         self.current_epoch = 0
         self.current_iteration = 0
         self.best_metric = 0
-
+        self.predictions = np.array([])
+        self.labels = np.array([])
 
 
 
@@ -72,6 +74,7 @@ class GenericAgent(BaseAgent):
             torch.manual_seed(self.manual_seed)
             self.logger.info("Program will run on *****CPU***** Using {} model\n".format(config.model))
 
+        self.summary_writer = SummaryWriter(log_dir="./experiments/{}/summaries".format(self.config.exp_name), comment=self.config.model)
 
 
 
@@ -135,9 +138,17 @@ class GenericAgent(BaseAgent):
         :return:
         """
         for epoch in range(1, self.config.max_epoch + 1):
-            self.train_one_epoch()
+            (train_loss,train_accuracy) = self.train_one_epoch()
             if epoch % self.config.validate_every == self.config.validate_every-1:
-                accuracy = self.validate()
+                (loss,accuracy) = self.validate()
+                self.summary_writer.add_scalars('accuracy', {
+                        'training':train_accuracy,
+                        'validation':accuracy
+                        }, epoch)
+                self.summary_writer.add_scalars('loss', {
+                        'training':train_loss,
+                        'validation':loss
+                        }, epoch)
                 if self.best_metric < accuracy:
                     self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (accuracy, self.best_metric))
                     self.best_metric = accuracy
@@ -150,6 +161,9 @@ class GenericAgent(BaseAgent):
         :return:
         """
         running_loss = 0.0
+        correct = 0
+        total = 0
+        total_running_loss = 0.0
         self.model.train()
         for batch_idx, (data, target) in enumerate(self.data_loader.train_loader):
             data, target = data.to(self.device), target.to(self.device)
@@ -157,18 +171,29 @@ class GenericAgent(BaseAgent):
 
             output = self.model(data)
             loss = self.loss(output, target)
-            running_loss += loss.item()
             loss.backward()
             self.optimizer.step()
-
+            with torch.no_grad():
+                running_loss += loss.item()
+                total_running_loss += running_loss
+                _,pred = output.max(1)  # get the index of the max log-probability
+                correct += pred.eq(target).sum().item()
+                total += target.size(0)
+                self.predictions = np.append(self.predictions,pred.numpy())
+                self.labels = np.append(self.labels,target.numpy())
             if batch_idx % self.config.log_interval == self.config.log_interval-1:
                 running_loss=running_loss / self.config.log_interval
                 self.logger.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    self.current_epoch,self.config.batch_size * batch_idx,  self.data_loader.train_size,
-                           100.0*self.config.batch_size * batch_idx / self.data_loader.train_size, running_loss))
+                    self.current_epoch,total,  self.data_loader.train_size,
+                           100.0*total / self.data_loader.train_size, running_loss))
                 running_loss=0.0
-            
             self.current_iteration += 1
+        total_running_loss /= len(self.data_loader.train_loader)
+        accuracy = 100* correct / total
+        self.logger.info('\Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+            valid_loss, correct, total,
+            accuracy))
+        return (total_running_loss,accuracy)
     def validate(self):
         """
         One cycle of model validation
@@ -177,21 +202,22 @@ class GenericAgent(BaseAgent):
         self.model.eval()
         valid_loss = 0
         correct = 0
+        total = 0
         with torch.no_grad():
             for data, target in self.data_loader.valid_loader:
                 data, target = data.to(self.device), target.to(self.device)
-
+                
                 output = self.model(data)
                 valid_loss += self.loss(output, target).item()  # sum up batch loss
-                pred = output.max(1, keepdim=True)[1]  # get the index of the max log-probability
-                correct += pred.eq(target.view_as(pred)).sum().item()
-
+                _,pred = output.max(1)  # get the index of the max log-probability
+                correct += pred.eq(target).sum().item()
+                total += target.size(0)
         valid_loss /= len(self.data_loader.valid_loader)
-        accuracy = 100.0*correct / self.data_loader.valid_size
-        self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-            valid_loss, correct, self.data_loader.valid_size,
+        accuracy = 100.0*correct / total
+        self.logger.info('\nValid set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+            valid_loss, correct, total,
             accuracy))
-        return accuracy
+        return (valid_loss,accuracy)
     def test(self):
         self.model.eval()
         test_loss = 0
@@ -215,6 +241,7 @@ class GenericAgent(BaseAgent):
         Finalizes all the operations of the 2 Main classes of the process, the operator and the data loader
         :return:
         """
+        self.summary_writer.close()
         self.logger.info("Please wait while finalizing the operation.. Thank you")
         self.data_loader.finalize()
         pass
