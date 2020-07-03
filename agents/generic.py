@@ -144,11 +144,11 @@ class GenericAgent(BaseAgent):
                 self.summary_writer.add_scalars('accuracy', {
                         'training':train_accuracy,
                         'validation':accuracy
-                        }, epoch)
+                        }, self.current_epoch)
                 self.summary_writer.add_scalars('loss', {
                         'training':train_loss,
                         'validation':loss
-                        }, epoch)
+                        }, self.current_epoch)
                 if self.best_metric < accuracy:
                     self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (accuracy, self.best_metric))
                     self.best_metric = accuracy
@@ -175,7 +175,7 @@ class GenericAgent(BaseAgent):
             self.optimizer.step()
             with torch.no_grad():
                 running_loss += loss.item()
-                total_running_loss += running_loss
+                total_running_loss += loss.item()
                 _,pred = output.max(1)  # get the index of the max log-probability
                 correct += pred.eq(target).sum().item()
                 total += target.size(0)
