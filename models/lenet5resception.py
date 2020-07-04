@@ -56,5 +56,5 @@ class LeNetResCeptionNet(nn.Module):
     def forward(self, x):
         x = self.encoder(x)
         x = self.decoder(x)
-        return x
+        return F.log_softmax(x,dim=1)
 
