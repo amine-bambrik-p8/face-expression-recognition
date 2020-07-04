@@ -13,4 +13,5 @@ class BasicDecoderBN(nn.Module):
                     for in_f, out_f in zip(dec_sizes, dec_sizes[1:])])
         self.last = nn.Linear(dec_sizes[-1], n_classes)
     def forward(self, x):
-        return self.dec_blocks(x)
+        x = self.dec_blocks(x)
+        return self.last(x)
