@@ -10,7 +10,7 @@ import numpy as np
 from torch.utils.data import DataLoader, TensorDataset, Dataset
 from torch.utils.data.sampler import SubsetRandomSampler
 from dataloaders.transforms import *
-
+from utils.project_data import project_data
 class ImageFERDataLoader:
     def __init__(self, config):
         """
@@ -44,37 +44,24 @@ class ImageFERDataLoader:
         self.test_loader = torch.utils.data.DataLoader(test_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
         self.valid_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,sampler=valid_sampler)
         self.classes =sorted(("angry","disgust","fear","happy","sad","surprise","neutral"))
+    def visualize_images(self,writer):
+        train_dataiter = iter(self.train_loader)
+        test_dataiter = iter(self.test_loader)
+        images, labels = train_dataiter.next()
 
-    def plot_samples_per_epoch(self, batch, epoch):
-        """
-        Plotting the batch images
-        :param batch: Tensor of shape (B,C,H,W)
-        :param epoch: the number of current epoch
-        :return: img_epoch: which will contain the image of this epoch
-        """
-        img_epoch = '{}samples_epoch_{:d}.png'.format(self.config.out_dir, epoch)
-        v_utils.save_image(batch,
-                           img_epoch,
-                           nrow=4,
-                           padding=2,
-                           normalize=True)
-        return imageio.imread(img_epoch)
-
-    def make_gif(self, epochs):
-        """
-        Make a gif from a multiple images of epochs
-        :param epochs: num_epochs till now
-        :return:
-        """
-        gen_image_plots = []
-        for epoch in range(epochs + 1):
-            img_epoch = '{}samples_epoch_{:d}.png'.format(self.config.out_dir, epoch)
-            try:
-                gen_image_plots.append(imageio.imread(img_epoch))
-            except OSError as e:
-                pass
-
-        imageio.mimsave(self.config.out_dir + 'animation_epochs_{:d}.gif'.format(epochs), gen_image_plots, fps=2)
-
+        # create grid of images
+        train_img_grid = torchvision.utils.make_grid(images)
+        
+        images, labels = test_dataiter.next()
+        test_img_grid = torchvision.utils.make_grid(images)
+        
+        # write to tensorboard
+        writer.add_image('%s Train Data: %s transfrom'%(self.config.exp_name,self.config.train_transform), train_img_grid)
+        writer.add_image('%s Test Data: %s transfrom'%(self.config.exp_name,self.config.test_transform), test_img_grid)
+    def project_data(self,writer):
+        project_data(writer,self.train_loader,self.classes)
+    def visualize(self,writer):
+        self.visualize_images(writer)
+        self.project_data(writer)
     def finalize(self):
         pass
