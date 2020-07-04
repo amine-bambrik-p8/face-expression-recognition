@@ -48,8 +48,8 @@ class GenericAgent(BaseAgent):
         self.current_epoch = 0
         self.current_iteration = 0
         self.best_metric = 0
-        self.predictions = np.array([])
-        self.labels = np.array([])
+        self.predictions = torch.tensor([],dtype=torch.int)
+        self.labels = torch.tensor([],dtype=torch.int)
 
 
 
@@ -140,21 +140,30 @@ class GenericAgent(BaseAgent):
         for epoch in range(1, self.config.max_epoch + 1):
             (train_loss,train_accuracy) = self.train_one_epoch()
             if epoch % self.config.validate_every == self.config.validate_every-1:
-                (loss,accuracy) = self.validate()
+                (valid_loss,valid_accuracy) = self.validate()
                 self.summary_writer.add_scalars('accuracy', {
                         'training':train_accuracy,
-                        'validation':accuracy
+                        'validation':valid_loss
                         },global_step=self.current_epoch)
                 self.summary_writer.add_scalars('loss', {
                         'training':train_loss,
-                        'validation':loss
+                        'validation':valid_loss
                         },global_step=self.current_epoch)
-                if self.best_metric < accuracy:
-                    self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (accuracy, self.best_metric))
-                    self.best_metric = accuracy
+                if self.best_metric < valid_accuracy:
+                    self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (valid_accuracy, self.best_metric))
+                    self.best_metric = valid_accuracy
                     self.save_checkpoint()
             self.current_epoch += 1
-        
+    def output_to_probs(self, output):
+        '''
+        Generates predictions and corresponding probabilities from a trained
+        network and a list of images
+        '''
+        # convert output probabilities to predicted class
+        _, preds_tensor = torch.max(output, 1)
+        preds = preds_tensor.squeeze()
+        return preds, [torch.exp(el)[i].item() for i, el in zip(preds, output)]
+    
     def train_one_epoch(self):
         """
         One epoch of training
@@ -176,11 +185,11 @@ class GenericAgent(BaseAgent):
             with torch.no_grad():
                 running_loss += loss.item()
                 total_running_loss += loss.item()
-                _,pred = output.max(1)  # get the index of the max log-probability
-                correct += pred.eq(target).sum().item()
+                pred,_ = self.output_to_probs(output)
+                correct += (pred == target).sum().item()
                 total += target.size(0)
-                self.predictions = np.append(self.predictions,pred.cpu().numpy())
-                self.labels = np.append(self.labels,target.cpu().numpy())
+                self.predictions = torch.cat((self.predictions,pred),dim=0)
+                self.labels = torch.cat((self.labels,target),dim=0)
             if batch_idx % self.config.log_interval == self.config.log_interval-1:
                 running_loss=running_loss / self.config.log_interval
                 self.logger.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
@@ -188,8 +197,7 @@ class GenericAgent(BaseAgent):
                            100.0*total / self.data_loader.train_size, running_loss))
                 running_loss=0.0
             self.current_iteration += 1
-        total_running_loss /= len(self.data_loader.train_loader)
-        accuracy = 100* correct / total
+        accuracy = 100*correct/total
         self.logger.info('\Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             total_running_loss, correct, total,
             accuracy))
@@ -209,10 +217,13 @@ class GenericAgent(BaseAgent):
                 
                 output = self.model(data)
                 valid_loss += self.loss(output, target).item()  # sum up batch loss
-                _,pred = output.max(1)  # get the index of the max log-probability
+                
+                pred,_=self.output_to_probs(output)
                 correct += pred.eq(target).sum().item()
                 total += target.size(0)
-        valid_loss /= len(self.data_loader.valid_loader)
+        
+        number_of_batches = len(self.data_loader.valid_loader)
+        valid_loss /= number_of_batches
         accuracy = 100.0*correct / total
         self.logger.info('\nValid set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             valid_loss, correct, total,
@@ -222,17 +233,19 @@ class GenericAgent(BaseAgent):
         self.model.eval()
         test_loss = 0
         correct = 0
+        total = 0
         with torch.no_grad():
             for data, target in self.data_loader.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
                 output = self.model(data)
                 test_loss += self.loss(output, target).item()  # sum up batch loss
-                pred = output.max(1, keepdim=True)[1]  # get the index of the max log-probability
-                correct += pred.eq(target.view_as(pred)).sum().item()
+                pred,_=self.output_to_probs(output)
+                correct += pred.eq(target).sum().item()
+                total += target.size(0)
         test_loss /= len(self.data_loader.test_loader)
-        accuracy = 100.0*correct / self.data_loader.test_size
+        accuracy = 100.0*correct / total
         self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-            test_loss, correct, self.data_loader.test_size,
+            test_loss, correct, total,
             accuracy))
         return accuracy
     
@@ -240,6 +253,7 @@ class GenericAgent(BaseAgent):
         self.data_loader.visualize(self.summary_writer)
         dataiter = iter(self.data_loader.train_loader)
         images,_ = next(dataiter)
+        images = images.to(self.device)
         self.summary_writer.add_graph(self.model, images)
         
     def finalize(self):
