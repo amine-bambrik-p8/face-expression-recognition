@@ -144,11 +144,11 @@ class GenericAgent(BaseAgent):
                 self.summary_writer.add_scalars('accuracy', {
                         'training':train_accuracy,
                         'validation':accuracy
-                        }, self.current_epoch)
+                        },global_step=self.current_epoch)
                 self.summary_writer.add_scalars('loss', {
                         'training':train_loss,
                         'validation':loss
-                        }, self.current_epoch)
+                        },global_step=self.current_epoch)
                 if self.best_metric < accuracy:
                     self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (accuracy, self.best_metric))
                     self.best_metric = accuracy
@@ -235,7 +235,13 @@ class GenericAgent(BaseAgent):
             test_loss, correct, self.data_loader.test_size,
             accuracy))
         return accuracy
-            
+    
+    def visualize(self):
+        self.data_loader.visualize(self.summary_writer)
+        dataiter = iter(self.data_loader.train_loader)
+        images,_ = next(dataiter)
+        self.summary_writer.add_graph(self.model, images)
+        
     def finalize(self):
         """
         Finalizes all the operations of the 2 Main classes of the process, the operator and the data loader
