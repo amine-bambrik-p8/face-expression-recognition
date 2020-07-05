@@ -20,6 +20,8 @@ from models import *
 from dataloaders import *
 from agents.optimizers import *
 from torch.utils.tensorboard import SummaryWriter
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
 
 cudnn.benchmark = True
 
@@ -160,9 +162,9 @@ class GenericAgent(BaseAgent):
         network and a list of images
         '''
         # convert output probabilities to predicted class
-        _, preds_tensor = torch.max(output, 1)
+        log_probs, preds_tensor = torch.max(output, 1)
         preds = preds_tensor.squeeze()
-        return preds, [torch.exp(el)[i].item() for i, el in zip(preds, output)]
+        return preds, torch.exp(log_probs)
     
     def train_one_epoch(self):
         """
@@ -188,8 +190,6 @@ class GenericAgent(BaseAgent):
                 pred,_ = self.output_to_probs(output)
                 correct += (pred == target).sum().item()
                 total += target.size(0)
-                self.predictions = torch.cat((self.predictions,pred),dim=0)
-                self.labels = torch.cat((self.labels,target),dim=0)
             if batch_idx % self.config.log_interval == self.config.log_interval-1:
                 running_loss=running_loss / self.config.log_interval
                 self.logger.info('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
@@ -248,7 +248,6 @@ class GenericAgent(BaseAgent):
             test_loss, correct, total,
             accuracy))
         return accuracy
-    
     def visualize(self):
         self.data_loader.visualize(self.summary_writer)
         dataiter = iter(self.data_loader.train_loader)
