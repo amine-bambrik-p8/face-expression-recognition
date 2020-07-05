@@ -253,7 +253,8 @@ class GenericAgent(BaseAgent):
         self.data_loader.visualize(self.summary_writer)
         dataiter = iter(self.data_loader.train_loader)
         images,_ = next(dataiter)
-        images = images.to(self.device)
+        images = images.cpu()
+        self.model = self.model.cpu()
         self.summary_writer.add_graph(self.model, images)
         
     def finalize(self):
