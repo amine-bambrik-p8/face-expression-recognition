@@ -14,7 +14,7 @@ def same_conv_block(in_f,out_f,kernel_size=(3,3),*args,**kwargs):
 def conv_block(in_f, out_f,kernel_size,*args, **kwargs):
     return nn.Sequential(
         nn.Conv2d(in_f, out_f,kernel_size=kernel_size, *args, **kwargs),
-        nn.BatchNorm2d(out_f)
+        nn.BatchNorm2d(out_f),
         nn.ReLU(inplace=True)
     )
 def stack_block(in_f, out_f,kernel_size,depth=1,*args, **kwargs):
