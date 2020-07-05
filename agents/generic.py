@@ -22,7 +22,7 @@ from agents.optimizers import *
 from torch.utils.tensorboard import SummaryWriter
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
-
+from utils.plot_confusion_matrix import plot_confusion_matrix
 cudnn.benchmark = True
 
 
@@ -198,6 +198,8 @@ class GenericAgent(BaseAgent):
                 running_loss=0.0
             self.current_iteration += 1
         accuracy = 100*correct/total
+        number_of_batches = len(self.data_loader.train_loader)
+        total_running_loss /= 
         self.logger.info('\Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             total_running_loss, correct, total,
             accuracy))
@@ -234,6 +236,8 @@ class GenericAgent(BaseAgent):
         test_loss = 0
         correct = 0
         total = 0
+        predictions = None
+        labels = None
         with torch.no_grad():
             for data, target in self.data_loader.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
@@ -242,8 +246,19 @@ class GenericAgent(BaseAgent):
                 pred,_=self.output_to_probs(output)
                 correct += pred.eq(target).sum().item()
                 total += target.size(0)
+                if predictions is not None:
+                    predictions = np.concatenate((predictions, pred.cpu().numpy()), axis=None)
+                    labels = np.concatenate((labels,target.cpu().numpy()),axis=None)
+                else:
+                    predictions = pred.cpu().numpy()
+                    labels =target.cpu().numpy()
         test_loss /= len(self.data_loader.test_loader)
         accuracy = 100.0*correct / total
+        print(classification_report(labels, predictions, target_names=self.data_loader.classes))
+        cm=confusion_matrix(labels, predictions, labels=range(len(self.data_loader.classes)))
+        print(cm)
+        fig = plot_confusion_matrix(cm,self.data_loader.classes)
+        self.summary_writer.add_figure("Confusion matrix",fig)
         self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, total,
             accuracy))
@@ -255,7 +270,7 @@ class GenericAgent(BaseAgent):
         images = images.cpu()
         self.model = self.model.cpu()
         self.summary_writer.add_graph(self.model, images)
-        
+    
     def finalize(self):
         """
         Finalizes all the operations of the 2 Main classes of the process, the operator and the data loader
