@@ -38,7 +38,7 @@ class ImageFERDataLoader:
         self.valid_size = len(valid_dataset)
         self.train_size = len(train_dataset)
         self.test_size = len(test_dataset)
-        self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
+        self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,shuffle=True)
         self.test_loader = torch.utils.data.DataLoader(test_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
         self.valid_loader = torch.utils.data.DataLoader(valid_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
         self.classes =sorted(("angry","disgust","fear","happy","sad","surprise","neutral"))
