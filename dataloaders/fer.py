@@ -19,30 +19,28 @@ class ImageFERDataLoader:
         self.config = config
         test_transform_m = globals()[config.test_transform]
         train_transform_m = globals()[config.train_transform]
+        valid_transform_m = globals()[config.valid_transform]
         train_transform = getattr(train_transform_m,"transform")()
+        valid_transform = getattr(valid_transform_m,"transform")()
         test_transform = getattr(test_transform_m,"transform")()
         train_dataset = torchvision.datasets.ImageFolder(
             root=self.config.train_datafolder,
             transform=train_transform
         )
+        valid_dataset = torchvision.datasets.ImageFolder(
+            root=self.config.valid_datafolder,
+            transform=valid_transform
+        )
         test_dataset = torchvision.datasets.ImageFolder(
             root=self.config.test_datafolder,
             transform=test_transform,
             )
-        num_train = len(train_dataset)
-        self.valid_size = int(num_train * self.config.valid_size)
-        self.train_size = num_train - self.valid_size
+        self.valid_size = len(valid_dataset)
+        self.train_size = len(train_dataset)
         self.test_size = len(test_dataset)
-        valid_idx,train_idx, = torch.utils.data.random_split(range(num_train),[
-            self.valid_size,
-            self.train_size
-            ]
-        )
-        train_sampler = SubsetRandomSampler(train_idx.indices)
-        valid_sampler = SubsetRandomSampler(valid_idx.indices)
-        self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,sampler=train_sampler)
+        self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
         self.test_loader = torch.utils.data.DataLoader(test_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
-        self.valid_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,sampler=valid_sampler)
+        self.valid_loader = torch.utils.data.DataLoader(valid_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
         self.classes =sorted(("angry","disgust","fear","happy","sad","surprise","neutral"))
     def visualize_images(self,writer):
         train_dataiter = iter(self.train_loader)
