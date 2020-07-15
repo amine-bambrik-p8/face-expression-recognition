@@ -42,7 +42,7 @@ class ImageFERDataLoaderWeighted:
         weights = self.make_weights_for_balanced_classes(train_dataset.imgs,len(train_dataset.classes),range(len(train_dataset.imgs)))
         weights = torch.DoubleTensor(weights)
         train_sampler = torch.utils.data.sampler.WeightedRandomSampler(weights, len(weights))
-        self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
+        self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,sampler=train_sampler)
         self.test_loader = torch.utils.data.DataLoader(test_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
         self.valid_loader = torch.utils.data.DataLoader(valid_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
         self.classes =sorted(("angry","disgust","fear","happy","sad","surprise","neutral"))
