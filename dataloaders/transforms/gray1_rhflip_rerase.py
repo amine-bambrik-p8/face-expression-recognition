@@ -5,4 +5,5 @@ def transform():
                         transforms.RandomHorizontalFlip(p=0.5),
                         transforms.RandomErasing(0.2,(0.2,0.2)),
                         transforms.ToTensor(),
+                        transforms.Normalize([0.5],[0.5]),
                     ])

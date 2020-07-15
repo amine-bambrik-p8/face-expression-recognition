@@ -7,4 +7,5 @@ def transform():
                         transforms.RandomCrop(40),
                         transforms.Resize(48),
                         transforms.ToTensor(),
+                        transforms.Normalize([0.5],[0.5])
                     ])
