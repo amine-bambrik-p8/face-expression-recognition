@@ -1,0 +1,10 @@
+{
+    "exp_name":"bootstrap tester",
+    "exps":[
+        "configs/ckplus_exp_0.json",
+        "configs/ckplus_exp_0.json",
+        "configs/ckplus_exp_0.json"
+    ],
+    "mode":"train",
+    "agent":"BootstrapTester"
+}
