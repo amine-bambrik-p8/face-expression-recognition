@@ -1,4 +1,4 @@
-from agents.generic import *
+from agents import *
 from setup import process_config
 
 class BootstrapTester(BaseAgent):
