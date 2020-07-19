@@ -26,7 +26,7 @@ class EncoderBNDO(nn.Module):
               batch_norm=False
               )
         self.enc_blocks = nn.Sequential(
-            gate
+            gate,
             *[stack_block(
               in_f=in_f,
               out_f=out_f,
