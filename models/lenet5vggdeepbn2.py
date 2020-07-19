@@ -1,20 +1,9 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from models.layers.basic_decoder import BasicDecoder
-def same_conv_block(in_f,out_f,kernel_size=(3,3),*args,**kwargs):
-    padding=1
-    if isinstance(kernel_size,tuple):
-      padding = (kernel_size[0] // 2, kernel_size[1] // 2)
-    else:
-      padding = kernel_size // 2
-    return conv_block(in_f,out_f,kernel_size=kernel_size,padding=padding)
+from models.layers.conv_block import conv_block
+from models.layers.same_conv import same_conv_block
 
-def conv_block(in_f, out_f,kernel_size,*args, **kwargs):
-    return nn.Sequential(
-        nn.Conv2d(in_f, out_f,kernel_size=kernel_size, *args, **kwargs),
-        nn.BatchNorm2d(out_f),
-        nn.ReLU()
-    )
 def stack_block(in_f, out_f,kernel_size,*args, **kwargs):
     return nn.Sequential(
         same_conv_block(in_f,out_f,kernel_size,*args,**kwargs),
@@ -31,17 +20,17 @@ class LeNetVGGDeepBN2(nn.Module):
     # self.conv1_2 = nn.Conv2d(16,16,3,padding=1)
     # self.conv1_3 = nn.Conv2d(16,16,3,padding=1)
     # self.conv1_4 = nn.Conv2d(16,16,3)
-    self.conv1 = stack_block(1,16,3)
+    self.conv1 = stack_block(1,16,3,conv_block=conv_block)
     # self.conv2_1 = nn.Conv2d(16,32,3,padding=1)
     # self.conv2_2 = nn.Conv2d(32,32,3,padding=1)
     # self.conv2_3 = nn.Conv2d(32,32,3,padding=1)
     # self.conv2_4 = nn.Conv2d(32,32,3)
-    self.conv2 = stack_block(16,32,3)
+    self.conv2 = stack_block(16,32,3,conv_block=conv_block)
     # self.conv3_1 = nn.Conv2d(32,64,3,padding=1)
     # self.conv3_2 = nn.Conv2d(64,64,3,padding=1)
     # self.conv3_3 = nn.Conv2d(64,64,3,padding=1)
     # self.conv3_4 = nn.Conv2d(64,64,3)
-    self.conv3 = stack_block(32,64,3)
+    self.conv3 = stack_block(32,64,3,conv_block=conv_block)
 
     self.decoder = BasicDecoder([64*4*4,512,1024,2048,512],7);
 

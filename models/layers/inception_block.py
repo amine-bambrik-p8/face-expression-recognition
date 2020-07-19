@@ -2,7 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from functools import partial
-from models.layers.conv_auto import Conv2dAuto
+from models.layers.same_conv import same_conv_block
+
 from models.layers.res_block import *
 def conv_bn(in_channels, out_channels, conv, *args, **kwargs):
     return nn.Sequential(conv(in_channels, out_channels, *args, **kwargs), nn.BatchNorm2d(out_channels))
@@ -17,17 +18,17 @@ class ResCeptionBlock(ResNetBasicBlock):
         )
 
 class InceptionBlock(nn.Module):
-    def __init__(self,in_channels,out_channels):
+    def __init__(self,in_channels,out_channels,kernel_size=1,padding=0):
         super(InceptionBlock,self).__init__()
         self.branch1x1 = nn.Conv2d(in_channels,out_channels,kernel_size=1)
 
         self.branch5x5_1 =  nn.Conv2d(in_channels,out_channels//2,kernel_size=1)
-        self.branch5x5_2 = Conv2dAuto(out_channels//2,out_channels,kernel_size=5)
+        self.branch5x5_2 = same_conv_block(out_channels//2,out_channels,kernel_size=5,conv_block=conv_bn)
 
         self.branch3x3_1 =  nn.Conv2d(in_channels,out_channels,kernel_size=1)
-        self.branch3x3_2 = Conv2dAuto(out_channels,out_channels*2,kernel_size=3)
+        self.branch3x3_2 = same_conv_block(out_channels,out_channels*2,kernel_size=3,conv_block=conv_bn)
 
-        self.compress = nn.Conv2d(out_channels*4,out_channels=out_channels,kernel_size=1)
+        self.compress = nn.Conv2d(out_channels*4,out_channels=out_channels,kernel_size=kernel_size,padding=padding)
     def forward(self,x):
         out_branch1x1 = self.branch1x1(x)
         

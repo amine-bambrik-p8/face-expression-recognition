@@ -1,42 +1,53 @@
 import torch.nn as nn
 import torch.nn.functional as F
-from models.layers.basic_decoder_bn_do import BasicDecoderBNDO
-def conv_block(in_f, out_f,kernel_size,*args, **kwargs):
-    return nn.Sequential(
-        nn.Conv2d(in_f, out_f,kernel_size=kernel_size, *args, **kwargs),
-        nn.ReLU(),
-        nn.BatchNorm2d(out_f)
-    )
-def same_conv_block(in_f,out_f,kernel_size=(3,3),*args,**kwargs):
-    padding=1
-    if isinstance(kernel_size,tuple):
-      padding = (kernel_size[0] // 2, kernel_size[1] // 2)
-    else:
-      padding = kernel_size // 2
-    return conv_block(in_f,out_f,kernel_size=kernel_size,padding=padding)
+from models.layers.basic_decode import BasicDecoder
 
-def enc_block(in_f, out_f,kernel_size,with_dropout=False,*args, **kwargs):
-    return nn.Sequential(
-        same_conv_block(in_f,out_f,kernel_size,*args, **kwargs),
-        same_conv_block(out_f,out_f,kernel_size,*args, **kwargs),
-        nn.MaxPool2d(2,2),
-        nn.Dropout2d(0.1) if(with_dropout) else nn.Identity()
-    )
+from models.layers.conv_block import conv_block
+from models.layers.stack_block import stack_block
+from models.layers.same_conv import same_conv_block
+
 class EncoderBNDO(nn.Module):
-    def __init__(self):
+    def __init__(self,in_c,channels):
         super().__init__()
         self.enc_blocks = nn.Sequential(
-            enc_block(1,64,4,with_dropout=False),
-            enc_block(64,64,4,with_dropout=True),
-            enc_block(64,128,4,with_dropout=True)
+            stack_block(
+              in_f=in_f,
+              out_f=channels[0],
+              kernel_size=4,
+              block=same_conv_block,
+              depth=2,
+              out_gate=nn.Sequential(
+                  nn.MaxPool2d(
+                    kernel_size=2,
+                    stride=2
+                  ),
+                ),
+              conv_block=conv_block
+              )
+            *[stack_block(
+              in_f=in_f,
+              out_f=out_f,
+              kernel_size=4,
+              block=same_conv_block,
+              depth=2,
+              out_gate=nn.Sequential(
+                  nn.MaxPool2d(
+                    kernel_size=2,
+                    stride=2
+                  ),
+                  nn.Dropout(0.1)
+                ),
+              conv_block=conv_block
+              ) for in_f,out_f in zip(channels[:-1],channels[1:])],
         )
     def forward(self, x):
         return self.enc_blocks(x)
+
 class GoodFellow(nn.Module):
   def __init__(self):
     super(GoodFellow,self).__init__()
-    self.encoder = EncoderBNDO()
-    self.decoder = BasicDecoderBNDO([128*7*7,1024,1024],7)
+    self.encoder = EncoderBNDO(1,[64,64,128])
+    self.decoder = BasicDecoder([128*7*7,1024,1024],7,dropout=0.1)
 
   def forward(self,x):
     x = self.encoder(x)

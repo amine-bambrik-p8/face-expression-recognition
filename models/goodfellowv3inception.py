@@ -5,13 +5,13 @@ from models.layers.inception_block import InceptionBlock
 
 def block(in_f, out_f,with_dropout=False):
     return nn.Sequential(
-        InceptionBlock(in_f, out_f),
+        InceptionBlock(in_f, out_f,kernel_size=4,padding=2),
         nn.BatchNorm2d(out_f),
         nn.ReLU(),
         InceptionBlock(out_f, out_f),
         nn.BatchNorm2d(out_f),
         nn.ReLU(),
-        nn.MaxPool2d(2,2),
+        nn.MaxPool2d(2,2,kernel_size=4,padding=2),
         nn.Dropout2d(0.1) if(with_dropout) else nn.Identity()
     )
 class GoodFellowV3Inception(nn.Module):
@@ -20,7 +20,7 @@ class GoodFellowV3Inception(nn.Module):
     self.block1 = block(1,64)
     self.block2 = block(64,64)
     self.block3 = block(64,128)
-    self.decoder = BasicDecoder([128*6*6,1024,1024],7);
+    self.decoder = BasicDecoder([128*6*6,1024,1024],7,dropout=0.1);
 
   def forward(self,x):
     x = self.block1(x)

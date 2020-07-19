@@ -1,22 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from models.layers.conv_block import conv_block
+from models.layers.same_conv import same_conv_block
 
-
-def same_conv_block(in_f,out_f,kernel_size=(3,3),*args,**kwargs):
-    padding=1
-    if isinstance(kernel_size,tuple):
-      padding = (kernel_size[0] // 2, kernel_size[1] // 2)
-    else:
-      padding = kernel_size // 2
-    return conv_block(in_f,out_f,kernel_size=kernel_size,padding=padding)
-
-def conv_block(in_f, out_f,kernel_size,*args, **kwargs):
-    return nn.Sequential(
-        nn.Conv2d(in_f, out_f,kernel_size=kernel_size, *args, **kwargs),
-        nn.BatchNorm2d(out_f),
-        nn.ReLU(inplace=True)
-    )
 def stack_block(in_f, out_f,kernel_size,depth=1,*args, **kwargs):
     return nn.Sequential(
         same_conv_block(in_f,out_f,kernel_size,*args,**kwargs),
@@ -30,7 +17,7 @@ class VGG19(nn.Module):
         depth = [2,2,4,4,4]
         self.features = nn.Sequential(
             *[
-                stack_block(in_c,out_c,3,depth=dp) for dp,in_c,out_c in zip(depth,stack[:-1],stack[1:])
+                stack_block(in_c,out_c,3,depth=dp,conv_block=conv_block) for dp,in_c,out_c in zip(depth,stack[:-1],stack[1:])
             ],
             nn.AvgPool2d(kernel_size=1, stride=1)
         )

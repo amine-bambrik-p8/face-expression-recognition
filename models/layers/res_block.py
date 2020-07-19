@@ -82,16 +82,58 @@ class ResNetLayer(nn.Module):
     """
     A ResNet layer composed by `n` blocks stacked one after the other
     """
-    def __init__(self, in_channels, out_channels, block=ResNetBasicBlock, n=1, *args, **kwargs):
+    def __init__(self, in_channels, out_channels, block=ResNetBasicBlock, n=1,out_gate=nn.Identity(), *args, **kwargs):
         super().__init__()
         # 'We perform downsampling directly by convolutional layers that have a stride of 2.'
         downsampling = 2 if in_channels != out_channels else 1
         self.blocks = nn.Sequential(
             block(in_channels , out_channels, *args, **kwargs, downsampling=downsampling),
             *[block(out_channels * block.expansion, 
-                    out_channels, downsampling=1, *args, **kwargs) for _ in range(n - 1)]
+                    out_channels, downsampling=1, *args, **kwargs) for _ in range(n - 1)],
+            out_gate
         )
 
     def forward(self, x):
         x = self.blocks(x)
         return x
+
+
+class ResNetEncoder(nn.Module):
+    """
+    ResNet encoder composed by layers with increasing features.
+    """
+    def __init__(self, in_channels=3, blocks_sizes=[64, 128, 256, 512], deepths=[2,2,2,2], 
+                 activation='relu', block=ResNetBasicBlock, *args, **kwargs):
+        super().__init__()
+        self.blocks_sizes = blocks_sizes
+        
+        self.in_out_block_sizes = list(zip(blocks_sizes[:-1], blocks_sizes[1:]))
+        self.blocks = nn.ModuleList([ 
+            ResNetLayer(in_channels, blocks_sizes[0], n=deepths[0], activation=activation, 
+                        block=block,*args, **kwargs),
+            *[ResNetLayer(in_channels, 
+                          out_channels, n=n, activation=activation, 
+                          block=block, *args, **kwargs) 
+              for (in_channels, out_channels), n in zip(self.in_out_block_sizes, deepths[1:])]       
+        ])
+                
+    def forward(self, x):
+        for block in self.blocks:
+            x = block(x)
+        return x
+
+class ResnetDecoder(nn.Module):
+    """
+    This class represents the tail of ResNet. It performs a global pooling and maps the output to the
+    correct class by using a fully connected layer.
+    """
+    def __init__(self, in_features, n_classes):
+        super().__init__()
+        self.avg = nn.AdaptiveAvgPool2d((1, 1))
+        self.decoder = nn.Linear(in_features,n_classes)
+
+    def forward(self, x):
+        x = self.avg(x)
+        x = x.view(x.size(0), -1)
+        x = self.decoder(x)
+        return F.log_softmax(x,dim=1)
