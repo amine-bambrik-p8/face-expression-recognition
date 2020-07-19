@@ -9,7 +9,7 @@ class EncoderBNDO(nn.Module):
     def __init__(self,in_c,channels):
         super().__init__()
         gate = stack_block(
-              in_f=in_f,
+              in_f=in_c,
               out_f=channels[0],
               kernel_size=3,
               block=same_conv_block,

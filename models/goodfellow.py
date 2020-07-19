@@ -11,7 +11,7 @@ class EncoderBNDO(nn.Module):
         super().__init__()
         self.enc_blocks = nn.Sequential(
             stack_block(
-              in_f=in_f,
+              in_f=in_c,
               out_f=channels[0],
               kernel_size=4,
               block=same_conv_block,
