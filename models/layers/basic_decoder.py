@@ -5,7 +5,7 @@ def dec_block(in_f, out_f,dropout=None,batch_norm=True):
         nn.Linear(in_f, out_f),        
         nn.BatchNorm1d(out_f) if(batch_norm) else nn.Identity(),
         nn.ReLU(),
-        nn.Dropout(dropout) if(dropout in not None) else nn.Identity(),
+        nn.Dropout(dropout) if(dropout is not None) else nn.Identity(),
     )
 class BasicDecoder(nn.Module):
     def __init__(self, dec_sizes, n_classes,dropout=None,batch_norm=True):
