@@ -1,10 +1,12 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from functools import partial
-from models.layers.conv_auto import Conv2dAuto
-conv3x3 = partial(Conv2dAuto, kernel_size=3, bias=False)      
+from models.layers.same_conv import same_conv_block
+from models.layers.conv_block import conv_block
 
-conv = conv3x3(in_channels=32, out_channels=64)
+
+conv3x3 = partial(same_conv_block,conv_block=conv_block, kernel_size=3, bias=False)      
+
 
 def activation_func(activation):
     return  nn.ModuleDict([
