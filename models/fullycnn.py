@@ -1,7 +1,7 @@
 
 import torch.nn as nn
 import torch.nn.functional as F
-from models.layers.basic_decoder import BasicDecoderBNDO
+from models.layers.basic_decoder import BasicDecoder
 from models.layers.conv_block import conv_block
 from models.layers.stack_block import stack_block
 from models.layers.same_conv import same_conv_block

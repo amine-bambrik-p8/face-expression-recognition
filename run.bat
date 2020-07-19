@@ -1,1 +1,1 @@
-python main.py configs/fer2013_exp_deepbn2.json
+python main.py configs/fer2013_exp_lenet.json train
