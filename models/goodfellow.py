@@ -23,7 +23,7 @@ class EncoderBNDO(nn.Module):
                   ),
                 ),
               conv_block=conv_block
-              )
+              ),
             *[stack_block(
               in_f=in_f,
               out_f=out_f,

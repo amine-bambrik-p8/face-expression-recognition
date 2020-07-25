@@ -1,0 +1,34 @@
+{
+    "exp_name": "fer2013_exp_FullCNN",
+    "agent": "GenericAgentLRDecay",
+    "mode": "train",
+    "model":"FullCNN",
+    "cuda": true,
+    "gpu_device": 0,
+    "seed": 1,
+    "valid_size":0.2,
+  
+    "batch_size": 128,
+  
+    "learning_rate": 0.0005,
+    "loss_function":"NLLLoss",
+    
+    "lr_scheduler_factor":0.1,
+    "lr_scheduler_mode":"min",
+    "min_lr":0.0001,
+
+    "max_epoch": 15,
+    "optimizer":"simple_adam",
+    "test_transform":"gray_scale",
+    "train_transform":"gray1_rhflip_rrotate_ccrop40",
+    "log_interval": 10,
+  
+    "validate_every": 1,
+  
+    "checkpoint_file": "checkpoint.pth.tar",
+    "data_loader": "ImageFERDataLoader",
+    "data_loader_workers": 2,
+    "pin_memory": true,
+    "train_datafolder": "./data/FER/train",
+    "test_datafolder": "./data/FER/test"
+}
