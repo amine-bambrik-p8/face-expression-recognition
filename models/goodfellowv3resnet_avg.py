@@ -11,7 +11,6 @@ class GoodFellowV3ResNetAvg(nn.Module):
         
     def forward(self, x):
         x = self.encoder(x)
-        x = x.view(x.size(0),-1)
         x = self.decoder(x)
         return F.log_softmax(x,dim=1)
 
