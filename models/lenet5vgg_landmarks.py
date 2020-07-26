@@ -45,8 +45,8 @@ class LeNetVGGLandmarks(nn.Module):
     # x = self.pool(F.relu(self.conv3_2(x)))
     x_i = self.conv3(x_i)
     # 4 x 4 x 64
-    x_i = x_i.view(x.size(0),-1)
-    x = torch.cat[]
+    x_i = x_i.view(x_i.size(0),-1)
+    x = torch.cat([x_i,x_l],dim=1)
     x = self.decoder(x)
     return F.log_softmax(x,dim=1)
   
