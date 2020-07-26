@@ -47,7 +47,7 @@ class GoodFellowV3(nn.Module):
     self.decoder = nn.Linear(128,7)
 
   def forward(self,x):
-     x = self.encoder(x)
+    x = self.encoder(x)
     x = self.avg(x)
     x = x.view(x.size(0),-1)
     x = self.decoder(x)

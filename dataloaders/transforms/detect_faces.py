@@ -10,7 +10,7 @@ class DetectFaces(object):
         face = faces[0]
         cropped_image = image[:,face[0]:face[2], face[1]:face[3]]
         cropped_pil_image = F.to_pil_image(cropped_image, mode=None)
-        pil_image=F.resize(cropped_pil_image,(w,h))
+        pil_image=F.resize(cropped_pil_image,(c,w,h))
         return F.to_tensor(pil_image)
     def __repr__(self):
         return self.__class__.__name__ + '()'
