@@ -26,7 +26,7 @@ from utils.plot_confusion_matrix import plot_confusion_matrix
 cudnn.benchmark = True
 
 
-class GenericAgent(GenericAgent):
+class GenericAgentLandmarks(GenericAgent):
 
    
     def train_one_epoch(self):
