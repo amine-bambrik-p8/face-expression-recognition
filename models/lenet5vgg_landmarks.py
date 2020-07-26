@@ -25,8 +25,7 @@ class LeNetVGGLandmarks(nn.Module):
     # self.conv3_1 = nn.Conv2d(32,64,3,padding=1)
     # self.conv3_2 = nn.Conv2d(64,64,3)
     self.conv3 = stack_block(32,64,3,conv_block=conv_block,batch_norm=False)
-
-    self.decoder = BasicDecoder([64*4*4,256,512],7);
+    self.decoder = BasicDecoder([64*4*4+68*2,256,512],7);
 
   def forward(self,x):
     image,landmark = x[0],x[1]
