@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from models.layers.basic_decoder import BasicDecoder
 from models.layers.inception_block import InceptionBlock
 
-def block(in_f, out_f,with_dropout=False):
+def block(in_f, out_f,dropout=0.0):
     return nn.Sequential(
         InceptionBlock(in_f, out_f,kernel_size=4,padding=2),
         nn.BatchNorm2d(out_f),
@@ -12,7 +12,7 @@ def block(in_f, out_f,with_dropout=False):
         nn.BatchNorm2d(out_f),
         nn.ReLU(),
         nn.MaxPool2d(2,2),
-        nn.Dropout2d(0.1) if(with_dropout) else nn.Identity()
+        nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
 class GoodFellowV3Inception(nn.Module):
   def __init__(self):
