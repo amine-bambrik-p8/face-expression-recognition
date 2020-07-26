@@ -4,7 +4,7 @@ import torchvision.transforms.functional as F
 class DetectFaces(object):
     def __call__(self, image):
         faces = detect_faces(image)
-        c,w,h image.shape
+        c,w,h = image.shape
         if len(faces) == 0:
             return image
         face = faces[0]
