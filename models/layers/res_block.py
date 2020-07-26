@@ -5,7 +5,7 @@ from models.layers.same_conv import same_conv_block
 from models.layers.conv_block import conv_block
 
 
-conv3x3 = partial(same_conv_block,conv_block=conv_block, kernel_size=3, bias=False)      
+conv3x3 = partial(same_conv_block,conv_block=nn.Conv2d, kernel_size=3, bias=False)      
 
 
 def activation_func(activation):
