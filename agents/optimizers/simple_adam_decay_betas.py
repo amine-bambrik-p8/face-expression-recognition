@@ -4,6 +4,6 @@ def optimizer(model,config):
     return optim.Adam(
         model.parameters(),
         lr=config.learning_rate,
-        betas=config.betas,
+        betas=[config.betas[0],config.betas[1]],
         weight_decay=config.weight_decay
     )
