@@ -1,6 +1,6 @@
 from torchvision import transforms
 from dataloaders.transforms.histo_equal import HistogramEqualization
-from dataloaders.transforms.detect_faces import ExtractLandmarks
+from dataloaders.transforms.extract_landmarks import ExtractLandmarks
 
 def transform():
     return transforms.Compose([
