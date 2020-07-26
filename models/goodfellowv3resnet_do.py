@@ -24,7 +24,7 @@ class ResNetBasicBlockDO(ResNetResidualBlock):
 class GoodFellowV3ResNetDO(nn.Module):
     def __init__(self, in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()
-        self.gate = ResNetEncoder(in_channels,blocks_sizes=[64], deepths=[2],dropout=0.0)
+        self.gate = ResNetEncoder(in_channels,blocks_sizes=[64], deepths=[2])
         self.encoder = ResNetEncoder(64, block=ResNetBasicBlockDO,blocks_sizes=[64,128], deepths=[2, 2])
         self.decoder = BasicDecoder([128*12*12,1024,1024],7,dropout=0.5)
 
