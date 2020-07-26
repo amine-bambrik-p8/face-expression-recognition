@@ -14,7 +14,7 @@ class ResNetBasicBlockDO(ResNetResidualBlock):
     Basic ResNet block composed by two layers of 3x3conv/batchnorm/activation
     """
     expansion = 1
-    def __init__(self, in_channels, out_channels,dropout=0.2, *args, **kwargs):
+    def __init__(self, in_channels, out_channels,dropout=0.1, *args, **kwargs):
         super().__init__(in_channels, out_channels, *args, **kwargs)
         self.blocks = nn.Sequential(
             same_conv_block(self.in_channels, self.out_channels, conv_block=conv_block,activation=nn.Identity, bias=False,stride=self.downsampling),
@@ -26,7 +26,7 @@ class GoodFellowV3ResNetDO(nn.Module):
         super().__init__()
         self.gate = ResNetEncoder(in_channels,blocks_sizes=[64], deepths=[2])
         self.encoder = ResNetEncoder(64, block=ResNetBasicBlockDO,blocks_sizes=[64,128], deepths=[2, 2])
-        self.decoder = BasicDecoder([128*12*12,1024,1024],7,dropout=0.5)
+        self.decoder = BasicDecoder([128*12*12,1024,1024],7,dropout=0.3)
 
     def forward(self, x):
         x = self.gate(x)
