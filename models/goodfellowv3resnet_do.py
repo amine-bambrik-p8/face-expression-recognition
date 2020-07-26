@@ -17,8 +17,8 @@ class ResNetBasicBlockDO(ResNetResidualBlock):
     def __init__(self, in_channels, out_channels,dropout=0.2, *args, **kwargs):
         super().__init__(in_channels, out_channels, *args, **kwargs)
         self.blocks = nn.Sequential(
-            same_conv_block(self.out_channels, self.out_channels, conv_block=conv_block,activation=nn.Identity, bias=False,stride=self.downsampling),
-            same_conv_block(self.in_channels, self.expanded_channels, conv_block=conv_block, bias=False,dropout=dropout),
+            same_conv_block(self.in_channels, self.out_channels, conv_block=conv_block,activation=nn.Identity, bias=False,stride=self.downsampling),
+            same_conv_block(self.out_channels, self.expanded_channels, conv_block=conv_block, bias=False,dropout=dropout),
         )
 
 class GoodFellowV3ResNetDO(nn.Module):
