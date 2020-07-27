@@ -41,7 +41,7 @@ class EncoderBNDO(nn.Module):
         return self.enc_blocks(x)
 class GoodFellowV3LandmarksDO(nn.Module):
   def __init__(self):
-    super(GoodFellowV3Landmarks,self).__init__()
+    super(GoodFellowV3LandmarksDO,self).__init__()
     self.encoder = EncoderBNDO(1,[64,64,128])
     self.decoder = BasicDecoder([128*7*7+68*2,1024,1024],7,dropout=0.1)
 
