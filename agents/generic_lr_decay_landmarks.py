@@ -15,7 +15,7 @@ import torch.nn.functional as F
 import torchvision
 
 from utils.project_data import project_data
-from agents.generic import GenericAgent
+from agents.generic_lr_decay import GenericAgentLRDecay
 from models import *
 from dataloaders import *
 from agents.optimizers import *
@@ -26,7 +26,7 @@ from utils.plot_confusion_matrix import plot_confusion_matrix
 cudnn.benchmark = True
 
 
-class GenericAgentLandmarks(GenericAgent):
+class GenericAgentLRDecayLandmarks(GenericAgentLRDecay):
 
    
     def train_one_epoch(self):
@@ -131,10 +131,10 @@ class GenericAgentLandmarks(GenericAgent):
     def visualize(self):
         self.data_loader.visualize(self.summary_writer)
         dataiter = iter(self.data_loader.train_loader)
-        images,_ = next(dataiter)
-        images = images.cpu()
+        data,_ = next(dataiter)
+        images,landmarks = data[0].cpu(),data[1].cpu()
         self.model = self.model.cpu()
-        self.summary_writer.add_graph(self.model, images)
+        self.summary_writer.add_graph(self.model, [images,landmarks])
     
     def finalize(self):
         """
