@@ -15,10 +15,7 @@ class EncoderBNDO(nn.Module):
               kernel_size=4,
               block=same_conv_block,
               depth=2,
-              out_gate=nn.MaxPool2d(
-                kernel_size=2,
-                stride=2
-                ),
+              out_gate=nn.Conv2d(channels[0],channels[0],kernel_size=2,stride=2),
               conv_block=conv_block
               ),
             *[stack_block(
@@ -28,10 +25,7 @@ class EncoderBNDO(nn.Module):
               block=same_conv_block,
               depth=2,
               out_gate=nn.Sequential(
-                  nn.MaxPool2d(
-                    kernel_size=2,
-                    stride=2
-                  ),
+                  nn.Conv2d(out_f,out_f,kernel_size=2,stride=2),
                   nn.Dropout(0.1)
                 ),
               conv_block=conv_block
@@ -39,16 +33,14 @@ class EncoderBNDO(nn.Module):
         )
     def forward(self, x):
         return self.enc_blocks(x)
-class GoodFellowV3Avg(nn.Module):
+class GoodFellowV3Down(nn.Module):
   def __init__(self):
-    super(GoodFellowV3Avg,self).__init__()
+    super(GoodFellowV3Down,self).__init__()
     self.encoder = EncoderBNDO(1,[64,64,128])
-    self.avg = nn.AvgPool2d((48,48))
-    self.decoder = nn.Linear(128,7)
+    self.decoder = BasicDecoder([128*7*7,1024,1024],7,dropout=0.1)
 
   def forward(self,x):
     x = self.encoder(x)
-    x = self.avg(x)
     x = x.view(x.size(0),-1)
     x = self.decoder(x)
     return F.log_softmax(x,dim=1)
