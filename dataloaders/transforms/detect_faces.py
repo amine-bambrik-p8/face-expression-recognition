@@ -9,6 +9,7 @@ class DetectFaces(object):
         if len(faces) == 0:
             return F.to_grayscale(pil_image,1)
         top, right, bottom, left = faces[0]
+        w, h = right-left, top-bottom
         x0, y0 = left, bottom
         x1, y1 = right, top
         x2, x3 = x1-w,  x0+w
