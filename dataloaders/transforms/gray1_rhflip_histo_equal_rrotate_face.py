@@ -6,9 +6,7 @@ def transform():
     return transforms.Compose([
                         transforms.Grayscale(1),
                         HistogramEqualization(),
-                        transforms.Grayscale(3),
                         DetectFaces(),
-                        transforms.Grayscale(1),
                         transforms.RandomRotation(30),
                         transforms.RandomHorizontalFlip(p=0.5),
                         transforms.Resize(48),
