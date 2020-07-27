@@ -43,6 +43,10 @@ class GoodFellowV3LandmarksDO(nn.Module):
   def __init__(self):
     super(GoodFellowV3LandmarksDO,self).__init__()
     self.encoder = EncoderBNDO(1,[64,64,128])
+    self.gate = nn.Sequential(
+      nn.BatchNorm1d(128*7*7+68*2),
+      nn.Dropout2d(p=0.3)
+      )
     self.decoder = BasicDecoder([128*7*7+68*2,1024,1024],7,dropout=0.1)
 
   def forward(self,x):
@@ -51,7 +55,6 @@ class GoodFellowV3LandmarksDO(nn.Module):
     x = self.encoder(x)
     x = x.view(x.size(0),-1)
     x = torch.cat([x,landmarks],dim=1)
-    x = F.batch_norm(x)
-    x = F.dropout(x,training=self.train,p=0.3)
+    x = self.gate(x)
     x = self.decoder(x)
     return F.log_softmax(x,dim=1)
