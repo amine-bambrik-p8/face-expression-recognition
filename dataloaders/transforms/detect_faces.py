@@ -13,7 +13,7 @@ class DetectFaces(object):
         x0, y0 = left, bottom
         x1, y1 = right, top
         x2, x3 = x1-w,  x0+w
-        cropped_image = image[:,y1:y0, x2:x3]
+        cropped_image = image[:,y1:y0, x3:x2]
         cropped_pil_image = F.to_pil_image(cropped_image, mode=None)
         c,w,h = image.shape
         pil_image=F.resize(cropped_pil_image,(w,h))
