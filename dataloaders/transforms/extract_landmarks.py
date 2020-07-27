@@ -8,7 +8,7 @@ class ExtractLandmarks(object):
         c,w,h = image.shape
         faces=cv2.UMat(np.array([[0,0,w,h]], dtype=np.uint8))
         landmarks = extract_landmarks(image,faces)
-        landmarks = landmarks.unsqueeze(0)
+        landmarks = landmarks.squeeze(0)
         landmarks = F.normalize(landmarks,[0.5],[0.5])
         return image,landmarks
     def __repr__(self):
