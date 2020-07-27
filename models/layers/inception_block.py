@@ -5,6 +5,7 @@ from functools import partial
 from models.layers.same_conv import same_conv_block
 
 from models.layers.res_block import *
+
 def conv_bn(in_channels, out_channels, conv, *args, **kwargs):
     return nn.Sequential(conv(in_channels, out_channels, *args, **kwargs), nn.BatchNorm2d(out_channels))
 
@@ -16,6 +17,19 @@ class ResCeptionBlock(ResNetBasicBlock):
             activation_func(self.activation),
             conv_bn(self.out_channels, self.expanded_channels, conv=self.conv, bias=False,stride=self.downsampling),
         )
+class XceptionBlock(nn.Module):
+    def __init__(self,in_channels,out_channels,kernel_size=1,padding=0):
+        super(XceptionBlock,self).__init__()
+        self.branch1x1 = nn.Conv2d(in_channels,out_channels//2,kernel_size=1)
+        self.branch5x5_1 = nn.Conv2d(in_channels,out_channels//2,kernel_size=1)
+        self.branch5x5_2 = same_conv_block(out_channels//2,out_channels//2,kernel_size=5,conv_block=conv_bn)
+    def forward(self,x):
+        out_branch1x1 = self.branch1x1(x)
+        out_branch5x5 = self.branch5x5_1(x)
+        out_branch5x5 = self.branch5x5_2(out_branch5x5)
+        outputs = [out_branch1x1,out_branch5x5]
+        outputs = torch.cat(outputs,1)
+        return outputs
 
 class InceptionBlock(nn.Module):
     def __init__(self,in_channels,out_channels,kernel_size=1,padding=0):
