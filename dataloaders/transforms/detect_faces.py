@@ -1,5 +1,5 @@
 import cv2
-from utils.face_utils import extract_landmarks
+from utils.face_utils import detect_faces
 import torchvision.transforms.functional as F
 class DetectFaces(object):
     def __call__(self, pil_image):
