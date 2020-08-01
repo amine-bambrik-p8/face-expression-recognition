@@ -5,15 +5,11 @@ from functools import partial
 from models.layers.same_conv import same_conv_block
 
 from models.layers.res_block import *
-
-def conv_bn(in_channels, out_channels, conv, *args, **kwargs):
-    return nn.Sequential(conv(in_channels, out_channels, *args, **kwargs), nn.BatchNorm2d(out_channels))
-
 class ResCeptionBlock(ResNetBasicBlock):
     def __init__(self, in_channels, out_channels, *args, **kwargs):
         super().__init__(in_channels, out_channels, *args, **kwargs)
         self.blocks = nn.Sequential(
-            InceptionBlock(self.in_channels, self.out_channels),
+            InceptionBlock(self.in_channels, self.out_channels,kernel_size=3,padding=1),
             activation_func(self.activation),
             conv_bn(self.out_channels, self.expanded_channels, conv=self.conv, bias=False,stride=self.downsampling),
         )
