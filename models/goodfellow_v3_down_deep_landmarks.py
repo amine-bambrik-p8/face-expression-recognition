@@ -41,7 +41,7 @@ class GoodFellowV3DownDeepLandmarks(nn.Module):
       nn.BatchNorm1d(128*7*7+68*2),
       nn.Dropout2d(p=0.5)
       )
-    self.decoder = BasicDecoder([128*6*6,1024,1024],7,dropout=0.25)
+    self.decoder = BasicDecoder([128*6*6+68*2,1024,1024],7,dropout=0.25)
 
   def forward(self,x):
     x,landmarks = x[0],x[1]
