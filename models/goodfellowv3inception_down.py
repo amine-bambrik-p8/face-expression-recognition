@@ -21,9 +21,9 @@ class GoodFellowV3InceptionDown(nn.Module):
   def __init__(self):
     super(GoodFellowV3InceptionDown,self).__init__()
     self.block1 = block(1,64)
-    self.block2 = block(64,64,dropout=0.1)
+    self.block2 = block(64,64)
     self.block3 = block(64,128,dropout=0.1)
-    self.decoder = BasicDecoder([128*6*6,1024,1024],7,dropout=0.25)
+    self.decoder = BasicDecoder([128*6*6,1024,1024],7,dropout=0.5)
 
   def forward(self,x):
     x = self.block1(x)
