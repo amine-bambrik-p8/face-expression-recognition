@@ -38,7 +38,7 @@ class GoodFellowV3DownDeepLandmarks(nn.Module):
     super(GoodFellowV3DownDeepLandmarks,self).__init__()
     self.encoder = EncoderBNDO(1,[64,64,128])
     self.gate = nn.Sequential(
-      nn.BatchNorm1d(128*7*7+68*2),
+      nn.BatchNorm1d(128*6*6+68*2),
       nn.Dropout2d(p=0.5)
       )
     self.decoder = BasicDecoder([128*6*6+68*2,1024,1024],7,dropout=0.25)
