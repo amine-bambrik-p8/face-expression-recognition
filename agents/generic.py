@@ -145,7 +145,7 @@ class GenericAgent(BaseAgent):
                 (valid_loss,valid_accuracy) = self.validate()
                 self.summary_writer.add_scalars('accuracy', {
                         'training':train_accuracy,
-                        'validation':valid_loss
+                        'validation':valid_accuracy
                         },global_step=self.current_epoch)
                 self.summary_writer.add_scalars('loss', {
                         'training':train_loss,
