@@ -15,6 +15,9 @@ def stack_block(in_f, out_f,kernel_size,*args, **kwargs):
 class LeNetVGGLandmarks(nn.Module):
   def __init__(self):
     super(LeNetVGGLandmarks,self).__init__()
+    self.gate = nn.Sequential(
+      nn.BatchNorm1d(128*6*6+68*2),
+      )
     # self.pool = nn.MaxPool2d(2,2)
     # self.conv1_1 = nn.Conv2d(1,16,3,padding=1)
     # self.conv1_2 = nn.Conv2d(16,16,3)
@@ -46,6 +49,7 @@ class LeNetVGGLandmarks(nn.Module):
     # 4 x 4 x 64
     x_i = x_i.view(x_i.size(0),-1)
     x = torch.cat([x_i,x_l],dim=1)
+    x = self.gate(x)
     x = self.decoder(x)
     return F.log_softmax(x,dim=1)
   
