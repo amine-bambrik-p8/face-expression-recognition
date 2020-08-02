@@ -16,7 +16,7 @@ class LeNetVGGLandmarks(nn.Module):
   def __init__(self):
     super(LeNetVGGLandmarks,self).__init__()
     self.noramlize = nn.Sequential(
-      nn.BatchNorm1d(64*4*4+68*2),
+      nn.BatchNorm1d(68*2),
       )
     # self.pool = nn.MaxPool2d(2,2)
     # self.conv1_1 = nn.Conv2d(1,16,3,padding=1)
