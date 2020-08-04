@@ -16,7 +16,17 @@ def detect_faces(image_tensor):
     image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     #image = cv2.imread(pic)
     faces = detector.detectMultiScale(image)
-    return faces
+    if len(faces) != 0:
+      top, right, bottom, left = faces[0]
+      w, h = right-left, top-bottom
+      x0, y0 = left, bottom
+      x1, y1 = right, top
+      x2, x3 = x1-w,  x0+w
+      w=x2-x3
+      h=y0-y1
+      if h>10 and w>10:
+        return x3,y1,x2,y0
+    return 0,0,48,48
 
 LBFmodel = "lbfmodel.yaml"
 landmark_detector  = cv2.face.createFacemarkLBF()

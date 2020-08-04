@@ -5,11 +5,8 @@ class DetectFaces(object):
     def __call__(self, pil_image):
         pil_image = F.to_grayscale(pil_image,3) 
         image = F.to_tensor(pil_image)
-        faces = detect_faces(image)
-        if len(faces) == 0:
-            return F.to_grayscale(pil_image,1)
-        top, right, bottom, left = faces[0]
-        cropped_image = image[:,top:bottom, left:right]
+        x0,y0,x1,y1 = detect_faces(image)
+        cropped_image = image[:,y0:y1, x0:x1]
         cropped_pil_image = F.to_pil_image(cropped_image, mode=None)
         c,w,h = image.shape
         pil_image=F.resize(cropped_pil_image,(w,h))
