@@ -270,7 +270,12 @@ class GenericAgent(BaseAgent):
         images = images.cpu()
         self.model = self.model.cpu()
         self.summary_writer.add_graph(self.model, images)
-    
+    def export(self):
+        self.load_checkpoint(self.config.checkpoint_file)
+        self.model.eval()
+        dummy_input = torch.zeros(1,1,48,48)
+        torch.onnx.export(self.model, dummy_input, '{}_onnx_model.onnx'.format(self.config.exp_name), verbose=True)
+
     def finalize(self):
         """
         Finalizes all the operations of the 2 Main classes of the process, the operator and the data loader
