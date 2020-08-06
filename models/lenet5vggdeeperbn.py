@@ -15,7 +15,7 @@ def stack_block(in_f, out_f,kernel_size,*args, **kwargs):
     )
 class LeNetVGGDeeperBN(nn.Module):
   def __init__(self):
-    super(LeNetVGGDeepBN,self).__init__()
+    super(LeNetVGGDeeperBN,self).__init__()
     # self.pool = nn.MaxPool2d(2,2)
     # self.conv1_1 = nn.Conv2d(1,64,3,padding=1)
     # self.conv1_3 = nn.Conv2d(64,64,3,padding=1)
