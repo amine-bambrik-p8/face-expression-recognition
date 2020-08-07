@@ -7,6 +7,6 @@ def transform():
                         HistogramEqualization(),
                         transforms.RandomHorizontalFlip(p=0.5),
                         transforms.ToTensor(),
-                        transforms.RandomErasing(0.2,(0.2,0.2)),
+                        transforms.RandomErasing(0.5,(0.2,0.2)),
                         transforms.Normalize([0.5],[0.5]),
                     ])
