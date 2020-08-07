@@ -10,7 +10,7 @@ def stack_block(in_f, out_f,kernel_size,*args, **kwargs):
         same_conv_block(in_f,out_f,kernel_size,*args,**kwargs),
         same_conv_block(out_f,out_f,kernel_size,*args,**kwargs),
         same_conv_block(out_f,out_f,kernel_size,*args,**kwargs),
-        conv_block(out_f,out_f,kernel_size),
+        same_conv_block(out_f,out_f,kernel_size,*args,**kwargs),
         nn.MaxPool2d(2,2)
     )
 class LeNetVGGDeeperBN(nn.Module):
@@ -20,27 +20,27 @@ class LeNetVGGDeeperBN(nn.Module):
     # self.conv1_1 = nn.Conv2d(1,64,3,padding=1)
     # self.conv1_3 = nn.Conv2d(64,64,3,padding=1)
     # self.conv1_3 = nn.Conv2d(64,64,3,padding=1)
-    # self.conv1_4 = nn.Conv2d(64,64,3)
+    # self.conv1_3 = nn.Conv2d(64,64,3,padding=1)
     self.conv1 = stack_block(1,64,3,conv_block=conv_block)
     # self.conv2_1 = nn.Conv2d(64,128,3,padding=1)
     # self.conv2_3 = nn.Conv2d(128,128,3,padding=1)
     # self.conv2_3 = nn.Conv2d(128,128,3,padding=1)
-    # self.conv2_4 = nn.Conv2d(128,128,3)
+    # self.conv2_3 = nn.Conv2d(128,128,3,padding=1)
     self.conv2 = stack_block(64,128,3,conv_block=conv_block)
     # self.conv3_1 = nn.Conv2d(128,256,3,padding=1)
     # self.conv3_1 = nn.Conv2d(128,256,3,padding=1)
     # self.conv3_3 = nn.Conv2d(256,256,3,padding=1)
-    # self.conv3_4 = nn.Conv2d(256,256,3)
+    # self.conv3_3 = nn.Conv2d(256,256,3,padding=1)
     self.conv3 = stack_block(128,256,3,conv_block=conv_block)
     # self.conv3_1 = nn.Conv2d(256,512,3,padding=1)
     # self.conv3_1 = nn.Conv2d(512,512,3,padding=1)
     # self.conv3_1 = nn.Conv2d(512,512,3,padding=1)
-    # self.conv3_4 = nn.Conv2d(512,512,3)
+    # self.conv3_1 = nn.Conv2d(512,512,3,padding=1)
     self.conv4 = stack_block(256,512,3,conv_block=conv_block)
     # self.conv3_1 = nn.Conv2d(256,512,3,padding=1)
     # self.conv3_1 = nn.Conv2d(512,512,3,padding=1)
     # self.conv3_1 = nn.Conv2d(512,512,3,padding=1)
-    # self.conv3_4 = nn.Conv2d(512,512,3)
+    # self.conv3_1 = nn.Conv2d(512,512,3,padding=1)
     self.conv5 = stack_block(512,512,3,conv_block=conv_block)
 
     self.decoder = BasicDecoder([512,1024,1024],7);
