@@ -32,26 +32,29 @@ class LeNetVGGDeeperBN(nn.Module):
     # self.conv3_3 = nn.Conv2d(256,256,3,padding=1)
     # self.conv3_4 = nn.Conv2d(256,256,3)
     self.conv3 = stack_block(128,256,3,conv_block=conv_block)
+    # self.conv3_1 = nn.Conv2d(256,512,3,padding=1)
+    # self.conv3_1 = nn.Conv2d(512,512,3,padding=1)
+    # self.conv3_1 = nn.Conv2d(512,512,3,padding=1)
+    # self.conv3_4 = nn.Conv2d(512,512,3)
+    self.conv4 = stack_block(256,512,3,conv_block=conv_block)
+    # self.conv3_1 = nn.Conv2d(256,512,3,padding=1)
+    # self.conv3_1 = nn.Conv2d(512,512,3,padding=1)
+    # self.conv3_1 = nn.Conv2d(512,512,3,padding=1)
+    # self.conv3_4 = nn.Conv2d(512,512,3)
+    self.conv5 = stack_block(512,512,3,conv_block=conv_block)
 
-    self.decoder = BasicDecoder([256*4*4,2048,2048],7);
+    self.decoder = BasicDecoder([512,1024,1024],7);
 
   def forward(self,x):
     # 48 x 48 x 1
-    # x = F.relu(self.conv1_1(x))
-    # x = F.relu(self.conv1_2(x))
-    # x = self.pool(F.relu(self.conv1_4(x)))
     x = self.conv1(x)
     # 23 x 23 x 16
-    # x = F.relu(self.conv2_1(x))
-    # x = F.relu(self.conv2_2(x))
-    # x = self.pool(F.relu(self.conv2_4(x)))
     x = self.conv2(x)
     # 10 x 10 x 32
-    # x = F.relu(self.conv3_1(x))
-    # x = F.relu(self.conv3_2(x))
-    # x = self.pool(F.relu(self.conv3_4(x)))
     x = self.conv3(x)
     # 4 x 4 x 64
+    x = self.conv4(x)
+    x = self.conv5(x)
     x = x.view(x.size(0),-1)
     x = self.decoder(x)
     return F.log_softmax(x,dim=1)
