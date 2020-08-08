@@ -29,13 +29,14 @@ class LeNetInception(nn.Module):
               depth=2,
               conv_block=conv_block
               )
-    );
+    )
     self.block1 = block(128,256)
     self.block2 = block(256,512)
     self.block3 = block(512,1024)
     self.decoder = BasicDecoder([1024*6*6,1024,1024],7);
 
   def forward(self,x):
+    x = self.gate(x)
     x = self.block1(x)
     x = self.block2(x)
     x = self.block3(x)

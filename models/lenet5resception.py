@@ -18,12 +18,21 @@ class ResCeptionBlock(ResNetBasicBlock):
 class LeNetResCeptionNet(nn.Module):
     def __init__(self, in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()
-        in_channels = 1
-        n_classes = 7
-        self.encoder = ResNetEncoder(in_channels, block=ResCeptionBlock,blocks_sizes=[64, 128, 256], deepths=[1, 1, 1])
+        self.gate = nn.Sequential(
+            stack_block(
+              in_f=in_c,
+              out_f=128,
+              kernel_size=7,
+              block=same_conv_block,
+              depth=2,
+              conv_block=conv_block
+              )
+    )
+        self.encoder = ResNetEncoder(in_channels, block=ResCeptionBlock,blocks_sizes=[128, 128, 256], deepths=[2, 2, 2])
         self.decoder = ResnetDecoder(self.encoder.blocks[-1].blocks[-1].expanded_channels, n_classes)
         
     def forward(self, x):
+        x = self.gate(x)
         x = self.encoder(x)
         x = self.decoder(x)
         return F.log_softmax(x,dim=1)
