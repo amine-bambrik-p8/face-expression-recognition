@@ -3,20 +3,37 @@ import torch.nn.functional as F
 from models.layers.basic_decoder import BasicDecoder
 from models.layers.inception_block import InceptionBlock
 
-def block(in_f, out_f):
+from models.layers.conv_block import conv_block
+from models.layers.stack_block import stack_block
+from models.layers.same_conv import same_conv_block
+def block(in_f, out_f,dropout=0.0):
     return nn.Sequential(
-        InceptionBlock(in_f, out_f),
+        InceptionBlock(in_f, out_f,kernel_size=3,padding=1),
         nn.BatchNorm2d(out_f),
         nn.ReLU(),
-        nn.MaxPool2d(2,2)
+        InceptionBlock(out_f, out_f,kernel_size=3,padding=1),
+        nn.BatchNorm2d(out_f),
+        nn.ReLU(),
+        nn.MaxPool2d(2,2),
+        nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
 class LeNetInception(nn.Module):
   def __init__(self):
     super(LeNetInception,self).__init__()
-    self.block1 = block(1,16)
-    self.block2 = block(16,32)
-    self.block3 = block(32,64)
-    self.decoder = BasicDecoder([64*6*6,256,512],7);
+    self.gate = nn.Sequential(
+            stack_block(
+              in_f=in_c,
+              out_f=128,
+              kernel_size=7,
+              block=same_conv_block,
+              depth=2,
+              conv_block=conv_block
+              )
+    );
+    self.block1 = block(128,256)
+    self.block2 = block(256,512)
+    self.block3 = block(512,1024)
+    self.decoder = BasicDecoder([1024*6*6,1024,1024],7);
 
   def forward(self,x):
     x = self.block1(x)
