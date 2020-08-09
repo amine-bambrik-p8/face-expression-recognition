@@ -20,15 +20,15 @@ class XceptionBlock(nn.Module):
         return outputs
 
 class InceptionBlock(nn.Module):
-    def __init__(self,in_channels,out_channels,kernel_size=1,padding=0,):
+    def __init__(self,in_channels,out_channels):
         super(InceptionBlock,self).__init__()
-        self.branch1x1 = nn.Conv2d(in_channels,out_channels,kernel_size=1)
+        self.branch1x1 = nn.Conv2d(in_channels,out_channels//4,kernel_size=1)
 
-        self.branch5x5_1 =  nn.Conv2d(in_channels,out_channels//2,kernel_size=1)
-        self.branch5x5_2 = same_conv_block(out_channels//2,out_channels,kernel_size=5,conv_block=nn.Conv2d)
+        self.branch5x5_1 =  nn.Conv2d(in_channels,out_channels//8,kernel_size=1)
+        self.branch5x5_2 = same_conv_block(out_channels//8,out_channels//4,kernel_size=5,conv_block=nn.Conv2d)
 
-        self.branch3x3_1 =  nn.Conv2d(in_channels,out_channels,kernel_size=1)
-        self.branch3x3_2 = same_conv_block(out_channels,out_channels*2,kernel_size=3,conv_block=nn.Conv2d)
+        self.branch3x3_1 =  nn.Conv2d(in_channels,out_channels//4,kernel_size=1)
+        self.branch3x3_2 = same_conv_block(out_channels//4,out_channels//2,kernel_size=3,conv_block=nn.Conv2d)
     def forward(self,x):
         out_branch1x1 = self.branch1x1(x)
         

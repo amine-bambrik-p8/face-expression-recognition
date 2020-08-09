@@ -26,7 +26,6 @@ class EncoderBNDO(nn.Module):
               depth=3,
               out_gate=nn.Sequential(
                   nn.Conv2d(out_f,out_f,kernel_size=2,stride=2),
-                  nn.Dropout(0.2)
                 ),
               conv_block=conv_block
               ) for in_f,out_f in zip(channels[:-1],channels[1:])],
@@ -37,7 +36,7 @@ class GoodFellowV3DownDeep(nn.Module):
   def __init__(self):
     super(GoodFellowV3DownDeep,self).__init__()
     self.encoder = EncoderBNDO(1,[64,64,128])
-    self.decoder = BasicDecoder([128*6*6,1024,1024],7,dropout=0.4)
+    self.decoder = BasicDecoder([128*6*6,1024,1024],7)
 
   def forward(self,x):
     x = self.encoder(x)
