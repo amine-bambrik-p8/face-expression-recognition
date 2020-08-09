@@ -23,8 +23,8 @@ class GenericAgentLRDecay(GenericAgent):
                         'training':train_loss,
                         'validation':loss
                         }, epoch)
-                if self.best_metric < accuracy:
-                    self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (accuracy, self.best_metric))
-                    self.best_metric = accuracy
+                if self.best_metric < loss:
+                    self.logger.info('Saving Model with loss %f previous best loss was %f \n'% (loss, self.best_metric))
+                    self.best_metric = loss
                     self.save_checkpoint()
             self.current_epoch += 1

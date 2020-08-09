@@ -151,9 +151,9 @@ class GenericAgent(BaseAgent):
                         'training':train_loss,
                         'validation':valid_loss
                         },global_step=self.current_epoch)
-                if self.best_metric < valid_accuracy:
-                    self.logger.info('Saving Model with accuracy %f previous best accuracy was %f \n'% (valid_accuracy, self.best_metric))
-                    self.best_metric = valid_accuracy
+                if self.best_metric > valid_loss:
+                    self.logger.info('Saving Model with loos %f previous best loss was %f \n'% (valid_loss, self.best_metric))
+                    self.best_metric = valid_loss
                     self.save_checkpoint()
             self.current_epoch += 1
     def output_to_probs(self, output):
@@ -273,7 +273,7 @@ class GenericAgent(BaseAgent):
     def export(self):
         self.load_checkpoint(self.config.checkpoint_file)
         self.model.eval()
-        dummy_input = torch.zeros(1,1,48,48)
+        dummy_input = torch.zeros(48*48*4*2)
         torch.onnx.export(self.model, dummy_input, '{}_onnx_model.onnx'.format(self.config.exp_name), verbose=True)
 
     def finalize(self):
