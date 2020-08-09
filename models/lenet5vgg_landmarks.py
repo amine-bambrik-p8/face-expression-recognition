@@ -13,7 +13,7 @@ def stack_block(in_f, out_f,kernel_size,*args, **kwargs):
         nn.MaxPool2d(2,2)
     )
 class LeNetVGGLandmarks(nn.Module):
-  def __init__(self):
+  def __init__(self,config):
     super(LeNetVGGLandmarks,self).__init__()
     self.noramlize = nn.Sequential(
       nn.BatchNorm1d(68*2),

@@ -39,7 +39,7 @@ class EncoderBNDO(nn.Module):
     def forward(self, x):
         return self.enc_blocks(x)
 class GoodFellowV3(nn.Module):
-  def __init__(self):
+  def __init__(self,config):
     super(GoodFellowV3,self).__init__()
     self.encoder = EncoderBNDO(1,[64,64,128])
     self.decoder = BasicDecoder([128*6*6,1024,1024],7)

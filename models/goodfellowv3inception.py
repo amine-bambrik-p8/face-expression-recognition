@@ -18,7 +18,7 @@ def block(in_f, out_f,dropout=0.0):
         nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
 class GoodFellowV3Inception(nn.Module):
-  def __init__(self):
+  def __init__(self,config):
     super(GoodFellowV3Inception,self).__init__()
     self.block1 = block(1,64)
     self.block2 = block(64,64,dropout=0.1)

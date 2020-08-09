@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from models.layers.basic_decoder import BasicDecoder
 class LeNet5(nn.Module):
-    def __init__(self):
+    def __init__(self,config):
         super(LeNet5,self).__init__()
         self.decoder = BasicDecoder([48*48,1024,2048,1024,512,64],7,batch_norm=False);
     def forward(self,x):

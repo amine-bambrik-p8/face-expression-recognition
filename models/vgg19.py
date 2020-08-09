@@ -11,7 +11,7 @@ def stack_block(in_f, out_f,kernel_size,depth=1,*args, **kwargs):
         nn.MaxPool2d(2,2)
     )
 class VGG19(nn.Module):
-    def __init__(self):
+    def __init__(self,config):
         super(VGG19, self).__init__()
         stack = [1,64,128,256,512,512]
         depth = [2,2,4,4,4]

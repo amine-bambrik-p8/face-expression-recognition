@@ -17,7 +17,7 @@ class ResCeptionBlock(ResNetBasicBlock):
             nn.MaxPool2d(2,2) if self.downsampling==2 else nn.Identity()
         )
 class LeNetResCeptionNet(nn.Module):
-    def __init__(self, in_channels=1, n_classes=7, *args, **kwargs):
+    def __init__(self,config,in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()
         self.gate = stack_block(
               in_f=1,

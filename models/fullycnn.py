@@ -22,7 +22,7 @@ class EncoderDO(nn.Module):
     def forward(self, x):
         return self.enc_blocks(x)
 class FullCNN(nn.Module):
-  def __init__(self):
+  def __init__(self,config):
     super(FullCNN,self).__init__()
     self.encoder = EncoderDO([1,64,64,128])
     self.avg = nn.AvgPool2d((48,48))

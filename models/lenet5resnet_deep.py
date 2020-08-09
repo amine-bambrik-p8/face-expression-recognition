@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from models.layers.res_block import *
 
 class LeNetResNet(nn.Module):
-    def __init__(self, in_channels=1, n_classes=7, *args, **kwargs):
+    def __init__(self,config,in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()
         in_channels = 1
         n_classes = 7
