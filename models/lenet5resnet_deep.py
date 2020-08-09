@@ -1,11 +1,13 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from models.layers.res_block import *
-from models.layers.basic_decoder import BasicDecoder
+
 class LeNetResNet(nn.Module):
-    def __init__(self):
+    def __init__(self, in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()
-        self.encoder = ResNetEncoder(1,blocks_sizes=[64, 128, 256], deepths=[2,2,2])
+        in_channels = 1
+        n_classes = 7
+        self.encoder = ResNetEncoder(in_channels, block=ResNetBasicBlock,blocks_sizes=[64, 128, 256,512,512], deepths=[1,1,1,1,1])
         self.decoder = ResnetDecoder(self.encoder.blocks[-1].blocks[-1].expanded_channels, n_classes)
         
     def forward(self, x):
