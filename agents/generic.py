@@ -34,7 +34,7 @@ class GenericAgent(BaseAgent):
 
 
         # define model
-        self.model = globals()[self.config.model]()
+        self.model = globals()[self.config.model](self.config)
         # define data_loader
         self.data_loader = globals()[self.config.data_loader](self.config)
         # define loss
@@ -77,10 +77,6 @@ class GenericAgent(BaseAgent):
             self.logger.info("Program will run on *****CPU***** Using {} model\n".format(config.model))
 
         self.summary_writer = SummaryWriter(log_dir="./experiments/{}/summaries".format(self.config.exp_name), comment=self.config.model)
-
-
-
-
 
         # Model Loading from the latest checkpoint if not found start from scratch.
         self.load_checkpoint(self.config.checkpoint_file)
@@ -144,14 +140,14 @@ class GenericAgent(BaseAgent):
             if epoch % self.config.validate_every == self.config.validate_every-1:
                 (valid_loss,valid_accuracy) = self.validate()
                 self.summary_writer.add_scalars('accuracy', {
-                        'training':train_accuracy,
-                        'validation':valid_accuracy
+                        'training_{}'.format(self.config.optimizer):train_accuracy,
+                        'validation_{}'.format(self.config.optimizer):valid_accuracy
                         },global_step=self.current_epoch)
                 self.summary_writer.add_scalars('loss', {
-                        'training':train_loss,
-                        'validation':valid_loss
+                        'training_{}'.format(self.config.optimizer):train_loss,
+                        'validation_{}'.format(self.config.optimizer):valid_loss
                         },global_step=self.current_epoch)
-                if self.best_metric is None or self.best_metric > valid_loss:
+                if self.config.do_save and (self.best_metric is None or self.best_metric > valid_loss):
                     self.logger.info('Saving Model with loos %f previous best loss was %f \n'% (valid_loss, self.best_metric if self.best_metric is not None else 0.0))
                     self.best_metric = valid_loss
                     self.save_checkpoint()
