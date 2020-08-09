@@ -49,7 +49,7 @@ class GenericAgent(BaseAgent):
         # initialize counter
         self.current_epoch = 0
         self.current_iteration = 0
-        self.best_metric = 0
+        self.best_metric = None
         self.predictions = torch.tensor([],dtype=torch.int)
         self.labels = torch.tensor([],dtype=torch.int)
 
@@ -151,7 +151,7 @@ class GenericAgent(BaseAgent):
                         'training':train_loss,
                         'validation':valid_loss
                         },global_step=self.current_epoch)
-                if self.best_metric > valid_loss:
+                if self.best_metric is None or self.best_metric > valid_loss:
                     self.logger.info('Saving Model with loos %f previous best loss was %f \n'% (valid_loss, self.best_metric))
                     self.best_metric = valid_loss
                     self.save_checkpoint()

@@ -23,7 +23,7 @@ class GenericAgentLRDecay(GenericAgent):
                         'training':train_loss,
                         'validation':loss
                         }, epoch)
-                if self.best_metric < loss:
+                if self.best_metric is None or self.best_metric > loss:
                     self.logger.info('Saving Model with loss %f previous best loss was %f \n'% (loss, self.best_metric))
                     self.best_metric = loss
                     self.save_checkpoint()
