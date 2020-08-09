@@ -1,6 +1,6 @@
 {
     "exp_name": "resnet_optims",
-    "description":"VGG optims test logging adam accuracy and loss",
+    "description":"ResNet optims test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
     "model":"GoodFellowV3ResNet",
