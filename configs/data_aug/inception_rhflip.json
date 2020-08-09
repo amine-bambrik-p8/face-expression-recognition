@@ -1,0 +1,38 @@
+{
+    "exp_name": "inception_augs",
+    "description":"Inception augs test logging adam accuracy and loss",
+    "agent": "GenericAgent",
+
+    "model":"GoodFellowV3Inception",
+    "loss_function":"NLLLoss",
+    "do_save":false,
+    
+    "optimizer":"adam",
+
+    "learning_rate": 0.0005,
+    "betas":[
+        0.9,
+        0.99
+    ],
+    "weight_decay":0,
+    "max_epoch": 30,
+    "log_interval": 10,
+    "validate_every": 1, 
+    
+    "data_loader": "ImageFERDataLoader",
+    "batch_size": 128,
+    "test_transform":"gray_scale_histo_equal_face",
+    "valid_transform":"gray_scale_histo_equal_face",
+    "train_transform":"gray1_rhflip_histo_equal_face",
+    "train_datafolder": "./data/FER/train",
+    "test_datafolder": "./data/FER/test",
+    "valid_datafolder": "./data/FER/validation",
+    
+    "data_loader_workers": 2,
+    "pin_memory": true,
+
+    "cuda": true,
+    "gpu_device": 0,
+    "seed": 1,
+    "checkpoint_file": "checkpoint.pth.tar"
+}
