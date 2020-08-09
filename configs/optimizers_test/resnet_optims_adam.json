@@ -1,5 +1,5 @@
 {
-    "exp_name": "vgg_optims",
+    "exp_name": "resnet_optims",
     "description":"VGG optims test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
