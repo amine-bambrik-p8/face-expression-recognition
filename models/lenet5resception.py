@@ -2,6 +2,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from models.layers.res_block import *
 from models.layers.inception_block import InceptionBlock
+from models.layers.stack_block import stack_block
 
 class ResCeptionBlock(ResNetBasicBlock):
     def __init__(self, in_channels, out_channels, *args, **kwargs):
@@ -18,15 +19,13 @@ class ResCeptionBlock(ResNetBasicBlock):
 class LeNetResCeptionNet(nn.Module):
     def __init__(self, in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()
-        self.gate = nn.Sequential(
-            stack_block(
+        self.gate = stack_block(
               in_f=in_c,
               out_f=128,
               kernel_size=7,
               block=ResNetBasicBlock,
               depth=2
               )
-    )
         self.encoder = ResNetEncoder(128, block=ResCeptionBlock,blocks_sizes=[256, 512, 1024], deepths=[2, 2, 2])
         self.decoder = ResnetDecoder(self.encoder.blocks[-1].blocks[-1].expanded_channels, n_classes)
         
