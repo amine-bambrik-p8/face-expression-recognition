@@ -20,7 +20,7 @@ class LeNetResCeptionNet(nn.Module):
     def __init__(self, in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()
         self.gate = stack_block(
-              in_f=in_c,
+              in_f=1,
               out_f=128,
               kernel_size=7,
               block=ResNetBasicBlock,
