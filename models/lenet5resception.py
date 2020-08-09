@@ -13,7 +13,7 @@ class ResCeptionBlock(ResNetBasicBlock):
             InceptionBlock(out_channels, out_channels,kernel_size=3,padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(),
-            nn.MaxPool2d(2,2),
+            nn.MaxPool2d(2,2) if self.downsampling==2 else nn.Identity()
         )
 class LeNetResCeptionNet(nn.Module):
     def __init__(self, in_channels=1, n_classes=7, *args, **kwargs):
@@ -23,12 +23,11 @@ class LeNetResCeptionNet(nn.Module):
               in_f=in_c,
               out_f=128,
               kernel_size=7,
-              block=same_conv_block,
-              depth=2,
-              conv_block=conv_block
+              block=ResNetBasicBlock,
+              depth=2
               )
     )
-        self.encoder = ResNetEncoder(in_channels, block=ResCeptionBlock,blocks_sizes=[128, 128, 256], deepths=[2, 2, 2])
+        self.encoder = ResNetEncoder(128, block=ResCeptionBlock,blocks_sizes=[256, 512, 1024], deepths=[2, 2, 2])
         self.decoder = ResnetDecoder(self.encoder.blocks[-1].blocks[-1].expanded_channels, n_classes)
         
     def forward(self, x):
