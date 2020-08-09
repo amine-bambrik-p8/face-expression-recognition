@@ -1,6 +1,6 @@
 {
     "exp_name": "vgg_optims",
-    "description":"VGG optims test logging adam accuracy and loss",
+    "description":"VGG optims test logging sgd accuracy and loss",
     "agent": "GenericAgent",
 
     "model":"GoodFellowV3",
@@ -10,11 +10,11 @@
     "optimizer":"sgd_momentum",
 
     "learning_rate": 0.0005,
+    "momentum":0.9,
     "weight_decay":0,
-    "max_epoch": 30,
+    "max_epoch": 15,
     "log_interval": 10,
     "validate_every": 1, 
-    
     "data_loader": "ImageFERDataLoader",
     "batch_size": 128,
     "test_transform":"gray_scale",

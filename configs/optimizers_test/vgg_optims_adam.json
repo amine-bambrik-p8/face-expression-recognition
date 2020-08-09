@@ -15,7 +15,7 @@
         0.99
     ],
     "weight_decay":0,
-    "max_epoch": 30,
+    "max_epoch": 15,
     "log_interval": 10,
     "validate_every": 1,
     
