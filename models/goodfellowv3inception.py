@@ -26,10 +26,6 @@ class GoodFellowV3Inception(nn.Module):
               kernel_size=7,
               block=same_conv_block,
               depth=2,
-              out_gate=nn.MaxPool2d(
-                kernel_size=2,
-                stride=2
-                ),
               conv_block=conv_block
               )
     self.block1 = block(64,128)
