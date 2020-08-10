@@ -1,4 +1,5 @@
 {
+    "label":"no_pre",
     "exp_name": "resnet_prepro",
     "description":"VGG optims test logging adam accuracy and loss",
     "agent": "GenericAgent",
@@ -15,9 +16,13 @@
     "decoder_channels":[18432,1024,1024],
     "decoder_dropout":0.0,
     "decoder_batch_norm":true,
-    "optimizer":"sgd_momentum",
+    "optimizer":"adam",
 
     "learning_rate": 0.0005,
+    "betas":[
+        0.9,
+        0.99
+    ],
     "weight_decay":0,
     "max_epoch": 15,
     "log_interval": 10,

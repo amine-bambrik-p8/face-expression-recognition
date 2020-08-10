@@ -1,6 +1,0 @@
-{
-    "exp_name":"svm_exp_0",
-    "csv_path":"./data/fer2013.csv",
-    "agent":"SVMAgent",
-    "n_components":60
-}
