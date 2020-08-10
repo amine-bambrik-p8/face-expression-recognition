@@ -1,4 +1,5 @@
 {
+    "label":"inference"
     "exp_name": "inference",
     "description":"vgg with avg decoder",
     "agent": "GenericAgent",
