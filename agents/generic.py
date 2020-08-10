@@ -86,7 +86,7 @@ class GenericAgent(BaseAgent):
         :param file_name: name of the checkpoint file
         :return:
         """
-        filename = self.checkpoint_dir+self.config.exp_name+"checkpoint.pth.tar"
+        filename = self.checkpoint_dir + self.config.exp_name + "_" +self.config.label +"checkpoint.pth.tar"
         try:
             self.logger.info("Loading checkpoint '{}'".format(filename))
             checkpoint = torch.load(filename)
@@ -118,7 +118,7 @@ class GenericAgent(BaseAgent):
             'optimizer': self.optimizer.state_dict(),
         }
         # Save the state
-        torch.save(state, self.checkpoint_dir + self.config.exp_name + filename)
+        torch.save(state, self.checkpoint_dir + self.config.exp_name + "_" + self.config.label + filename)
 
     def run(self):
         """
@@ -147,7 +147,7 @@ class GenericAgent(BaseAgent):
                         'training_{}'.format(self.config.label):train_loss,
                         'validation_{}'.format(self.config.label):valid_loss
                         },global_step=self.current_epoch)
-                if self.config.do_save and (self.best_metric is None or self.best_metric > valid_loss):
+                if self.best_metric is None or self.best_metric > valid_loss:
                     self.logger.info('Saving Model with loos %f previous best loss was %f \n'% (valid_loss, self.best_metric if self.best_metric is not None else 0.0))
                     self.best_metric = valid_loss
                     self.save_checkpoint()

@@ -43,14 +43,14 @@ class BootstrapTester(BaseAgent):
                 vote = None
                 for agent in self.agents:
                     data, target = data.to(agent.device), target.to(agent.device)
-                    output = agents.model(data)
-                    test_loss += agents.loss(output, target).item()  # sum up batch loss
+                    output = agent.model(data)
+                    test_loss += agent.loss(output, target).item()  # sum up batch loss
                     if(vote is None):
                         vote = output;
                     else:
                         vote += output
                         assert len(vote) == len(output)
-                pred,_=agents.output_to_probs(vote)
+                pred,_=self.output_to_probs(vote)
                 correct += pred.eq(target).sum().item()
                 total += target.size(0)
                 if predictions is not None:
@@ -70,7 +70,15 @@ class BootstrapTester(BaseAgent):
             test_loss, correct, total,
             accuracy))
         return accuracy
-        
+    def output_to_probs(self, output):
+        '''
+        Generates predictions and corresponding probabilities from a trained
+        network and a list of images
+        '''
+        # convert output probabilities to predicted class
+        log_probs, preds_tensor = torch.max(output, 1)
+        preds = preds_tensor.squeeze()
+        return preds, torch.exp(log_probs)
         
     def finalize(self):
         pass
