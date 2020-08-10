@@ -53,7 +53,7 @@ class GoodFellowV3(nn.Module):
     x = self.gate(x)    
     x = self.encoder(x)
     x = self.decoder(x)
-    return self.classfn(x)
+    return self.class_fn(x)
   
 
 class GoodFellowV3Inference(nn.Module):
