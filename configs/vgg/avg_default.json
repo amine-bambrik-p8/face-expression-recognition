@@ -1,0 +1,45 @@
+{
+    "exp_name": "default",
+    "description":"vgg with avg decoder",
+    "agent": "GenericAgent",
+
+    "model":"GoodFellowV3",
+    "loss_function":"NLLLoss",
+    "do_save":false,
+    "decoder":"AvgDecoder",
+    "encoder_channels":[64,64,128],
+    "n_classes":7,
+    "in_channels":1,
+    "class_fn":"LogSoftmax",
+    "decoders_channels":[128],
+    "decoder_dropout":0.0,
+    "decoder_batch_norm":true,
+    "optimizer":"adam",
+
+    "learning_rate": 0.0005,
+    "betas":[
+        0.9,
+        0.99
+    ],
+    "weight_decay":0,
+    "max_epoch": 30,
+    "log_interval": 10,
+    "validate_every": 1, 
+    
+    "data_loader": "ImageFERDataLoader",
+    "batch_size": 128,
+    "test_transform":"gray_scale",
+    "valid_transform":"gray_scale",
+    "train_transform":"gray_scale",
+    "train_datafolder": "./data/FER/train",
+    "test_datafolder": "./data/FER/test",
+    "valid_datafolder": "./data/FER/validation",
+    
+    "data_loader_workers": 2,
+    "pin_memory": true,
+
+    "cuda": true,
+    "gpu_device": 0,
+    "seed": 1,
+    "checkpoint_file": "checkpoint.pth.tar"
+}
