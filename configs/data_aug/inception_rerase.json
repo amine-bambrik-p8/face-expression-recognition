@@ -1,6 +1,6 @@
 {
-    "label":"name",
-    "exp_name": "inception_augs",
+    "label":"inception",
+    "exp_name": "rerase",
     "description":"Inception augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
