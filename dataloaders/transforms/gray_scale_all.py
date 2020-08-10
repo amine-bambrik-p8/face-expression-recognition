@@ -6,13 +6,13 @@ from dataloaders.transforms.detect_faces import DetectFaces
 def transform():
     return transforms.Compose([
                     transforms.Grayscale(1),
-                    DetectFaces(),
                     HistogramEqualization(),
-                    transforms.RandomRotation(25),
+                    DetectFaces(),
+                    transforms.RandomRotation(30),
                     transforms.RandomHorizontalFlip(p=0.5),
-                    transforms.CenterCrop(44),
+                    transforms.RandomCrop(42),
                     transforms.Resize(48),
                     transforms.ToTensor(),
-                    transforms.RandomErasing(0.3,(0.15,0.15)),
+                    transforms.RandomErasing(0.2,(0.15,0.15)),
                     transforms.Normalize([0.5],[0.5]),
                 ])
