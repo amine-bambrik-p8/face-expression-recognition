@@ -25,8 +25,8 @@ class NetInNetDecoder(nn.Module):
         self.decoder = nn.Linear(config.decoder_channels[-1],config.n_classes)
 
     def forward(self, x):
+        x = self.net_in_net(x)
         x = self.avg(x)
         x = x.view(x.size(0), -1)
-        print(x.shape)
         x = self.decoder(x)
         return x
