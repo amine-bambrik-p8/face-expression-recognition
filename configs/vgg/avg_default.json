@@ -11,7 +11,7 @@
     "n_classes":7,
     "in_channels":1,
     "class_fn":"LogSoftmax",
-    "decoders_channels":[128],
+    "decoder_channels":[128],
     "decoder_dropout":0.0,
     "decoder_batch_norm":true,
     "optimizer":"adam",

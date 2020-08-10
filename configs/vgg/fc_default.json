@@ -12,7 +12,7 @@
     "in_channels":1,
     "class_fn":"LogSoftmax",
     "decoder_fn":"ReLU",
-    "decoders_channels":[4608,1024,1024],
+    "decoder_channels":[4608,1024,1024],
     "decoder_dropout":0.0,
     "decoder_batch_norm":true,
     "optimizer":"adam",

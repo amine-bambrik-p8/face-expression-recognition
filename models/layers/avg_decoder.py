@@ -7,7 +7,7 @@ class AvgDecoder(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.avg = nn.AdaptiveAvgPool2d((1,1))
-        self.decoder = nn.Linear(config.decoders_channels[0],config.n_classes)
+        self.decoder = nn.Linear(config.decoder_channels[0],config.n_classes)
 
     def forward(self, x):
         x = self.avg(x)
