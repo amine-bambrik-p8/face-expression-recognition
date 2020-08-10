@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.nn import *
 from models.layers.basic_decoder import BasicDecoder
 from models.layers.avg_decoder import AvgDecoder 
 from models.layers.net_in_net_decoder import NetInNetDecoder 
