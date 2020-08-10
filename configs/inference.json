@@ -33,9 +33,9 @@
     
     "data_loader": "ImageFERDataLoader",
     "batch_size": 128,
-    "test_transform":"gray_scale",
-    "valid_transform":"gray_scale",
-    "train_transform":"gray_scale",
+    "test_transform":"gray_scale_histo_equal",
+    "valid_transform":"gray_scale_histo_equal",
+    "train_transform":"gray1_rhflip_histo_equal_face",
     "train_datafolder": "./data/FER/train",
     "test_datafolder": "./data/FER/test",
     "valid_datafolder": "./data/FER/validation",
