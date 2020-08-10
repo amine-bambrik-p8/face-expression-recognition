@@ -23,6 +23,7 @@ class EncoderBNDO(nn.Module):
                     kernel_size=2,
                     stride=2
                   ),
+                  nn.Dropout2d(config.encoder_dropout) if config.encoder_dropout > 0.0 else nn.Identity()
                 ),
               conv_block=conv_block
               ) for in_c,out_c in zip(config.encoder_channels[:-1],config.encoder_channels[1:])],
