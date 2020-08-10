@@ -140,12 +140,12 @@ class GenericAgent(BaseAgent):
             if epoch % self.config.validate_every == self.config.validate_every-1:
                 (valid_loss,valid_accuracy) = self.validate()
                 self.summary_writer.add_scalars('accuracy', {
-                        'training_{}'.format(self.config.optimizer):train_accuracy,
-                        'validation_{}'.format(self.config.optimizer):valid_accuracy
+                        'training_{}'.format(self.config.label):train_accuracy,
+                        'validation_{}'.format(self.config.label):valid_accuracy
                         },global_step=self.current_epoch)
                 self.summary_writer.add_scalars('loss', {
-                        'training_{}'.format(self.config.optimizer):train_loss,
-                        'validation_{}'.format(self.config.optimizer):valid_loss
+                        'training_{}'.format(self.config.label):train_loss,
+                        'validation_{}'.format(self.config.label):valid_loss
                         },global_step=self.current_epoch)
                 if self.config.do_save and (self.best_metric is None or self.best_metric > valid_loss):
                     self.logger.info('Saving Model with loos %f previous best loss was %f \n'% (valid_loss, self.best_metric if self.best_metric is not None else 0.0))

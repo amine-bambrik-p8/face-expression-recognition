@@ -16,12 +16,12 @@ class GenericAgentLRDecay(GenericAgent):
                 (loss,accuracy) = self.validate()
                 scheduler.step(loss)
                 self.summary_writer.add_scalars('accuracy', {
-                        'training_{}'.format(self.config.optimizer):train_accuracy,
-                        'validation_{}'.format(self.config.optimizer):valid_accuracy
+                        'training_{}'.format(self.config.label):train_accuracy,
+                        'validation_{}'.format(self.config.label):valid_accuracy
                         }, epoch)
                 self.summary_writer.add_scalars('loss', {
-                        'training_{}'.format(self.config.optimizer):train_loss,
-                        'validation_{}'.format(self.config.optimizer):loss
+                        'training_{}'.format(self.config.label):train_loss,
+                        'validation_{}'.format(self.config.label):loss
                         }, epoch)
                 if self.config.do_save and (self.best_metric is None or self.best_metric > valid_loss):
                     self.logger.info('Saving Model with loss %f previous best loss was %f \n'% (loss, self.best_metric if self.best_metric is not None else 0.0))
