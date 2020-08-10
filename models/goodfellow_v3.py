@@ -23,7 +23,7 @@ class EncoderBNDO(nn.Module):
                   ),
                 ),
               conv_block=conv_block
-              ) for in_f,out_f in zip(config.encoder_channels[:-1],config.encoder_channels[1:])],
+              ) for in_c,out_c in zip(config.encoder_channels[:-1],config.encoder_channels[1:])],
         )
     def forward(self, x):
         return self.enc_blocks(x)
