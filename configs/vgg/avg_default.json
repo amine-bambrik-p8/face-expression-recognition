@@ -1,5 +1,6 @@
 {
-    "exp_name": "default",
+    "label":"vgg",
+    "exp_name": "vgg",
     "description":"vgg with avg decoder",
     "agent": "GenericAgent",
 
@@ -7,16 +8,23 @@
     "loss_function":"NLLLoss",
     "do_save":false,
     "decoder":"AvgDecoder",
-    "encoder_channels":[64,64,128],
-    "n_classes":7,
     "in_channels":1,
-    "class_fn":"LogSoftmax",
+    "encoder_dropout":0.1,
+    "encoder_fn":"ReLU",
+    "encoder_fn_params":[],
+    "encoder_batch_norm":true,
+    "encoder_channels":[64,64,128],
+    "encoder_depths":[2,2,2],
+    "n_classes":7,
     "decoder_channels":[128],
-    "decoder_dropout":0.0,
-    "decoder_batch_norm":true,
+    "decoder_dropout":0.4,
+    "class_fn":"LogSoftmax",
     "optimizer":"adam",
 
     "learning_rate": 0.0005,
+    "lr_scheduler_factor":0.1,
+    "lr_scheduler_mode":"min",
+    "min_lr":0.00001,
     "betas":[
         0.9,
         0.99

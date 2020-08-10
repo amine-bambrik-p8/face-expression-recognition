@@ -7,6 +7,7 @@
     "model":"GoodFellowV3",
     "loss_function":"NLLLoss",
     "do_save":true,
+    "decoder_fn_params":[0.1],
     "decoder":"BasicDecoder",
     "encoder_channels":[64,64,128],
     "encoder_dropout":0.0,
