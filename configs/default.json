@@ -3,7 +3,7 @@
     "description":"Inception optims test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
-    "model":"GoodFellowV3ResNet",
+    "model":"GoodFellowV3",
     "loss_function":"NLLLoss",
     "do_save":false,
     "decoder":"AvgDecoder",
