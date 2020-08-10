@@ -26,6 +26,7 @@ class EncoderBNDO(nn.Module):
                   nn.Dropout2d(config.encoder_dropout) if config.encoder_dropout > 0.0 else nn.Identity()
                 ),
               conv_block=conv_block,
+              batch_norm=config.encoder_batch_norm,
               activation=globals()[config.encoder_fn](*config.encoder_fn_params)
               ) for in_c,out_c in zip(config.encoder_channels[:-1],config.encoder_channels[1:])],
         )
