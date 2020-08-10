@@ -25,7 +25,8 @@ class EncoderBNDO(nn.Module):
                   ),
                   nn.Dropout2d(config.encoder_dropout) if config.encoder_dropout > 0.0 else nn.Identity()
                 ),
-              conv_block=conv_block
+              conv_block=conv_block,
+              activation=activation=globals()[config.encoder_fn](*config.encoder_fn_params)
               ) for in_c,out_c in zip(config.encoder_channels[:-1],config.encoder_channels[1:])],
         )
     def forward(self, x):
@@ -58,19 +59,14 @@ class GoodFellowV3(nn.Module):
   
 
 class GoodFellowV3Inference(nn.Module):
-  def __init__(self):
+  def __init__(self,config):
     super(GoodFellowV3Inference,self).__init__()
-    
-    self.encoder = EncoderBNDO(1,[64,64,128])
-    self.decoder = BasicDecoder([128*6*6,1024,1024],7)
-
+    self.network = GoodFellowV3(config)
   def forward(self,x):
     x = x.reshape(48, 48, 4,-1)
     x = torch.narrow(x, dim=2, start=3, length=1)
     x = x.reshape(-1,1, 48, 48)
     x = x / 255
     x = (x - 0.5) / 0.5
-    x = self.encoder(x)
-    x = torch.flatten(x,1)
-    x = self.decoder(x)
+    x = network(x)
     return F.softmax(x,dim=1)

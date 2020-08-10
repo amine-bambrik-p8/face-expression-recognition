@@ -19,7 +19,7 @@ class NetInNetDecoder(nn.Module):
               kernel_size=1,
               block=conv_block,
               depth=1,
-              activation=globals()[config.decoder_fn],
+              activation=globals()[config.decoder_fn](*config.decoder_fn_params),
               dropout=config.decoder_dropout,
               batch_norm=config.decoder_batch_norm,
               ) for in_c,out_c in zip(config.decoder_channels[:-1],config.decoder_channels[1:]) ])

@@ -6,14 +6,17 @@ from models.layers.inception_block import InceptionBlock
 from models.layers.conv_block import conv_block
 from models.layers.stack_block import stack_block
 from models.layers.same_conv import same_conv_block
-def block(in_f, out_f,dropout=0.0):
+def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU):
     return nn.Sequential(
         InceptionBlock(in_f, out_f),
         nn.BatchNorm2d(out_f),
         nn.ReLU(),
-        InceptionBlock(out_f, out_f),
-        nn.BatchNorm2d(out_f),
-        nn.ReLU(),
+        *[
+          nn.Sequential(
+          InceptionBlock(out_f, out_f),
+          nn.BatchNorm2d(out_f),
+          nn.ReLU())
+        for i in range(depth-1)],
         nn.MaxPool2d(2,2),
         nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
@@ -29,11 +32,12 @@ class GoodFellowV3Inception(nn.Module):
               conv_block=conv_block
               )
     self.encoder = nn.Sequential(*[block(in_c,out_c) for in_c,out_c in zip(config.encoder_channels[:-1],config.encoder_channels[1:])])
-    self.decoder = BasicDecoder(config)
+    self.decoder = globals()[config.decoder](config)
+    self.class_fn = globals()[config.class_fn](dim=1)
 
   def forward(self,x):
     x = self.gate(x)
     x = self.encoder(x)
     x = x.view(x.size(0),-1)
     x = self.decoder(x)
-    return F.log_softmax(x,dim=1)
+    return self.class_fn(x)
