@@ -1,6 +1,6 @@
 {
     "label":"histo_equal_face",
-    "exp_name": "vgg_prepro",
+    "exp_name": "resnet_prepro",
     "description":"VGG optims test logging adam accuracy and loss",
     "agent": "GenericAgent",
 

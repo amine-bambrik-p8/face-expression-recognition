@@ -1,10 +1,9 @@
 {
-    "label":"histo_equal_face",
-    "exp_name": "vgg_prepro",
+    "exp_name": "resnet_prepro",
     "description":"VGG optims test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
-    "model":"GoodFellowV3",
+    "model":"GoodFellowV3ResNet",
     "loss_function":"NLLLoss",
     "do_save":false,
     "decoder":"BasicDecoder",
@@ -26,9 +25,9 @@
     
     "data_loader": "ImageFERDataLoader",
     "batch_size": 128,
-    "test_transform":"gray_scale_histo_equal_face",
-    "valid_transform":"gray_scale_histo_equal_face",
-    "train_transform":"gray_scale_histo_equal_face",
+    "test_transform":"gray_scale",
+    "valid_transform":"gray_scale",
+    "train_transform":"gray_scale",
     "train_datafolder": "./data/FER/train",
     "test_datafolder": "./data/FER/test",
     "valid_datafolder": "./data/FER/validation",

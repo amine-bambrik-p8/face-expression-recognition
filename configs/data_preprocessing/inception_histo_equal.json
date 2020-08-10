@@ -1,4 +1,5 @@
 {
+    "label":"histo_equal",
     "exp_name": "inception_prepro",
     "description":"VGG optims test logging adam accuracy and loss",
     "agent": "GenericAgent",
@@ -6,7 +7,15 @@
     "model":"GoodFellowV3",
     "loss_function":"NLLLoss",
     "do_save":false,
-    
+    "decoder":"BasicDecoder",
+    "encoder_channels":[64,64,128],
+    "n_classes":7,
+    "in_channels":1,
+    "class_fn":"LogSoftmax",
+    "decoder_fn":"ReLU",
+    "decoder_channels":[18432,1024,1024],
+    "decoder_dropout":0.0,
+    "decoder_batch_norm":true,
     "optimizer":"sgd_momentum",
 
     "learning_rate": 0.0005,
