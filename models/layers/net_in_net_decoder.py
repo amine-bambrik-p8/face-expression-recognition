@@ -19,7 +19,9 @@ class NetInNetDecoder(nn.Module):
               kernel_size=1,
               block=conv_block,
               depth=1,
-              activation=globals()[config.decoder_fn]
+              activation=globals()[config.decoder_fn],
+              dropout=config.decoder_dropout,
+              batch_norm=config.decoder_batch_norm,
               ) for in_c,out_c in zip(config.decoder_channels[:-1],config.decoder_channels[1:]) ])
         self.avg = nn.AdaptiveAvgPool2d((1,1))
         self.decoder = nn.Linear(config.decoder_channels[-1],config.n_classes)

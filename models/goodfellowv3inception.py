@@ -21,23 +21,19 @@ class GoodFellowV3Inception(nn.Module):
   def __init__(self,config):
     super(GoodFellowV3Inception,self).__init__()
     self.gate = stack_block(
-              in_f=1,
-              out_f=64,
+              in_f=config.in_channels,
+              out_f=config.encoder_channels[0],
               kernel_size=7,
               block=same_conv_block,
               depth=2,
               conv_block=conv_block
               )
-    self.block1 = block(64,128)
-    self.block2 = block(128,256)
-    self.block3 = block(256,512)
-    self.decoder = BasicDecoder([512*6*6,1024,1024],7)
+    self.encoder = *[block(in_c,out_c) for in_c,out_c in zip(config.encoder_channels[:-1],config.encoder_channels[1:])]
+    self.decoder = BasicDecoder(config)
 
   def forward(self,x):
     x = self.gate(x)
-    x = self.block1(x)
-    x = self.block2(x)
-    x = self.block3(x)
+    x = self.encoder(x)
     x = x.view(x.size(0),-1)
     x = self.decoder(x)
     return F.log_softmax(x,dim=1)
