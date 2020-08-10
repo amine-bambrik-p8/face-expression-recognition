@@ -28,7 +28,7 @@ class GoodFellowV3Inception(nn.Module):
               depth=2,
               conv_block=conv_block
               )
-    self.encoder = *[block(in_c,out_c) for in_c,out_c in zip(config.encoder_channels[:-1],config.encoder_channels[1:])]
+    self.encoder = nn.Sequential(*[block(in_c,out_c) for in_c,out_c in zip(config.encoder_channels[:-1],config.encoder_channels[1:])])
     self.decoder = BasicDecoder(config)
 
   def forward(self,x):
