@@ -1,6 +1,7 @@
 
 import torch
 from torch import nn
+from torch.nn import *
 from models.layers.conv_block import conv_block
 from models.layers.stack_block import stack_block
 from models.layers.same_conv import same_conv_block
