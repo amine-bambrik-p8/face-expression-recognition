@@ -1,8 +1,9 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from models.layers.basic_decoder import BasicDecoder
+from models.layers.avg_decoder import AvgDecoder 
+from models.layers.net_in_net_decoder import NetInNetDecoder 
 import torch
-from models.layers import * 
 from models.layers.conv_block import conv_block
 from models.layers.stack_block import stack_block
 from models.layers.same_conv import same_conv_block
