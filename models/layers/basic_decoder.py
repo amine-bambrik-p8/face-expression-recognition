@@ -15,7 +15,7 @@ class BasicDecoder(nn.Module):
         n_classes=config.n_classes
         dropout=config.decoder_dropout
         batch_norm=config.decoder_batch_norm
-        self.dec_blocks = nn.Sequential(*[dec_block(in_f, out_f,dropout=dropout,batch_norm=batch_norm,activation=globals()[config.decoder_fn_params](*config.decoder_fn_params)) 
+        self.dec_blocks = nn.Sequential(*[dec_block(in_f, out_f,dropout=dropout,batch_norm=batch_norm,activation=globals()[config.decoder_fn](*config.decoder_fn_params)) 
                     for in_f, out_f in zip(dec_sizes, dec_sizes[1:])])
         self.last = nn.Linear(dec_sizes[-1], n_classes)
     def forward(self, x):
