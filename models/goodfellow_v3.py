@@ -17,7 +17,7 @@ class EncoderBNDO(nn.Module):
               out_f=out_c,
               kernel_size=5,
               block=same_conv_block,
-              depth=2,
+              depth=depth,
               out_gate=nn.Sequential(
                   nn.MaxPool2d(
                     kernel_size=2,
@@ -28,7 +28,7 @@ class EncoderBNDO(nn.Module):
               conv_block=conv_block,
               batch_norm=config.encoder_batch_norm,
               activation=globals()[config.encoder_fn](*config.encoder_fn_params)
-              ) for in_c,out_c in zip(config.encoder_channels[:-1],config.encoder_channels[1:])],
+              ) for in_c,out_c,depth in zip(config.encoder_channels[:-1],config.encoder_channels[1:],config.encoder_depths[1:])],
         )
     def forward(self, x):
         return self.enc_blocks(x)
@@ -40,7 +40,7 @@ class GoodFellowV3(nn.Module):
               out_f=config.encoder_channels[0],
               kernel_size=7,
               block=same_conv_block,
-              depth=2,
+              depth=config.encoder_depths[0],
               out_gate=nn.MaxPool2d(
                 kernel_size=2,
                 stride=2

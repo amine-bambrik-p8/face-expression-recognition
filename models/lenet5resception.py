@@ -20,14 +20,15 @@ class LeNetResCeptionNet(nn.Module):
     def __init__(self,config,in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()
         self.gate = stack_block(
-              in_f=1,
-              out_f=128,
+              in_f=config.in_channels,
+              out_f=config.encoder_channels[0],
               kernel_size=7,
               block=ResNetBasicBlock,
               depth=2
               )
-        self.encoder = ResNetEncoder(128, block=ResCeptionBlock,blocks_sizes=[256, 512, 1024], deepths=[2, 2, 2])
-        self.decoder = ResnetDecoder(self.encoder.blocks[-1].blocks[-1].expanded_channels, n_classes)
+        self.encoder = ResNetEncoder(config.encoder_channels[0], block=ResCeptionBlock,blocks_sizes=config.encoder_channels[1:], deepths=config.encoder_depths)
+        self.decoder = globals()[config.decoder](config)
+        self.class_fn = globals()[config.class_fn](dim=1)
         
     def forward(self, x):
         x = self.gate(x)
