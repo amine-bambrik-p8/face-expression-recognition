@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import *
+import torch 
 def dec_block(in_f, out_f,dropout=0.0,activation=nn.ReLU(),batch_norm=True):
     return nn.Sequential(
         nn.Linear(in_f, out_f),        

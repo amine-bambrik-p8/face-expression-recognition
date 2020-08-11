@@ -3,6 +3,7 @@ import torch.nn.functional as F
 from models.layers.basic_decoder import BasicDecoder
 from models.layers.inception_block import InceptionBlock
 from torch.nn import *
+import torch
 
 from models.layers.conv_block import conv_block
 from models.layers.stack_block import stack_block
@@ -39,6 +40,5 @@ class GoodFellowV3Inception(nn.Module):
   def forward(self,x):
     x = self.gate(x)
     x = self.encoder(x)
-    x = x.view(x.size(0),-1)
     x = self.decoder(x)
     return self.class_fn(x)
