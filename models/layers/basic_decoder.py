@@ -19,6 +19,6 @@ class BasicDecoder(nn.Module):
                     for in_f, out_f in zip(dec_sizes, dec_sizes[1:])])
         self.last = nn.Linear(dec_sizes[-1], n_classes)
     def forward(self, x):
-        x = x.view(x.size(0),-1)
+        x = torch.flatten(x,1)
         x = self.dec_blocks(x)
         return self.last(x)

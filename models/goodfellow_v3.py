@@ -62,12 +62,28 @@ class GoodFellowV3(nn.Module):
 class GoodFellowV3Inference(nn.Module):
   def __init__(self,config):
     super(GoodFellowV3Inference,self).__init__()
-    self.network = GoodFellowV3(config)
+    self.gate = stack_block(
+              in_f=config.in_channels,
+              out_f=config.encoder_channels[0],
+              kernel_size=7,
+              block=same_conv_block,
+              depth=config.encoder_depths[0],
+              out_gate=nn.MaxPool2d(
+                kernel_size=2,
+                stride=2
+                ),
+              conv_block=conv_block
+              )
+    self.encoder = EncoderBNDO(config)
+    #1,[64,64,128]
+    self.decoder = globals()[config.decoder](config)
+    #[128*6*6,1024,1024],7
+    self.class_fn = globals()[config.class_fn](dim=1)
   def forward(self,x):
-    x = x.reshape(48, 48, 4,-1)
-    x = torch.narrow(x, dim=2, start=3, length=1)
-    x = x.reshape(-1,1, 48, 48)
+    x = x.reshape(1,1, 48, 48)
     x = x / 255
     x = (x - 0.5) / 0.5
-    x = network(x)
+    x = self.gate(x)    
+    x = self.encoder(x)
+    x = self.decoder(x)
     return F.softmax(x,dim=1)

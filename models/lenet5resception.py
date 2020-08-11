@@ -3,6 +3,7 @@ import torch.nn.functional as F
 from models.layers.res_block import *
 from models.layers.inception_block import InceptionBlock
 from models.layers.stack_block import stack_block
+from torch.nn import *
 
 class ResCeptionBlock(ResNetBasicBlock):
     def __init__(self, in_channels, out_channels, *args, **kwargs):
