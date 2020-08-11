@@ -33,7 +33,7 @@ class GoodFellowV3Inception(nn.Module):
               depth=config.encoder_depths[0],
               conv_block=conv_block
               )
-    self.encoder = nn.Sequential(*[block(in_c,out_c,dropout=config.encoder_dropout,depth=depth,activation=globals()[config.encoder_fn](*config.encoder_fn_params)) for in_c,out_c,depth in zip(config.encoder_channels[:-1],config.encoder_channels[1:],config.encoder_depths[1:])])
+    self.encoder = nn.Sequential(*[block(in_c,out_c,dropout=config.encoder_dropout,depth=depth,activation=globals()[config.encoder_fn](*config.encoder_fn_params)) for in_c,out_c,depth in zip(config.encoder_channels[:-1],config.encoder_channels[1:],config.encoder_depths)])
     self.decoder = globals()[config.decoder](config)
     self.class_fn = globals()[config.class_fn](dim=1)
 
