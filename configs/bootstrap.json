@@ -1,10 +1,10 @@
 {
     "label":"test",
-    "exp_name":"bootstrap tester",
+    "exp_name":"bootstrap",
     "exps":[
-        "configs/test.json",
-        "configs/test.json",
-        "configs/test.json"
+        "configs/data_aug/inception_all.json",
+        "configs/data_aug/vgg_all.json",
+        "configs/data_aug/resnet_all.json"
     ],
     "mode":"train",
     "agent":"BootstrapTester"
