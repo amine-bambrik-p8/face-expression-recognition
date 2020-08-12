@@ -40,7 +40,7 @@ class NetInNetDecoder(nn.Module):
     def forward(self, x):
         x = self.net_in_net(x)
         x = self.decoder(x)
+        print(x.shape)
         x = self.avg(x)
         x = torch.flatten(x,1)
-        print(x.shape)
         return x
