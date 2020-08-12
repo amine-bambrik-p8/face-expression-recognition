@@ -1,0 +1,11 @@
+{
+    "label":"test",
+    "exp_name":"bootstrap tester",
+    "exps":[
+        "configs/test.json",
+        "configs/test.json",
+        "configs/test.json"
+    ],
+    "mode":"train",
+    "agent":"BootstrapTester"
+}
