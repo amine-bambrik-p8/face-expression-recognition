@@ -32,7 +32,8 @@ class NetInNetDecoder(nn.Module):
               ) for in_c,out_c in zip(config.decoder_channels[:-1],config.decoder_channels[1:]) ])
         self.decoder = nn.Sequential(
             nn.Conv2d(config.decoder_channels[-1],config.n_classes,kernel_size=1),
-            nn.Softmax2d()
+            nn.Softmax2d(),
+            nn.Conv2d(config.n_classes,config.n_classes,kernel_size=6)
             )
         self.avg = nn.AdaptiveAvgPool2d((1,1))
 
@@ -41,4 +42,5 @@ class NetInNetDecoder(nn.Module):
         x = self.decoder(x)
         x = self.avg(x)
         x = torch.flatten(x,1)
+        print(x.shape)
         return x
