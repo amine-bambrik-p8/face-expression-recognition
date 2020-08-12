@@ -1,6 +1,6 @@
 {
     "label":"vgg",
-    "exp_name": "rrotate",
+    "exp_name": "dropout",
     "description":"VGG augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
@@ -19,7 +19,7 @@
     "decoder_channels":[4608,1024,1024],
     "decoder_fn":"ReLU",
     "decoder_fn_params":[],
-    "decoder_dropout":0.0,
+    "decoder_dropout":0.3,
     "decoder_batch_norm":true,
     "class_fn":"LogSoftmax",
     "optimizer":"adam",
@@ -38,7 +38,7 @@
     "batch_size": 128,
     "test_transform":"gray_scale_histo_equal_face",
     "valid_transform":"gray_scale_histo_equal_face",
-    "train_transform":"gray1_rhflip_histo_equal_rrotate_face",
+    "train_transform":"gray_scale_all",
     "train_datafolder": "./data/FER/train",
     "test_datafolder": "./data/FER/test",
     "valid_datafolder": "./data/FER/validation",
