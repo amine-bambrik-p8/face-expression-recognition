@@ -108,10 +108,13 @@ class ResNetEncoder(nn.Module):
         super().__init__()
         self.blocks_sizes = blocks_sizes
         self.gate = nn.Sequential(
-            nn.Conv2d(in_channels, self.blocks_sizes[0], kernel_size=7, stride=2, padding=3, bias=False),
+            nn.Conv2d(in_channels, self.blocks_sizes[0], kernel_size=7),
             nn.BatchNorm2d(self.blocks_sizes[0]),
             activation_func(activation),
-            nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+            nn.Conv2d(in_channels, self.blocks_sizes[0], kernel_size=7),
+            nn.BatchNorm2d(self.blocks_sizes[0]),
+            activation_func(activation),
+            nn.MaxPool2d(kernel_size=2, stride=2)
         )
         self.in_out_block_sizes = list(zip(blocks_sizes, blocks_sizes[1:]))
         self.blocks = nn.ModuleList([ 

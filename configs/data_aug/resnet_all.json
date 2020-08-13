@@ -1,5 +1,5 @@
 {
-    "label":"resnet",
+    "label":"resnet_new",
     "exp_name": "all",
     "description":"ResNet augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
@@ -13,10 +13,10 @@
     "encoder_fn":"ReLU",
     "encoder_fn_params":[],
     "encoder_batch_norm":true,
-    "encoder_channels":[64,64,128],
+    "encoder_channels":[64,128,256],
     "encoder_depths":[2,2,2],
     "n_classes":7,
-    "decoder_channels":[18432,1024,1024],
+    "decoder_channels":[9216,1024,1024],
     "decoder_fn":"ReLU",
     "decoder_fn_params":[],
     "decoder_dropout":0.0,
@@ -31,7 +31,7 @@
         0.99
     ],
     "weight_decay":0,
-    "max_epoch": 15,
+    "max_epoch": 30,
     "log_interval": 10,
     "validate_every": 1, 
     
