@@ -1,6 +1,6 @@
 {
     "label":"vgg_net_in_net",
-    "exp_name": "decoder",
+    "exp_name": "decoders",
     "description":"VGG augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
