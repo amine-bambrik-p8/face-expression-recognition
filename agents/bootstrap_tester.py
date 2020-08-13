@@ -60,20 +60,19 @@ class BootstrapTester(BaseAgent):
         total = 0
         predictions = None
         labels = None
-
         with torch.no_grad():
             for data, target in self.data_loader.test_loader:
-                vote = None
+                vote = torch.zeros(data.size(0),7)
                 for agent in self.agents:
                     data, target = data.to(agent.device), target.to(agent.device)
                     output = agent.model(data)
                     _,pred=torch.max(output,1)
                     one_hot=torch.nn.functional.one_hot(pred,num_classes=7)
-                    if(vote is None):
-                        vote = one_hot;
-                    else:
-                        vote += one_hot
+                    vote += one_hot
+                print(vote)
                 _,pred = torch.max(vote,1)
+                print(pred)
+                raise Exception("break point")
                 correct += pred.eq(target).sum().item()
                 total += target.size(0)
                 if predictions is not None:
