@@ -109,11 +109,11 @@ class ResNetEncoder(nn.Module):
         super().__init__()
         self.blocks_sizes = blocks_sizes
         self.gate = stack_block(
-              in_f=config.in_channels,
-              out_f=config.encoder_channels[0],
+              in_f=in_channels,
+              out_f=blocks_sizes[0],
               kernel_size=7,
               block=same_conv_block,
-              depth=config.encoder_depths[0],
+              depth=2,
               out_gate=nn.MaxPool2d(
                 kernel_size=2,
                 stride=2
