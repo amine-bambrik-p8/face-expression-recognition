@@ -23,7 +23,7 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
                     out_f,out_f,
                     kernel_size=2,
                     stride=2
-                  ),,
+                  ),
         nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
 class GoodFellowV3InceptionDown(nn.Module):
