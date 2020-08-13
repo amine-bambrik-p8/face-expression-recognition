@@ -30,16 +30,12 @@ class NetInNetDecoder(nn.Module):
               dropout=config.decoder_dropout,
               batch_norm=config.decoder_batch_norm,
               ) for in_c,out_c in zip(config.decoder_channels[:-1],config.decoder_channels[1:]) ])
-        self.decoder = nn.Sequential(
-            nn.Conv2d(config.decoder_channels[-1],config.n_classes,kernel_size=1),
-            nn.Softmax2d(),
-            nn.Conv2d(config.n_classes,config.n_classes,kernel_size=6)
-            )
         self.avg = nn.AdaptiveAvgPool2d((1,1))
+        self.decoder = nn.Linear(config.decoder_channels[-1],config.n_classes)
 
     def forward(self, x):
         x = self.net_in_net(x)
-        x = self.decoder(x)
         x = self.avg(x)
         x = torch.flatten(x,1)
+        x = self.decoder(x)
         return x
