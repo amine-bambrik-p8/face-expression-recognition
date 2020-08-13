@@ -34,7 +34,6 @@ class BootstrapTester(BaseAgent):
         self.agents = []
         self.load_checkpoint()
         self.data_loader= self.agents[0].data_loader
-        self.summary_writer = SummaryWriter(log_dir="./experiments/{}/summaries".format(self.config.exp_name), comment=self.config.model)
 
 
     def load_checkpoint(self):
@@ -89,7 +88,6 @@ class BootstrapTester(BaseAgent):
         cm=confusion_matrix(labels, predictions, labels=range(len(self.data_loader.classes)))
         print(cm)
         fig = plot_confusion_matrix(cm,self.data_loader.classes)
-        self.summary_writer.add_figure("Confusion matrix",fig)
         self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, total,
             accuracy))
