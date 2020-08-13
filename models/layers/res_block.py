@@ -3,6 +3,7 @@ import torch.nn.functional as F
 from functools import partial
 from models.layers.same_conv import same_conv_block
 from models.layers.conv_block import conv_block
+from models.layers.stack_block import stack_block
 
 
 conv3x3 = partial(same_conv_block,conv_block=nn.Conv2d, kernel_size=3, bias=False)      
@@ -107,15 +108,18 @@ class ResNetEncoder(nn.Module):
                  activation='relu', block=ResNetBasicBlock, *args, **kwargs):
         super().__init__()
         self.blocks_sizes = blocks_sizes
-        self.gate = nn.Sequential(
-            nn.Conv2d(in_channels, self.blocks_sizes[0], kernel_size=7),
-            nn.BatchNorm2d(self.blocks_sizes[0]),
-            activation_func(activation),
-            nn.Conv2d(self.blocks_sizes[0], self.blocks_sizes[0], kernel_size=7),
-            nn.BatchNorm2d(self.blocks_sizes[0]),
-            activation_func(activation),
-            nn.MaxPool2d(kernel_size=2, stride=2)
-        )
+        self.gate = stack_block(
+              in_f=config.in_channels,
+              out_f=config.encoder_channels[0],
+              kernel_size=7,
+              block=same_conv_block,
+              depth=config.encoder_depths[0],
+              out_gate=nn.MaxPool2d(
+                kernel_size=2,
+                stride=2
+                ),
+              conv_block=conv_block
+              )
         self.in_out_block_sizes = list(zip(blocks_sizes, blocks_sizes[1:]))
         self.blocks = nn.ModuleList([ 
             ResNetLayer(blocks_sizes[0], blocks_sizes[0], n=deepths[0], activation=activation,
