@@ -35,7 +35,7 @@ class EncoderBNDO(nn.Module):
         return self.enc_blocks(x)
 class GoodFellowV3Down(nn.Module):
   def __init__(self,config):
-    super(GoodFellowV3,self).__init__()
+    super(GoodFellowV3Down,self).__init__()
     self.gate = stack_block(
               in_f=config.in_channels,
               out_f=config.encoder_channels[0],
