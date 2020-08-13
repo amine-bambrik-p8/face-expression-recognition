@@ -1,10 +1,10 @@
 {
-    "label":"resnet",
-    "exp_name": "all",
-    "description":"ResNet augs test logging adam accuracy and loss",
+    "label":"inception",
+    "exp_name": "downsampling",
+    "description":"Inception augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
-    "model":"GoodFellowV3ResNet",
+    "model":"GoodFellowV3Inception",
     "loss_function":"NLLLoss",
     "do_save":false,
     "decoder":"BasicDecoder",
@@ -13,7 +13,7 @@
     "encoder_fn":"ReLU",
     "encoder_fn_params":[],
     "encoder_batch_norm":true,
-    "encoder_channels":[64,64,128],
+    "encoder_channels":[64,128,256,512],
     "encoder_depths":[2,2,2],
     "n_classes":7,
     "decoder_channels":[18432,1024,1024],
@@ -23,7 +23,6 @@
     "decoder_batch_norm":true,
     "class_fn":"LogSoftmax",
     "optimizer":"adam",
-    
 
     "learning_rate": 0.0005,
     "betas":[
