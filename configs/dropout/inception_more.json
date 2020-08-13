@@ -1,5 +1,5 @@
 {
-    "label":"inception_less",
+    "label":"inception_more",
     "exp_name": "dropout",
     "description":"Inception augs test logging adam accuracy and loss",
     "agent": "GenericAgent",

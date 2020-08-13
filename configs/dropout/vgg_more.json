@@ -1,5 +1,5 @@
 {
-    "label":"vgg_less",
+    "label":"vgg_more",
     "exp_name": "dropout",
     "description":"VGG augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
