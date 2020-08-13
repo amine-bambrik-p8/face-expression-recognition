@@ -34,6 +34,7 @@ class BootstrapTester(BaseAgent):
         self.agents = []
         self.load_checkpoint()
         self.data_loader= self.agents[0].data_loader
+        self.summary_writer = SummaryWriter(log_dir="./experiments/{}/summaries".format(self.config.exp_name), comment=self.config.model)
 
 
     def load_checkpoint(self):
@@ -60,19 +61,20 @@ class BootstrapTester(BaseAgent):
         total = 0
         predictions = None
         labels = None
+
         with torch.no_grad():
             for data, target in self.data_loader.test_loader:
                 vote = None
                 for agent in self.agents:
                     data, target = data.to(agent.device), target.to(agent.device)
                     output = agent.model(data)
-                    test_loss += agent.loss(output, target).item()  # sum up batch loss
+                    _,pred=torch.max(output,1)
+                    one_hot=torch.nn.functional.one_hot(pred,num_classes=7)
                     if(vote is None):
-                        vote = output;
+                        vote = one_hot;
                     else:
-                        vote += output
-                        assert len(vote) == len(output)
-                pred,_=self.output_to_probs(vote)
+                        vote += one_hot
+                _,pred = torch.max(vote,1)
                 correct += pred.eq(target).sum().item()
                 total += target.size(0)
                 if predictions is not None:
