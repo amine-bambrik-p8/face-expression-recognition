@@ -19,7 +19,7 @@ class EncoderBNDO(nn.Module):
               block=same_conv_block,
               depth=depth,
               out_gate=nn.Sequential(
-                  nn,Conv2d(
+                  nn.Conv2d(
                     out_c,out_c,
                     kernel_size=2,
                     stride=2

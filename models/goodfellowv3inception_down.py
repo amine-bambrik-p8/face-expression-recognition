@@ -19,7 +19,7 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
           nn.BatchNorm2d(out_f),
           nn.ReLU())
         for i in range(depth-1)],
-        nn,Conv2d(
+        nn.Conv2d(
                     out_f,out_f,
                     kernel_size=2,
                     stride=2
