@@ -1,6 +1,6 @@
 {
     "label":"vgg",
-    "exp_name": "leaky_relu",
+    "exp_name": "lr_decay",
     "description":"VGG augs test logging adam accuracy and loss",
     "agent": "GenericAgentLRDecay",
 
