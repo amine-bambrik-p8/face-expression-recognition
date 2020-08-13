@@ -111,7 +111,7 @@ class ResNetEncoder(nn.Module):
             nn.Conv2d(in_channels, self.blocks_sizes[0], kernel_size=7),
             nn.BatchNorm2d(self.blocks_sizes[0]),
             activation_func(activation),
-            nn.Conv2d(in_channels, self.blocks_sizes[0], kernel_size=7),
+            nn.Conv2d(self.blocks_sizes[0], self.blocks_sizes[0], kernel_size=7),
             nn.BatchNorm2d(self.blocks_sizes[0]),
             activation_func(activation),
             nn.MaxPool2d(kernel_size=2, stride=2)
