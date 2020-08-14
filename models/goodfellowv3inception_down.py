@@ -5,6 +5,8 @@ from models.layers.inception_block import InceptionBlock
 from torch.nn import *
 import torch
 
+from models.layers.avg_decoder import AvgDecoder
+from models.layers.net_in_net_decoder import NetInNetDecoder
 from models.layers.conv_block import conv_block
 from models.layers.stack_block import stack_block
 from models.layers.same_conv import same_conv_block
