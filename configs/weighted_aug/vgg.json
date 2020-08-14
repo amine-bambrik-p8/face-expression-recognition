@@ -2,7 +2,7 @@
     "label":"vgg",
     "exp_name": "weighted",
     "description":"VGG augs test logging adam accuracy and loss",
-    "agent": "GenericAgentLRDecay",
+    "agent": "GenericAgent",
 
     "model":"GoodFellowV3",
     "loss_function":"NLLLoss",
