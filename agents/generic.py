@@ -43,11 +43,7 @@ class GenericAgent(BaseAgent):
         # define optimizer
         self.optimizer = getattr(optim_m,"optimizer")(self.model,config)
         self.checkpoint_dir = "experiments/{}/checkpoints/".format(self.config.exp_name)
-        def init_weights(m):
-            if type(m) == nn.Linear:
-                torch.nn.init.xavier_uniform(m.weight)
-                m.bias.data.fill_(0.01)
-        self.model.apply(init_weights)
+        
 
 
         # initialize counter
