@@ -39,7 +39,7 @@ class ImageFERDataLoaderBootstrap:
         self.valid_size = len(valid_dataset)
         self.train_size = len(train_dataset)
         self.test_size = len(test_dataset)
-        sampler = SubsetRandomSampler(bootstrap(self.train_size))
+        sampler = SubsetRandomSampler(bootstrap(4500))
         self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,sampler=sampler)
         self.test_loader = torch.utils.data.DataLoader(test_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
         self.valid_loader = torch.utils.data.DataLoader(valid_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
