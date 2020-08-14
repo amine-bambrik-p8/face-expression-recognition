@@ -38,7 +38,7 @@
     "validate_every": 1, 
     
     "data_loader": "ImageFERDataLoader",
-    "batch_size": 48,
+    "batch_size": 64,
     "test_transform":"gray_scale_histo_equal_face",
     "valid_transform":"gray_scale_histo_equal_face",
     "train_transform":"gray1_rhflip_histo_equal_rrotate_face",
