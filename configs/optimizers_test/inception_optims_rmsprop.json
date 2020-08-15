@@ -1,5 +1,6 @@
 {
     "label":"rmsprop",
+    "agent": "GenericAgent",
 
     "exp_name": "inception_optims",
     "description":"Inception optims test logging rmsprop accuracy and loss",
