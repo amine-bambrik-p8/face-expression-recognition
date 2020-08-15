@@ -20,6 +20,7 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
           InceptionBlock(out_f, out_f),
           nn.BatchNorm2d(out_f),
           activation
+          )
         for i in range(depth-1)],
         nn.Conv2d(
                     out_f,out_f,
