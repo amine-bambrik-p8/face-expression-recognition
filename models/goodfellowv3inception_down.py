@@ -26,6 +26,8 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
                     kernel_size=2,
                     stride=2
                   ),
+        nn.BatchNorm2d(out_f),
+        nn.ReLU(),
         nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
 class GoodFellowV3InceptionDown(nn.Module):

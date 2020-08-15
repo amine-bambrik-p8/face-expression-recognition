@@ -23,7 +23,9 @@ class EncoderBNDO(nn.Module):
                     out_c,out_c,
                     kernel_size=2,
                     stride=2
-                  ),
+                  ),          
+                  nn.BatchNorm2d(out_c),
+                  nn.ReLU(),
                   nn.Dropout2d(config.encoder_dropout) if config.encoder_dropout > 0.0 else nn.Identity()
                 ),
               conv_block=conv_block,
