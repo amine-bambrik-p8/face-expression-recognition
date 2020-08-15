@@ -4,7 +4,7 @@
     "description":"Inception augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
-    "model":"GoodFellowV3Inception",
+    "model":"GoodFellowV3InceptionDown",
     "loss_function":"NLLLoss",
     "do_save":false,
     "decoder":"NetInNetDecoder",

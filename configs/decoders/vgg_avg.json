@@ -4,7 +4,7 @@
     "description":"VGG augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
-    "model":"GoodFellowV3",
+    "model":"GoodFellowV3Down",
     "loss_function":"NLLLoss",
     "do_save":false,
     "decoder":"AvgDecoder",

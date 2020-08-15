@@ -16,7 +16,7 @@
     "encoder_channels":[64,64,128],
     "encoder_depths":[2,2,2],
     "n_classes":7,
-    "decoder_channels":[128,256,512],
+    "decoder_channels":[256,512,512],
     "decoder_fn":"LeakyReLU",
     "decoder_fn_params":[0.01],
     "decoder_dropout":0.4,
