@@ -1,6 +1,6 @@
 {
     "label":"inception",
-    "exp_name": "downsampling",
+    "exp_name": "leaky",
     "description":"Inception augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
