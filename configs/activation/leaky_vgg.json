@@ -1,6 +1,6 @@
 {
-    "label":"vgg",
-    "exp_name": "leaky_relu",
+    "label":"vgg_leaky",
+    "exp_name": "leaky",
     "description":"Inception augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
