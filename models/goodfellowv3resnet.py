@@ -8,7 +8,7 @@ from torch.nn import *
 class GoodFellowV3ResNet(nn.Module):
     def __init__(self,config, in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()
-        self.encoder = ResNetEncoder(in_channels, block=ResNetBasicBlock,blocks_sizes=config.encoder_channels, deepths=config.encoder_depths)
+        self.encoder = ResNetEncoder(in_channels, block=ResNetBasicBlock,blocks_sizes=config.encoder_channels, deepths=config.encoder_depths,activation=globals()[config.encoder_fn](*config.encoder_fn_params))
         self.decoder = globals()[config.decoder](config)
         self.class_fn = globals()[config.class_fn](dim=1)
     def forward(self, x):

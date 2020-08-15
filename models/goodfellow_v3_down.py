@@ -25,7 +25,7 @@ class EncoderBNDO(nn.Module):
                     stride=2
                   ),          
                   nn.BatchNorm2d(out_c),
-                  nn.ReLU(),
+                  globals()[config.encoder_fn](*config.encoder_fn_params),
                   nn.Dropout2d(config.encoder_dropout) if config.encoder_dropout > 0.0 else nn.Identity()
                 ),
               conv_block=conv_block,
@@ -48,6 +48,7 @@ class GoodFellowV3Down(nn.Module):
                 kernel_size=2,
                 stride=2
                 ),
+              activation=globals()[config.encoder_fn](*config.encoder_fn_params),
               conv_block=conv_block
               )
     self.encoder = EncoderBNDO(config)

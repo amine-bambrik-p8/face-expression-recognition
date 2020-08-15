@@ -14,12 +14,12 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
     return nn.Sequential(
         InceptionBlock(in_f, out_f),
         nn.BatchNorm2d(out_f),
-        nn.ReLU(),
+        activation,
         *[
           nn.Sequential(
           InceptionBlock(out_f, out_f),
           nn.BatchNorm2d(out_f),
-          nn.ReLU())
+          activation
         for i in range(depth-1)],
         nn.Conv2d(
                     out_f,out_f,
@@ -27,7 +27,7 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
                     stride=2
                   ),
         nn.BatchNorm2d(out_f),
-        nn.ReLU(),
+        activation,
         nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
 class GoodFellowV3InceptionDown(nn.Module):

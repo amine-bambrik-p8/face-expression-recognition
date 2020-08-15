@@ -15,12 +15,12 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
     return nn.Sequential(
         InceptionBlock(in_f, out_f),
         nn.BatchNorm2d(out_f),
-        nn.ReLU(),
+        activation,
         *[
           nn.Sequential(
           InceptionBlock(out_f, out_f),
           nn.BatchNorm2d(out_f),
-          nn.ReLU())
+          activation)
         for i in range(depth-1)],
         nn.MaxPool2d(2,2),
         nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()

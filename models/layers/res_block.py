@@ -9,20 +9,12 @@ from models.layers.stack_block import stack_block
 conv3x3 = partial(same_conv_block,conv_block=nn.Conv2d, kernel_size=3, bias=False)      
 
 
-def activation_func(activation):
-    return  nn.ModuleDict([
-        ['relu', nn.ReLU(inplace=True)],
-        ['leaky_relu', nn.LeakyReLU(negative_slope=0.01, inplace=True)],
-        ['selu', nn.SELU(inplace=True)],
-        ['none', nn.Identity()]
-    ])[activation]
-
 class ResidualBlock(nn.Module):
-    def __init__(self, in_channels, out_channels, activation='relu'):
+    def __init__(self, in_channels, out_channels, activation=nn.ReLU()):
         super().__init__()
         self.in_channels, self.out_channels, self.activation = in_channels, out_channels, activation
         self.blocks = nn.Identity()
-        self.activate = activation_func(activation)
+        self.activate = activation
         self.shortcut = nn.Identity()   
     
     def forward(self, x):
@@ -64,7 +56,7 @@ class ResNetBasicBlock(ResNetResidualBlock):
         super().__init__(in_channels, out_channels, *args, **kwargs)
         self.blocks = nn.Sequential(
             conv_bn(self.in_channels, self.out_channels, conv=self.conv, bias=False, stride=self.downsampling),
-            activation_func(self.activation),
+            self.activation,
             conv_bn(self.out_channels, self.expanded_channels, conv=self.conv, bias=False),
         )
     
@@ -75,9 +67,9 @@ class ResNetBottleNeckBlock(ResNetResidualBlock):
         super().__init__(in_channels, out_channels, expansion=4, *args, **kwargs)
         self.blocks = nn.Sequential(
            conv_bn(self.in_channels, self.out_channels, self.conv, kernel_size=1),
-             activation_func(self.activation),
+              self.activation,
              conv_bn(self.out_channels, self.out_channels, self.conv, kernel_size=3, stride=self.downsampling),
-             activation_func(self.activation),
+              self.activation,
              conv_bn(self.out_channels, self.expanded_channels, self.conv, kernel_size=1),
         )
 
@@ -105,7 +97,7 @@ class ResNetEncoder(nn.Module):
     ResNet encoder composed by layers with increasing features.
     """
     def __init__(self, in_channels=3, blocks_sizes=[64, 128, 256, 512], deepths=[2,2,2,2], 
-                 activation='relu', block=ResNetBasicBlock, *args, **kwargs):
+                 activation=nn.ReLU(), block=ResNetBasicBlock, *args, **kwargs):
         super().__init__()
         self.blocks_sizes = blocks_sizes
         self.gate = stack_block(
@@ -135,19 +127,3 @@ class ResNetEncoder(nn.Module):
         for block in self.blocks:
             x = block(x)
         return x
-
-class ResnetDecoder(nn.Module):
-    """
-    This class represents the tail of ResNet. It performs a global pooling and maps the output to the
-    correct class by using a fully connected layer.
-    """
-    def __init__(self, in_features, n_classes):
-        super().__init__()
-        self.avg = nn.AdaptiveAvgPool2d((1, 1))
-        self.decoder = nn.Linear(in_features,n_classes)
-
-    def forward(self, x):
-        x = self.avg(x)
-        x = x.view(x.size(0), -1)
-        x = self.decoder(x)
-        return F.log_softmax(x,dim=1)
