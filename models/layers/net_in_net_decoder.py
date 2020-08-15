@@ -32,10 +32,12 @@ class NetInNetDecoder(nn.Module):
               ) for in_c,out_c in zip(config.decoder_channels[:-1],config.decoder_channels[1:]) ])
         self.avg = nn.AdaptiveAvgPool2d((1,1))
         self.decoder = nn.Linear(config.decoder_channels[-1],config.n_classes)
+        self.dropout = nn.Dropout(config.decoder_dropout) if config.decoder_dropout>0.0 else nn.Identity()
 
     def forward(self, x):
         x = self.net_in_net(x)
         x = self.avg(x)
         x = torch.flatten(x,1)
+        x = self.dropout(x)
         x = self.decoder(x)
         return x
