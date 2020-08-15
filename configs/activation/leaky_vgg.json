@@ -1,10 +1,10 @@
 {
-    "label":"inception",
+    "label":"vgg",
     "exp_name": "leaky",
     "description":"Inception augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
-    "model":"GoodFellowV3InceptionDown",
+    "model":"GoodFellowV3Down",
     "loss_function":"NLLLoss",
     "do_save":false,
     "decoder":"BasicDecoder",
