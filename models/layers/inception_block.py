@@ -23,7 +23,7 @@ class InceptionBlock(nn.Module):
     def __init__(self,in_channels,out_channels):
         super(InceptionBlock,self).__init__()
         self.branch1x1 = nn.Conv2d(in_channels,out_channels//4,kernel_size=1,bias=False)
-        torch.nn.init.xavier_normal_(self.branch1x1)
+        torch.nn.init.xavier_normal_(self.branch1x1.weight)
 
         self.branch5x5_1 =  nn.Conv2d(in_channels,out_channels//8,kernel_size=1,bias=False)
         torch.nn.init.xavier_normal_(self.branch5x5_1.weight)
