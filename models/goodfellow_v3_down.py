@@ -19,13 +19,7 @@ class EncoderBNDO(nn.Module):
               block=same_conv_block,
               depth=depth,
               out_gate=nn.Sequential(
-                  nn.Conv2d(
-                    out_c,out_c,
-                    kernel_size=2,
-                    stride=2
-                  ),          
-                  nn.BatchNorm2d(out_c),
-                  globals()[config.encoder_fn](*config.encoder_fn_params),
+                  conv_block(out_f,out_f,kernel_size=2,activation=activation,stride=2),
                   nn.Dropout2d(config.encoder_dropout) if config.encoder_dropout > 0.0 else nn.Identity()
                 ),
               conv_block=conv_block,
@@ -44,10 +38,7 @@ class GoodFellowV3Down(nn.Module):
               kernel_size=7,
               block=same_conv_block,
               depth=config.encoder_depths[0],
-              out_gate=nn.MaxPool2d(
-                kernel_size=2,
-                stride=2
-                ),
+              out_gate=conv_block(out_f,out_f,kernel_size=2,activation=activation,stride=2),
               activation=globals()[config.encoder_fn](*config.encoder_fn_params),
               conv_block=conv_block
               )

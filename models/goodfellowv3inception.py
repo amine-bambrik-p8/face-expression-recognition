@@ -12,16 +12,23 @@ from models.layers.conv_block import conv_block
 from models.layers.stack_block import stack_block
 from models.layers.same_conv import same_conv_block
 def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
+    l = []
+    for i in range(depth-1):
+      b=nn.BatchNorm2d(out_f)
+      torch.nn.init.xavier_normal_(b.weight)
+      m=nn.Sequential(
+          InceptionBlock(out_f, out_f),
+          b,
+          activation
+          )
+      l.append(m)
+    b=nn.BatchNorm2d(out_f)
+    torch.nn.init.xavier_normal_(b.weight)
     return nn.Sequential(
         InceptionBlock(in_f, out_f),
-        nn.BatchNorm2d(out_f),
+        b,
         activation,
-        *[
-          nn.Sequential(
-          InceptionBlock(out_f, out_f),
-          nn.BatchNorm2d(out_f),
-          activation)
-        for i in range(depth-1)],
+        *l,
         nn.MaxPool2d(2,2),
         nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
