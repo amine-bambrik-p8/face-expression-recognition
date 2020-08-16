@@ -9,7 +9,7 @@ class DetectFaces(object):
         cropped_image = image[:,y0:y1, x0:x1]
         cropped_pil_image = F.to_pil_image(cropped_image, mode=None)
         c,w,h = image.shape
-        pil_image=F.resize(cropped_pil_image,(w,h))
+        pil_image=F.resize(cropped_pil_image,(w,h),interpolation=PIL.Image.BICUBIC)
         pil_image = F.to_grayscale(pil_image,1) 
         return pil_image
     def __repr__(self):
