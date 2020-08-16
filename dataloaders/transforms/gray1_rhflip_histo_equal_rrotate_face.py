@@ -1,12 +1,12 @@
 from torchvision import transforms
 from dataloaders.transforms.histo_equal import HistogramEqualization
 from dataloaders.transforms.detect_faces import DetectFaces
-
+import PIL
 def transform():
     return transforms.Compose([
                         transforms.Grayscale(1),
                         HistogramEqualization(),
-                        transforms.RandomRotation(30),
+                        transforms.RandomRotation(30,resample=PIL.Image.BICUBIC),
                         transforms.RandomHorizontalFlip(p=0.5),
                         DetectFaces(),
                         transforms.ToTensor(),
