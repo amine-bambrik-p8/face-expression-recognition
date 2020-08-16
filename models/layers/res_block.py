@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
+import torch
 from functools import partial
 from models.layers.same_conv import same_conv_block
 from models.layers.conv_block import conv_block
@@ -33,9 +34,11 @@ class ResNetResidualBlock(ResidualBlock):
     def __init__(self, in_channels, out_channels, expansion=1, downsampling=1, conv=conv3x3, *args, **kwargs):
         super().__init__(in_channels, out_channels, *args, **kwargs)
         self.expansion, self.downsampling, self.conv = expansion, downsampling, conv
+        c=nn.Conv2d(self.in_channels, self.expanded_channels, kernel_size=1,
+                      stride=self.downsampling, bias=False)
+        torch.nn.init.xavier_normal_(c.weight)
         self.shortcut = nn.Sequential(
-            nn.Conv2d(self.in_channels, self.expanded_channels, kernel_size=1,
-                      stride=self.downsampling, bias=False),
+            c,
             nn.BatchNorm2d(self.expanded_channels)) if self.should_apply_shortcut else nn.Identity()        
     @property
     def expanded_channels(self):
@@ -45,7 +48,12 @@ class ResNetResidualBlock(ResidualBlock):
         return self.in_channels != self.expanded_channels
 
 def conv_bn(in_channels, out_channels, conv, *args, **kwargs):
-    return nn.Sequential(conv(in_channels, out_channels, *args, **kwargs), nn.BatchNorm2d(out_channels))
+    c = conv(in_channels, out_channels, *args, **kwargs)
+    torch.nn.init.xavier_normal_(c.weight)
+    return nn.Sequential(
+        c,
+        nn.BatchNorm2d(out_channels)
+        )
 
 class ResNetBasicBlock(ResNetResidualBlock):
     """
@@ -60,19 +68,6 @@ class ResNetBasicBlock(ResNetResidualBlock):
             conv_bn(self.out_channels, self.expanded_channels, conv=self.conv, bias=False),
         )
     
-
-class ResNetBottleNeckBlock(ResNetResidualBlock):
-    expansion = 4
-    def __init__(self, in_channels, out_channels, *args, **kwargs):
-        super().__init__(in_channels, out_channels, expansion=4, *args, **kwargs)
-        self.blocks = nn.Sequential(
-           conv_bn(self.in_channels, self.out_channels, self.conv, kernel_size=1),
-              self.activation,
-             conv_bn(self.out_channels, self.out_channels, self.conv, kernel_size=3, stride=self.downsampling),
-              self.activation,
-             conv_bn(self.out_channels, self.expanded_channels, self.conv, kernel_size=1),
-        )
-
 class ResNetLayer(nn.Module):
     """
     A ResNet layer composed by `n` blocks stacked one after the other
@@ -97,7 +92,7 @@ class ResNetEncoder(nn.Module):
     ResNet encoder composed by layers with increasing features.
     """
     def __init__(self, in_channels=3, blocks_sizes=[64, 128, 256, 512], deepths=[2,2,2,2], 
-                 activation=nn.ReLU(), block=ResNetBasicBlock, *args, **kwargs):
+                 activation=nn.ReLU(inplace=True), block=ResNetBasicBlock, *args, **kwargs):
         super().__init__()
         self.blocks_sizes = blocks_sizes
         self.gate = stack_block(
