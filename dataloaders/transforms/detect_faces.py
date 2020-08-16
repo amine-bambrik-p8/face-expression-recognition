@@ -8,9 +8,9 @@ class DetectFaces(object):
         image = F.to_tensor(pil_image)
         x0,y0,x1,y1 = detect_faces(image)
         x0=max(x0,0) 
-        x1=max(x1,0)
+        x1=max(x1,min(x0+16,48))
         y0=max(y0,0)
-        y1=max(y1,0)
+        y1=max(y1,min(y0+16,48))
         cropped_image = image[:,x0:x1,y0:y1]
         cropped_pil_image = F.to_pil_image(cropped_image, mode=None)
         c,w,h = image.shape
