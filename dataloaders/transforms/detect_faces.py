@@ -1,6 +1,7 @@
 import cv2
 from utils.face_utils import detect_faces
 import torchvision.transforms.functional as F
+import PIL
 class DetectFaces(object):
     def __call__(self, pil_image):
         print("Hello")
