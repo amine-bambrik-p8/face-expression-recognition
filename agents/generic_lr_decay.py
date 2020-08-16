@@ -15,6 +15,9 @@ class GenericAgentLRDecay(GenericAgent):
             if epoch % self.config.validate_every == self.config.validate_every-1:
                 (loss,accuracy) = self.validate()
                 scheduler.step(loss)
+                self.summary_writer.add_scalars('learning_rate', {
+                        'lr_{}'.format(self.config.label):scheduler.get_lr(),
+                        }, epoch)
                 self.summary_writer.add_scalars('accuracy', {
                         'training_{}'.format(self.config.label):train_accuracy,
                         'validation_{}'.format(self.config.label):accuracy
