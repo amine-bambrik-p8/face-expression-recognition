@@ -5,10 +5,7 @@ import torch
 def dec_block(in_f, out_f,dropout=0.0,activation=nn.ReLU(True),batch_norm=True):
     n=nn.Linear(in_f, out_f,bias=False)
     b=nn.BatchNorm1d(out_f) if(batch_norm) else nn.Identity(),
-    nn.init.constant(b.bias, 0)
-
     torch.nn.init.xavier_normal_(n.weight)
-    torch.nn.init.xavier_normal_(b.weight)
     return nn.Sequential(
         n,
         b,
