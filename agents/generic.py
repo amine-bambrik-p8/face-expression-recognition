@@ -196,7 +196,7 @@ class GenericAgent(BaseAgent):
         accuracy = 100*correct/total
         number_of_batches = len(self.data_loader.train_loader)
         total_running_loss /= number_of_batches
-        self.logger.info('\Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.3f}%)\n'.format(
+        self.logger.info('\Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)\n'.format(
             total_running_loss, correct, total,
             accuracy))
         return (total_running_loss,accuracy)
@@ -223,7 +223,7 @@ class GenericAgent(BaseAgent):
         number_of_batches = len(self.data_loader.valid_loader)
         valid_loss /= number_of_batches
         accuracy = 100.0*correct / total
-        self.logger.info('\nValid set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        self.logger.info('\nValid set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)\n'.format(
             valid_loss, correct, total,
             accuracy))
         return (valid_loss,accuracy)
@@ -255,7 +255,7 @@ class GenericAgent(BaseAgent):
         print(cm)
         fig = plot_confusion_matrix(cm,self.data_loader.classes)
         self.summary_writer.add_figure("Confusion matrix",fig)
-        self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)\n'.format(
             test_loss, correct, total,
             accuracy))
         return accuracy
