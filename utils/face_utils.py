@@ -7,27 +7,36 @@ from torch.utils.data import DataLoader, TensorDataset, Dataset
 import cv2
 import os
 import matplotlib.pyplot as plt
-
+from imutils.face_utils import FaceAligner
+from imutils.face_utils import rect_to_bb
+import imutils
+import dlib
+detector_2 = dlib.get_frontal_face_detector()
+predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks (1).dat")
 haarcascade = "haarcascade_frontalface_alt2.xml"
 detector = cv2.CascadeClassifier(haarcascade)
 def detect_faces(image_tensor):
-    global detector
+    global detector_2
     image = (image_tensor.permute(1, 2, 0).numpy() * 255).astype('uint8')
     image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    #image = cv2.imread(pic)
-    faces = detector.detectMultiScale(image)
-    if len(faces) != 0:
-      top, right, bottom, left = faces[0]
-      w, h = right-left, top-bottom
-      x0, y0 = left, bottom
-      x1, y1 = right, top
-      x2, x3 = x1-w,  x0+w
-      w=x2-x3
-      h=y0-y1
-      if h>10 and w>10:
-        return x3,y1,x2,y0
+    rects = detector_2(image, 2)
+    for rect in rects:
+      (x, y, w, h) = rect_to_bb(rect)
+      #faceAligned=fa.align(image,gray,rect)
+      y2=y + h
+      x2=x + w
+      return x,y,x2,y2
     return 0,0,48,48
-
+def face_align(image_tensor):
+    global detector_2
+    image = (image_tensor.permute(1, 2, 0).numpy() * 255).astype('uint8')
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    rects = detector_2(image, 2)
+    for rect in rects:
+      (x, y, w, h) = rect_to_bb(rect)
+      faceAligned=fa.align(image,gray,rect)
+      return faceAligned
+      
 LBFmodel = "lbfmodel.yaml"
 landmark_detector  = cv2.face.createFacemarkLBF()
 landmark_detector.loadModel(LBFmodel)

@@ -1,7 +1,6 @@
 import torch
 import tensorflow as tf
 import tensorboard as tb
-tf.io.gfile = tb.compat.tensorflow_stub.io.gfile
 def select_n_random(data, labels, n=100):
     '''
     Selects n random datapoints and their corresponding labels from a dataset
