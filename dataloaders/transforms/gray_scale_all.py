@@ -3,6 +3,8 @@ from dataloaders.transforms.histo_equal import HistogramEqualization
 from dataloaders.transforms.detect_faces import DetectFaces
 import imgaug.augmenters as iaa
 import numpy as np
+import torchvision.transforms.functional as F
+
 class ImgAugTransform:
     def __init__(self):
         self.aug = iaa.Sequential([
