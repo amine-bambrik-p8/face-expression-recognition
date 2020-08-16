@@ -5,14 +5,18 @@ from torch.nn import *
 from models.layers.stack_block import stack_block
 from models.layers.same_conv import same_conv_block
 def conv_block(in_f, out_f,kernel_size,batch_norm=True,dropout=0.0,activation=nn.ReLU(),*args, **kwargs):
+    c=nn.Conv2d(in_f, out_f,kernel_size=kernel_size, *args, **kwargs),
+    b=nn.BatchNorm2d(out_f) if(batch_norm) else nn.Identity(),
+    torch.nn.init.xavier_normal_(c.weight)
+    torch.nn.init.xavier_normal_(b.weight)
     return nn.Sequential(
-        nn.Conv2d(in_f, out_f,kernel_size=kernel_size, *args, **kwargs),
-        nn.BatchNorm2d(out_f) if(batch_norm) else nn.Identity(),
+        c,
+        b,
         nn.LocalResponseNorm(out_f) if(batch_norm) else nn.Identity(),
         activation,
         nn.Dropout2d(dropout) if(dropout > 0.0) else nn.Identity()
     )
-class NetInNetDecoder(nn.Module):
+class AvgNetInNetDecoder(nn.Module):
     """
     This class represents the tail of ResNet. It performs a global pooling and maps the output to the
     correct class by using a fully connected layer.

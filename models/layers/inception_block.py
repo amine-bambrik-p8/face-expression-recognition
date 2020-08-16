@@ -23,12 +23,17 @@ class InceptionBlock(nn.Module):
     def __init__(self,in_channels,out_channels):
         super(InceptionBlock,self).__init__()
         self.branch1x1 = nn.Conv2d(in_channels,out_channels//4,kernel_size=1)
+        torch.nn.init.xavier_normal_(self.branch1x1)
 
         self.branch5x5_1 =  nn.Conv2d(in_channels,out_channels//8,kernel_size=1)
+        torch.nn.init.xavier_normal_(self.branch5x5_1.weight)
         self.branch5x5_2 = same_conv_block(out_channels//8,out_channels//4,kernel_size=5,conv_block=nn.Conv2d)
+        torch.nn.init.xavier_normal_(self.branch5x5_2.weight)
 
         self.branch3x3_1 =  nn.Conv2d(in_channels,out_channels//4,kernel_size=1)
+        torch.nn.init.xavier_normal_(self.branch3x3_1.weight)
         self.branch3x3_2 = same_conv_block(out_channels//4,out_channels//2,kernel_size=3,conv_block=nn.Conv2d)
+        torch.nn.init.xavier_normal_(self.branch3x3_2.weight)
     def forward(self,x):
         out_branch1x1 = self.branch1x1(x)
         
