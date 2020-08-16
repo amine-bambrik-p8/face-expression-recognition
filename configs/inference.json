@@ -19,7 +19,7 @@
     "decoder_channels":[512,512,512],
     "decoder_fn":"LeakyReLU",
     "decoder_fn_params":[0.01],
-    "decoder_dropout":0.4,
+    "decoder_dropout":0.2,
     "decoder_batch_norm":true,
     "class_fn":"LogSoftmax",
     "optimizer":"adam",
