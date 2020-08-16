@@ -15,8 +15,6 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
     l = []
     for i in range(depth-1):
       b=nn.BatchNorm2d(out_f)
-      b.bias.data.zero_()
-      torch.nn.init.xavier_normal_(b.weight)
       m=nn.Sequential(
           InceptionBlock(out_f, out_f),
           b,
@@ -24,8 +22,6 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
           )
       l.append(m)
     b=nn.BatchNorm2d(out_f)
-    b.bias.data.zero_()
-    torch.nn.init.xavier_normal_(b.weight)
     return nn.Sequential(
         InceptionBlock(in_f, out_f),
         b,
