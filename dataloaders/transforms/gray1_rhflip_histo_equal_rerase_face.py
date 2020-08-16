@@ -3,6 +3,7 @@ from dataloaders.transforms.histo_equal import HistogramEqualization
 from dataloaders.transforms.detect_faces import DetectFaces
 
 import imgaug.augmenters as iaa
+import numpy as np
 
 class ImgAugTransform:
     def __init__(self):
