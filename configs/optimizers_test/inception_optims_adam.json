@@ -24,7 +24,7 @@
     "class_fn":"LogSoftmax",
     "optimizer":"adam",
 
-    "learning_rate": 0.0002,
+    "learning_rate": 0.0005,
     "betas":[
         0.9,
         0.99
