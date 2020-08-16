@@ -7,6 +7,7 @@ class DetectFaces(object):
         image = F.to_tensor(pil_image)
         x0,y0,x1,y1 = detect_faces(image)
         cropped_image = image[:,x0:x1,y0:y1]
+        print(x0,y0,x1,y1)
         cropped_pil_image = F.to_pil_image(cropped_image, mode=None)
         c,w,h = image.shape
         pil_image=F.resize(cropped_pil_image,(w,h),interpolation=PIL.Image.BICUBIC)
