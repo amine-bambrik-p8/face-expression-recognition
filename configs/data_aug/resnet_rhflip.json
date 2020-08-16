@@ -1,6 +1,6 @@
 {
-    "label":"resnet_new",
-    "exp_name": "rhflip",
+    "label":"rhflip",
+    "exp_name": "resnet_data_aug",
     "description":"ResNet augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
@@ -11,14 +11,14 @@
     "in_channels":1,
     "encoder_dropout":0.0,
     "encoder_fn":"ReLU",
-    "encoder_fn_params":[],
+    "encoder_fn_params":[true],
     "encoder_batch_norm":true,
-    "encoder_channels":[64,128,256],
-    "encoder_depths":[2,2,2],
+    "encoder_channels":[64,128,256,512],
+    "encoder_depths":[2,2,4,4],
     "n_classes":7,
-    "decoder_channels":[9216,1024,1024],
+    "decoder_channels":[4608,1024,1024],
     "decoder_fn":"ReLU",
-    "decoder_fn_params":[],
+    "decoder_fn_params":[true],
     "decoder_dropout":0.0,
     "decoder_batch_norm":true,
     "class_fn":"LogSoftmax",
@@ -30,7 +30,7 @@
         0.99
     ],
     "weight_decay":0,
-    "max_epoch": 15,
+    "max_epoch": 30,
     "log_interval": 10,
     "validate_every": 1, 
     
