@@ -12,7 +12,7 @@ from imutils.face_utils import rect_to_bb
 import imutils
 import dlib
 detector_2 = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks (1).dat")
+#predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks (1).dat")
 haarcascade = "haarcascade_frontalface_alt2.xml"
 detector = cv2.CascadeClassifier(haarcascade)
 def detect_faces(image_tensor):
