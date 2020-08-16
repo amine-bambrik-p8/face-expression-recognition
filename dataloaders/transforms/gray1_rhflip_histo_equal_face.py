@@ -4,14 +4,14 @@ from dataloaders.transforms.detect_faces import DetectFaces
 import imgaug.augmenters as iaa
 
 class ImgAugTransform:
-      def __init__(self):
-    self.aug = iaa.Sequential([
-        iaa.Fliplr(0.5),
-        iaa.HistogramEqualization(),
-    ])
-  def __call__(self, img):
-    img = np.array(img)
-    return F.to_pil_image(F.to_tensor(self.aug.augment_image(img)))
+    def __init__(self):
+        self.aug = iaa.Sequential([
+            iaa.Fliplr(0.5),
+            iaa.HistogramEqualization(),
+        ])
+    def __call__(self, img):
+        img = np.array(img)
+        return F.to_pil_image(F.to_tensor(self.aug.augment_image(img)))
 def transform():
     return transforms.Compose([
                         transforms.Grayscale(1),
