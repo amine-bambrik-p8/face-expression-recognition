@@ -16,7 +16,7 @@ def conv_block(in_f, out_f,kernel_size,batch_norm=True,dropout=0.0,activation=nn
         activation,
         nn.Dropout2d(dropout) if(dropout > 0.0) else nn.Identity()
     )
-class AvgNetInNetDecoder(nn.Module):
+class NetInNetDecoder(nn.Module):
     """
     This class represents the tail of ResNet. It performs a global pooling and maps the output to the
     correct class by using a fully connected layer.
