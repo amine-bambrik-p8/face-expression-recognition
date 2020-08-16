@@ -196,7 +196,7 @@ class GenericAgent(BaseAgent):
         accuracy = 100*correct/total
         number_of_batches = len(self.data_loader.train_loader)
         total_running_loss /= number_of_batches
-        self.logger.info('\Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        self.logger.info('\Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.3f}%)\n'.format(
             total_running_loss, correct, total,
             accuracy))
         return (total_running_loss,accuracy)
