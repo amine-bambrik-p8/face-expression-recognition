@@ -1,5 +1,5 @@
 {
-    "label":"all",
+    "label":"rrotate",
     "exp_name": "resnet_data_aug",
     "description":"ResNet augs test logging adam accuracy and loss",
     "agent": "GenericAgent",

@@ -1,5 +1,5 @@
 {
-    "label":"rrotate",
+    "label":"rrotate_no_erase",
     "exp_name": "inception_data_aug",
     "description":"Inception augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
