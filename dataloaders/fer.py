@@ -41,7 +41,7 @@ class ImageFERDataLoader:
         self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,shuffle=True)
         self.test_loader = torch.utils.data.DataLoader(test_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
         self.valid_loader = torch.utils.data.DataLoader(valid_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
-        self.classes =sorted(("angry","disgust","fear","happy","sad","surprise","neutral"))
+        self.classes =sorted(("angry","disgust","fear","happy","neutral","sad","surprise"))
     def visualize_images(self,writer):
         train_dataiter = iter(self.train_loader)
         test_dataiter = iter(self.test_loader)

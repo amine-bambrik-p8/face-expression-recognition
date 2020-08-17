@@ -11,7 +11,6 @@ class ImgAugTransform:
             iaa.Fliplr(0.5),
             iaa.Affine(rotate=(-30, 30), mode='symmetric'),
             iaa.HistogramEqualization(),
-            iaa.Sometimes(0.4,iaa.arithmetic.Cutout(size=0.5,fill_mode="gaussian", fill_per_channel=True)),
         ])
     def __call__(self, img):
         img = np.array(img)

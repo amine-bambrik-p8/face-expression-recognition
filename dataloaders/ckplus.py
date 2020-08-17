@@ -45,7 +45,7 @@ class CKPlusDataLoader:
             self.train_loader = torch.utils.data.DataLoader(dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,sampler=train_sampler)
             self.test_loader = torch.utils.data.DataLoader(dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,sampler=test_sampler)
             self.valid_loader = torch.utils.data.DataLoader(dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,sampler=valid_sampler)
-            classes = ("anger","contempt","disgust","fear","happy","sadness","surprise")
+            classes = ("anger","disgust","fear","happy","contempt","sadness","surprise")
             
         elif self.config.data_mode == "numpy":
             raise NotImplementedError("This mode is not implemented YET")
