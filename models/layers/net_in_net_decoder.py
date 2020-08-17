@@ -5,10 +5,9 @@ from torch.nn import *
 from models.layers.stack_block import stack_block
 from models.layers.same_conv import same_conv_block
 def conv_block(in_f, out_f,kernel_size,batch_norm=True,dropout=0.0,activation=nn.ReLU(),*args, **kwargs):
-    c=nn.Conv2d(in_f, out_f,kernel_size=kernel_size, *args, **kwargs),
-    b=nn.BatchNorm2d(out_f) if(batch_norm) else nn.Identity(),
+    c=nn.Conv2d(in_f, out_f,kernel_size=kernel_size,bias=False, *args, **kwargs)
+    b=nn.BatchNorm2d(out_f) if(batch_norm) else nn.Identity()
     torch.nn.init.xavier_normal_(c.weight)
-    torch.nn.init.xavier_normal_(b.weight)
     return nn.Sequential(
         c,
         b,
@@ -31,11 +30,12 @@ class NetInNetDecoder(nn.Module):
               block=conv_block,
               depth=1,
               activation=globals()[config.decoder_fn](*config.decoder_fn_params),
-              dropout=config.decoder_dropout,
-              batch_norm=config.decoder_batch_norm,
+              dropout=config.encoder_dropout,
+              batch_norm=config.encoder_batch_norm,
               ) for in_c,out_c in zip(config.decoder_channels[:-1],config.decoder_channels[1:]) ])
         self.avg = nn.AdaptiveAvgPool2d((1,1))
-        self.decoder = nn.Linear(config.decoder_channels[-1],config.n_classes)
+        self.decoder = nn.Linear(config.decoder_channels[-1],config.n_classes,bias=False)
+        torch.nn.init.xavier_normal_(self.decoder.weight)
         self.dropout = nn.Dropout(config.decoder_dropout) if config.decoder_dropout>0.0 else nn.Identity()
 
     def forward(self, x):
