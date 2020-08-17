@@ -1,6 +1,6 @@
 {
-    "label":"vgg",
-    "exp_name": "no_aug",
+    "label":"no_aug",
+    "exp_name": "vgg",
     "description":"VGG augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
