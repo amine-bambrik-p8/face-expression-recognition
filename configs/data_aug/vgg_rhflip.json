@@ -1,6 +1,6 @@
 {
     "label":"rhflip",
-    "exp_name": "vgg",
+    "exp_name": "vgg_data_aug",
     "description":"VGG augs test logging adam accuracy and loss",
     "agent": "GenericAgent",
 
