@@ -1,4 +1,5 @@
 from torch import nn
+import torch
 class AvgDecoder(nn.Module):
     """
     This class represents the tail of ResNet. It performs a global pooling and maps the output to the
