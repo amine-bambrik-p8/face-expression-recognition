@@ -4,7 +4,7 @@
     "description":"vgg with avg decoder",
     "agent": "GenericAgent",
 
-    "model":"GoodFellowV3InceptionDownFinal",
+    "model":"GoodFellowV3InceptionDown",
     "loss_function":"NLLLoss",
     "decoder":"AvgDecoder",
     "in_channels":1,
@@ -15,7 +15,7 @@
     "encoder_channels":[64,128,256,512],
     "encoder_depths":[2,2,2],
     "n_classes":7,
-    "decoder_channels":[512],
+    "decoder_channels":[18432,1024],
     "decoder_fn":"ReLU",
     "decoder_fn_params":[],
     "decoder_dropout":0.0,
