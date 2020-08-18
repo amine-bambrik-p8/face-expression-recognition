@@ -2,9 +2,9 @@
     "label":"test",
     "exp_name":"bootstrap",
     "exps":[
-        "configs/data_aug/inception_middle.json",
-        "configs/data_aug/inception_middle.json",
-        "configs/data_aug/inception_middle.json"
+        "configs/dropout/inception_middle.json",
+        "configs/dropout/inception_middle.json",
+        "configs/dropout/inception_middle.json"
     ],
     "mode":"train",
     "agent":"BootstrapTester"
