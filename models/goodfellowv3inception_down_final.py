@@ -35,7 +35,7 @@ class GoodFellowV3InceptionDownFinal(nn.Module):
     self.gate = stack_block(
               in_f=config.in_channels,
               out_f=config.encoder_channels[0],
-              kernel_size=7,
+              kernel_size=3,
               block=same_conv_block,
               depth=config.encoder_depths[0],
               conv_block=conv_block
