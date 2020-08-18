@@ -71,6 +71,7 @@ class BootstrapTester(BaseAgent):
                     _,pred=torch.max(output,1)
                     pred=pred.squeeze()
                     one_hot=torch.nn.functional.one_hot(pred,num_classes=7)
+                    vote = vote.to(agent.device)
                     vote += one_hot
                 _,pred = torch.max(vote,1)
                 pred=pred.squeeze()
