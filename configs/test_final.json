@@ -1,6 +1,6 @@
 {
-    "label":"vgg",
-    "exp_name": "vgg",
+    "label":"test_final",
+    "exp_name": "test_final",
     "description":"vgg with avg decoder",
     "agent": "GenericAgent",
 
@@ -15,7 +15,7 @@
     "encoder_channels":[32,64,128,256],
     "encoder_depths":[2,2,2],
     "n_classes":7,
-    "decoder_channels":[18432,1024],
+    "decoder_channels":[9216,1024],
     "decoder_fn":"GELU",
     "decoder_fn_params":[],
     "decoder_dropout":0.4,
@@ -36,7 +36,7 @@
     "log_interval": 10,
     "validate_every": 1, 
     
-    "data_loader": "ImageFERDataLoaderWeighted",
+    "data_loader": "ImageFERDataLoader",
     "batch_size": 32,
     "test_transform":"gray_scale_histo_equal_face",
     "valid_transform":"gray_scale_histo_equal_face",
