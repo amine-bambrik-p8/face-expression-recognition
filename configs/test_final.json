@@ -2,7 +2,7 @@
     "label":"test_final",
     "exp_name": "test_final",
     "description":"vgg with avg decoder",
-    "agent": "GenericAgent",
+    "agent": "GenericAgentLRDecay",
 
     "model":"GoodFellowV3InceptionDown",
     "loss_function":"NLLLoss",
