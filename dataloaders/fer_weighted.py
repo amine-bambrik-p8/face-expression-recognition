@@ -51,7 +51,8 @@ class ImageFERDataLoaderWeighted:
         for index in indices:                                                         
             count[images[index][1]] += 1                                                     
         weight_per_class = [0.] * nclasses                                      
-        N = float(sum(count))                                                   
+        #N = float(sum(count))
+        N=4500
         for i in range(nclasses):                                                   
             weight_per_class[i] = N/float(count[i])                                 
         weight = [0] * len(images)                                              

@@ -5,7 +5,8 @@ import numpy as np
 import os
 
 from setup import process_config
-from models.goodfellow_v3 import GoodFellowV3Inference
+from models.goodfellow_v3 import GoodFellowV3
+
 def load_checkpoint(model,config,checkpoint_dir):
     """
     Latest checkpoint loader
@@ -20,8 +21,13 @@ def load_checkpoint(model,config,checkpoint_dir):
 config = process_config("configs/test.json")
 config.mode="export"
 checkpoint_dir = "experiments/{}/checkpoints/".format(config.exp_name)
-x = torch.randn(48*48*1)
-model = GoodFellowV3Inference(config)
-load_checkpoint(model,config,checkpoint_dir)
+x = torch.randn(128,1,48,48)
+model = GoodFellowV3(config)
 model.eval()
-torch.onnx.export(model, x, '{}_onnx_model.onnx'.format(config.exp_name), verbose=True)
+output = model(x)
+log_probs, preds_tensor = torch.max(output, 1)
+preds = preds_tensor.squeeze()
+one_hot=torch.nn.functional.one_hot(preds,num_classes=7)
+
+print(one_hot)
+print(preds)
