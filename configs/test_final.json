@@ -23,8 +23,8 @@
     "class_fn":"LogSoftmax",
     "optimizer":"adam",
 
-    "learning_rate": 0.01,
-    "lr_scheduler_factor":0.05,
+    "learning_rate": 0.08,
+    "lr_scheduler_factor":0.5,
     "lr_scheduler_mode":"min",
     "min_lr":0.00001,
     "betas":[
