@@ -19,11 +19,13 @@ class BasicDecoder(nn.Module):
         n_classes=config.n_classes
         dropout=config.decoder_dropout
         batch_norm=config.decoder_batch_norm
+        self.dropout = nn.Dropout(dropout)
         self.dec_blocks = nn.Sequential(*[dec_block(in_f, out_f,dropout=dropout,batch_norm=batch_norm,activation=globals()[config.decoder_fn](*config.decoder_fn_params)) 
                     for in_f, out_f in zip(dec_sizes, dec_sizes[1:])])
         self.last = nn.Linear(dec_sizes[-1], n_classes,bias=False)
         torch.nn.init.xavier_normal_(self.last.weight)
     def forward(self, x):
         x = torch.flatten(x,1)
+        x = self.dropout(x)
         x = self.dec_blocks(x)
         return self.last(x)
