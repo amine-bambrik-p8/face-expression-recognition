@@ -9,8 +9,8 @@ class ImgAugTransform:
     def __init__(self):
         self.aug = iaa.Sequential([
             iaa.Fliplr(0.5),
-            iaa.Affine(rotate=(-15, 15), mode='symmetric'),
-            iaa.Crop(percent=(0.2, 0.3),keep_size=True),
+            iaa.Affine(rotate=(-20, 20), mode='symmetric'),
+            iaa.Crop(px=(0,10),keep_size=True),
             iaa.HistogramEqualization(),
         ])
     def __call__(self, img):
