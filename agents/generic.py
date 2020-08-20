@@ -147,9 +147,9 @@ class GenericAgent(BaseAgent):
                         'training_{}'.format(self.config.label):train_loss,
                         'validation_{}'.format(self.config.label):valid_loss
                         },global_step=self.current_epoch)
-                if self.best_metric is None or self.best_metric > valid_loss:
-                    self.logger.info('Saving Model with loos %f previous best loss was %f \n'% (valid_loss, self.best_metric if self.best_metric is not None else 0.0))
-                    self.best_metric = valid_loss
+                if self.best_metric is None or valid_accuracy > self.best_metric:
+                    self.logger.info('Saving Model with loos %f previous best loss was %f \n'% (valid_accuracy, self.best_metric if self.best_metric is not None else 0.0))
+                    self.best_metric = valid_accuracy
                     self.save_checkpoint()
             self.current_epoch += 1
     def output_to_probs(self, output):
