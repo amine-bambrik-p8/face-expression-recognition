@@ -63,6 +63,7 @@ class GoodFellowV3InceptionDownFinal(nn.Module):
               batch_norm=config.encoder_batch_norm,
     )
     self.avg = nn.AdaptiveAvgPool2d((1,1))
+    self.dropout = nn.Dropout(config.decoder_dropout)
     self.decoder = globals()[config.decoder](config)
     self.class_fn = globals()[config.class_fn](dim=1)
 
@@ -71,5 +72,6 @@ class GoodFellowV3InceptionDownFinal(nn.Module):
     x = self.encoder(x)
     x = self.net_in_net(x)
     x = self.avg(x)
+    x = self.dropout(x)
     x = self.decoder(x)
     return self.class_fn(x)
