@@ -35,17 +35,30 @@ class GoodFellowV3InceptionDownFinal(nn.Module):
     self.gate = stack_block(
               in_f=config.in_channels,
               out_f=config.encoder_channels[0],
-              kernel_size=3,
+              kernel_size=7,
               block=same_conv_block,
               depth=config.encoder_depths[0],
               conv_block=conv_block
               )
     self.encoder = nn.Sequential(*[block(in_c,out_c,dropout=config.encoder_dropout,depth=depth,activation=globals()[config.encoder_fn](*config.encoder_fn_params)) for in_c,out_c,depth in zip(config.encoder_channels[:-1],config.encoder_channels[1:],config.encoder_depths)])
+    self.net_in_net = stack_block(
+              in_f=config.encoder_channels[-1],
+              out_f=config.encoder_channels[-1],
+              kernel_size=1,
+              block=conv_block,
+              depth=1,
+              activation=globals()[config.decoder_fn](*config.decoder_fn_params),
+              dropout=config.encoder_dropout,
+              batch_norm=config.encoder_batch_norm,
+    )
+    self.avg = nn.AdaptiveAvgPool2d((1,1))
     self.decoder = globals()[config.decoder](config)
     self.class_fn = globals()[config.class_fn](dim=1)
 
   def forward(self,x):
     x = self.gate(x)
     x = self.encoder(x)
+    x = self.net_in_net(x)
+    x = self.avg(x)
     x = self.decoder(x)
     return self.class_fn(x)
