@@ -18,7 +18,7 @@
     "decoder_channels":[4608,4096,1024],
     "decoder_fn":"ReLU",
     "decoder_fn_params":[],
-    "decoder_dropout":0.5,
+    "decoder_dropout":0.2,
     "decoder_batch_norm":true,
     "class_fn":"LogSoftmax",
     "optimizer":"adam",
