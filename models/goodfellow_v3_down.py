@@ -19,7 +19,7 @@ class EncoderBNDO(nn.Module):
               block=same_conv_block,
               depth=depth,
               out_gate=nn.Sequential(
-                  conv_block(out_f,out_f,kernel_size=2,activation=activation,stride=2),
+                  conv_block(out_c,outout_c_f,kernel_size=2,activation=activation,stride=2),
                   nn.Dropout2d(config.encoder_dropout) if config.encoder_dropout > 0.0 else nn.Identity()
                 ),
               conv_block=conv_block,
