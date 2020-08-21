@@ -38,7 +38,7 @@ class GoodFellowV3Down(nn.Module):
               kernel_size=7,
               block=same_conv_block,
               depth=config.encoder_depths[0],
-              out_gate=conv_block(config.encoder_channels[0],config.encoder_channels[0],kernel_size=2,activation=activation,stride=2),
+              out_gate=conv_block(config.encoder_channels[0],config.encoder_channels[0],kernel_size=2,activation=globals()[config.encoder_fn](*config.encoder_fn_params),stride=2),
               activation=globals()[config.encoder_fn](*config.encoder_fn_params),
               conv_block=conv_block
               )
