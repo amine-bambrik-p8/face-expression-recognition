@@ -34,11 +34,11 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
     b=nn.BatchNorm2d(out_f)
     return nn.Sequential(
         conv_block(in_f,in_f,kernel_size=2,activation=activation,stride=2),
+        nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity(),
         InceptionBlock(in_f, out_f),
         b,
         activation,
         *l,
-        nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
 class GoodFellowV3InceptionDownFinal(nn.Module):
   def __init__(self,config):

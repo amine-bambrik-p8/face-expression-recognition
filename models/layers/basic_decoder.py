@@ -5,7 +5,7 @@ import torch
 def dec_block(in_f, out_f,dropout=0.0,activation=nn.ReLU(True),batch_norm=True):
     n=nn.Linear(in_f, out_f,bias=False)
     b=nn.BatchNorm1d(out_f) if(batch_norm) else nn.Identity()
-    torch.nn.init.xavier_normal_(n.weight)
+    torch.nn.init.kaiming_normal_(n.weight)
     return nn.Sequential(
         n,
         b,
@@ -23,7 +23,7 @@ class BasicDecoder(nn.Module):
         self.dec_blocks = nn.Sequential(*[dec_block(in_f, out_f,dropout=dropout,batch_norm=batch_norm,activation=globals()[config.decoder_fn](*config.decoder_fn_params)) 
                     for in_f, out_f in zip(dec_sizes, dec_sizes[1:])])
         self.last = nn.Linear(dec_sizes[-1], n_classes,bias=False)
-        torch.nn.init.xavier_normal_(self.last.weight)
+        torch.nn.init.kaiming_normal_(self.last.weight)
     def forward(self, x):
         x = torch.flatten(x,1)
         x = self.dropout(x)

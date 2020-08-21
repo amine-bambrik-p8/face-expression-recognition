@@ -7,7 +7,7 @@ from models.layers.same_conv import same_conv_block
 def conv_block(in_f, out_f,kernel_size,batch_norm=True,dropout=0.0,activation=nn.ReLU(),*args, **kwargs):
     c=nn.Conv2d(in_f, out_f,kernel_size=kernel_size,bias=False, *args, **kwargs)
     b=nn.BatchNorm2d(out_f) if(batch_norm) else nn.Identity()
-    torch.nn.init.xavier_normal_(c.weight)
+    torch.nn.init.kaiming_normal_(c.weight)
     return nn.Sequential(
         c,
         b,
@@ -35,13 +35,12 @@ class NetInNetDecoder(nn.Module):
               ) for in_c,out_c in zip(config.decoder_channels[:-1],config.decoder_channels[1:]) ])
         self.avg = nn.AdaptiveAvgPool2d((1,1))
         self.decoder = nn.Linear(config.decoder_channels[-1],config.n_classes,bias=False)
-        torch.nn.init.xavier_normal_(self.decoder.weight)
-        self.dropout = nn.Dropout(config.decoder_dropout) if config.decoder_dropout>0.0 else nn.Identity()
+        torch.nn.init.kaiming_normal_(self.decoder.weight)
+        
 
     def forward(self, x):
         x = self.net_in_net(x)
         x = self.avg(x)
         x = torch.flatten(x,1)
-        x = self.dropout(x)
         x = self.decoder(x)
         return x
