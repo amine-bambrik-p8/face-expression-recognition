@@ -40,7 +40,7 @@
     "batch_size": 128,
     "test_transform":"gray_scale_histo_equal_face",
     "valid_transform":"gray_scale_histo_equal_face",
-    "train_transform":"gray_scale_histo_equal_face",
+    "train_transform":"gray_scale_all",
     "train_datafolder": "./data/FER/train",
     "test_datafolder": "./data/FER/test",
     "valid_datafolder": "./data/FER/validation",
