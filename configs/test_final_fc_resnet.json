@@ -15,7 +15,7 @@
     "encoder_channels":[64,128,256,512],
     "encoder_depths":[2,2,4,4],
     "n_classes":7,
-    "decoder_channels":[9216,4096,1024],
+    "decoder_channels":[4608,4096,1024],
     "decoder_fn":"ReLU",
     "decoder_fn_params":[],
     "decoder_dropout":0.5,
