@@ -10,7 +10,7 @@ class AvgDecoder(nn.Module):
         self.avg = nn.AdaptiveAvgPool2d((1,1))
         self.dropout = nn.Dropout(config.decoder_dropout) if config.decoder_dropout>0.0 else nn.Identity()
         self.decoder = nn.Linear(config.decoder_channels[0],config.n_classes,bias=False)
-        torch.nn.init.xavier_normal_(self.decoder.weight)
+        torch.nn.init.kaiming_normal_(self.decoder.weight)
 
     def forward(self, x):
         x = self.avg(x)
