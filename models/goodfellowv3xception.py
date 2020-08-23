@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from models.layers.basic_decoder import BasicDecoder
-from models.layers.inception_block import InceptionBlock
+from models.layers.inception_block import XceptionBlock
 from torch.nn import *
 import torch
 
@@ -16,23 +16,23 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
     for i in range(depth-1):
       b=nn.BatchNorm2d(out_f)
       m=nn.Sequential(
-          InceptionBlock(out_f, out_f),
+          XceptionBlock(out_f, out_f),
           b,
           activation
           )
       l.append(m)
     b=nn.BatchNorm2d(out_f)
     return nn.Sequential(
-        nn.MaxPool2d(2,2),
-        InceptionBlock(in_f, out_f),
+        XceptionBlock(in_f, out_f),
         b,
         activation,
         *l,
+        nn.MaxPool2d(2,2),
         nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
-class GoodFellowV3Inception(nn.Module):
+class GoodFellowV3Xception(nn.Module):
   def __init__(self,config):
-    super(GoodFellowV3Inception,self).__init__()
+    super(GoodFellowV3Xception,self).__init__()
     self.gate = stack_block(
               in_f=config.in_channels,
               out_f=config.encoder_channels[0],
