@@ -12,10 +12,10 @@
     "encoder_fn":"ReLU",
     "encoder_fn_params":[],
     "encoder_batch_norm":true,
-    "encoder_channels":[64,128,256,512],
-    "encoder_depths":[2,2,4,4],
+    "encoder_channels":[64,128,256],
+    "encoder_depths":[2,2,4],
     "n_classes":7,
-    "decoder_channels":[512],
+    "decoder_channels":[256],
     "decoder_fn":"ReLU",
     "decoder_fn_params":[],
     "decoder_dropout":0.0,
@@ -26,7 +26,7 @@
     "learning_rate": 0.001,
     "lr_scheduler_factor":0.5,
     "lr_scheduler_mode":"max",
-    "min_lr":0.00001,
+    "min_lr":0.000008,
     "betas":[
         0.9,
         0.99
