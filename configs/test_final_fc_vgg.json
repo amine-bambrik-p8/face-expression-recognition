@@ -6,7 +6,7 @@
 
     "model":"GoodFellowV3",
     "loss_function":"NLLLoss",
-    "decoder":"BasicDecoder",
+    "decoder":"AvgDecoder",
     "in_channels":1,
     "encoder_dropout":0.0,
     "encoder_fn":"ReLU",
@@ -15,7 +15,7 @@
     "encoder_channels":[64,64,128],
     "encoder_depths":[2,2,2],
     "n_classes":7,
-    "decoder_channels":[4608,1024],
+    "decoder_channels":[128],
     "decoder_fn":"ReLU",
     "decoder_fn_params":[],
     "decoder_dropout":0.2,
