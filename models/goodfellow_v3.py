@@ -41,10 +41,6 @@ class GoodFellowV3(nn.Module):
               kernel_size=7,
               block=same_conv_block,
               depth=config.encoder_depths[0],
-              out_gate=nn.MaxPool2d(
-                kernel_size=2,
-                stride=2
-                ),
               conv_block=conv_block
               )
     self.encoder = EncoderBNDO(config)
