@@ -1,5 +1,5 @@
 {
-    "label":"inception",
+    "label":"xception",
     "exp_name": "test_final",
     "description":"vgg with avg decoder",
     "agent": "GenericAgentLRDecay",
