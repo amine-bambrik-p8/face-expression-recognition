@@ -1,7 +1,13 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from models.layers.res_block import *
+from models.layers.basic_decoder import BasicDecoder
 from models.layers.inception_block import InceptionBlock
+from torch.nn import *
+import torch
+
+from models.layers.avg_decoder import AvgDecoder
+from models.layers.net_in_net_decoder import NetInNetDecoder
 from models.layers.stack_block import stack_block
 from torch.nn import *
 
@@ -20,7 +26,7 @@ class ResCeptionBlock(ResNetBasicBlock):
 class LeNetResCeptionNet(nn.Module):
     def __init__(self,config,in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()
-        self.encoder = ResNetEncoder(config.encoder_channels[0], block=ResCeptionBlock,blocks_sizes=config.encoder_channels[1:], deepths=config.encoder_depths)
+        self.encoder = ResNetEncoder(config.in_channels, block=ResCeptionBlock,blocks_sizes=config.encoder_channels, deepths=config.encoder_depths,activation=globals()[config.encoder_fn](*config.encoder_fn_params))
         self.decoder = globals()[config.decoder](config)
         self.class_fn = globals()[config.class_fn](dim=1)
         
