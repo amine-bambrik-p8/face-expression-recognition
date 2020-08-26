@@ -23,7 +23,6 @@ class ResCeptionBlock(ResNetBasicBlock):
             nn.BatchNorm2d(self.expanded_channels),
             nn.ReLU(),
         )
-        print(self.expanded_channels)
 class LeNetResCeptionNet(nn.Module):
     def __init__(self,config,in_channels=1, n_classes=7, *args, **kwargs):
         super().__init__()

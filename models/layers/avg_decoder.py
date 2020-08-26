@@ -13,7 +13,6 @@ class AvgDecoder(nn.Module):
         torch.nn.init.kaiming_normal_(self.decoder.weight)
 
     def forward(self, x):
-        print(x.shape)
         x = self.avg(x)
         x = x.view(x.size(0), -1)
         x = self.dropout(x)
