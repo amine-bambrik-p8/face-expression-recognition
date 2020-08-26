@@ -9,12 +9,12 @@ class ResCeptionBlock(ResNetBasicBlock):
     def __init__(self, in_channels, out_channels, *args, **kwargs):
         super().__init__(in_channels, out_channels, *args, **kwargs)
         self.blocks = nn.Sequential(
-            conv_block(in_channels,in_channels,kernel_size=2,activation=nn.ReLU(),stride=2) if self.downsampling==2 else nn.Identity(),
-            InceptionBlock(in_channels, out_channels),
-            nn.BatchNorm2d(out_channels),
+            conv_block(self.in_channels,self.in_channels,kernel_size=2,activation=nn.ReLU(),stride=2) if self.downsampling==2 else nn.Identity(),
+            InceptionBlock(self.in_channels, self.out_channels),
+            nn.BatchNorm2d(self.out_channels),
             nn.ReLU(),
-            InceptionBlock(out_channels, out_channels),
-            nn.BatchNorm2d(out_channels),
+            InceptionBlock(self.out_channels, self.expanded_channels),
+            nn.BatchNorm2d(self.expanded_channels),
             nn.ReLU(),
         )
 class LeNetResCeptionNet(nn.Module):
@@ -25,7 +25,6 @@ class LeNetResCeptionNet(nn.Module):
         self.class_fn = globals()[config.class_fn](dim=1)
         
     def forward(self, x):
-        x = self.gate(x)
         x = self.encoder(x)
         x = self.decoder(x)
         return self.class_fn(x)
