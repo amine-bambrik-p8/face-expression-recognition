@@ -7,7 +7,7 @@ class ResNet18(nn.Module):
     def __init__(self,config):
         super(ResNet18,self).__init__()
         self.model_conv = torchvision.models.resnet18(pretrained=True)
-        for param in model_conv.parameters():
+        for param in self.model_conv.parameters():
             param.requires_grad = False
         num_ftrs = self.model_conv.fc.in_features
         config.encoder_channels=[num_ftrs]
