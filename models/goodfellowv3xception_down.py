@@ -32,7 +32,7 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
     )
 class GoodFellowV3XceptionDown(nn.Module):
   def __init__(self,config):
-    super(GoodFellowV3Xception,self).__init__()
+    super(GoodFellowV3XceptionDown,self).__init__()
     self.gate = stack_block(
               in_f=config.in_channels,
               out_f=config.encoder_channels[0],
