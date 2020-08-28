@@ -15,5 +15,5 @@ class ResNet18(nn.Module):
     def forward(self,x):
         x = self.model_conv(x)
         return F.log_softmax(x,dim=1)
-    def parameters():
+    def parameters(self):
         return self.model_conv.fc.parameters()
