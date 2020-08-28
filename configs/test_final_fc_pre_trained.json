@@ -1,5 +1,5 @@
 {
-    "label":"inception",
+    "label":"pre_trained_resnet_18",
     "exp_name": "test_final",
     "description":"vgg with avg decoder",
     "agent": "GenericAgentLRDecay",
