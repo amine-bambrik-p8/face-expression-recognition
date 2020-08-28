@@ -4,7 +4,7 @@
     "description":"vgg with avg decoder",
     "agent": "GenericAgentLRDecay",
 
-    "model":"GoodFellowV3Xception",
+    "model":"GoodFellowV3XceptionDown",
     "loss_function":"NLLLoss",
     "decoder":"NetInNetDecoder",
     "in_channels":1,
@@ -15,7 +15,7 @@
     "encoder_channels":[64,128,256,512],
     "encoder_depths":[2,2,2],
     "n_classes":7,
-    "decoder_channels":[512],
+    "decoder_channels":[512,512],
     "decoder_fn":"LeakyReLU",
     "decoder_fn_params":[0.01],
     "decoder_dropout":0.2,
