@@ -11,7 +11,15 @@ class ResNet18(nn.Module):
             param.requires_grad = False
         num_ftrs = self.model_conv.fc.in_features
         self.model_conv.fc = nn.Sequential(
-            nn.Linear(num_ftrs,7)
+            nn.Linear(num_ftrs,4096),
+            nn.BatchNorm1d(4096),
+            nn.ReLU(),
+            nn.Dropout(0.5),
+            nn.Linear(4096,1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(),
+            nn.Dropout(0.5),
+            nn.Linear(1028,7),
         )
     def forward(self,x):
         x = self.model_conv(x)
