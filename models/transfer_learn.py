@@ -10,8 +10,9 @@ class ResNet18(nn.Module):
         for param in self.model_conv.parameters():
             param.requires_grad = False
         num_ftrs = self.model_conv.fc.in_features
-        config.encoder_channels=[num_ftrs]
-        self.model_conv.fc = globals()[config.decoder](config)
+        self.model_conv.fc = nn.Sequential(
+            nn.Linear(num_ftrs,7)
+        )
     def forward(self,x):
         x = self.model_conv(x)
         return F.log_softmax(x,dim=1)
