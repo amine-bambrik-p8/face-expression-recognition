@@ -19,7 +19,7 @@ class ResNet18(nn.Module):
             nn.BatchNorm1d(1024),
             nn.ReLU(),
             nn.Dropout(0.5),
-            nn.Linear(1028,7),
+            nn.Linear(1024,7),
         )
     def forward(self,x):
         x = self.model_conv(x)
