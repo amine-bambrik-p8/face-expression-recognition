@@ -24,7 +24,7 @@ class EncoderDO(nn.Module):
 class FullCNN(nn.Module):
   def __init__(self,config):
     super(FullCNN,self).__init__()
-    self.encoder = EncoderDO([1,64,64,128])
+    self.encoder = EncoderDO(config)
     self.avg = nn.AvgPool2d((48,48))
     self.decoder = nn.Linear(128,7)
 
