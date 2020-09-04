@@ -1,5 +1,5 @@
 {
-    "label":"resnet",
+    "label":"resnet_no_decay",
     "exp_name": "test_final",
     "description":"vgg with avg decoder",
     "agent": "GenericAgent",
