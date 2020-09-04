@@ -89,6 +89,7 @@ class BootstrapTester(BaseAgent):
         cm=confusion_matrix(labels, predictions, labels=range(len(self.data_loader.classes)))
         print(cm)
         fig = plot_confusion_matrix(cm,self.data_loader.classes)
+        self.summary_writer.add_figure("Confusion matrix for {}".format(self.config.label),fig)
         self.logger.info('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, total,
             accuracy))
