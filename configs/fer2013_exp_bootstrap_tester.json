@@ -1,4 +1,5 @@
 {
+    "label":"bootstrap",
     "exp_name":"bootstrap tester",
     "exps":[
         "configs/test_final_fc_resnet_bootstrap.json",
