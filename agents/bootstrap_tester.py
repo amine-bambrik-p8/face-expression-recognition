@@ -34,6 +34,7 @@ class BootstrapTester(BaseAgent):
         self.agents = []
         self.load_checkpoint()
         self.data_loader= self.agents[0].data_loader
+        self.summary_writer.add_figure("Confusion matrix for {}".format(self.config.label),fig)
 
 
     def load_checkpoint(self):
