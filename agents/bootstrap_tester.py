@@ -34,7 +34,7 @@ class BootstrapTester(BaseAgent):
         self.agents = []
         self.load_checkpoint()
         self.data_loader= self.agents[0].data_loader
-        self.summary_writer = SummaryWriter(log_dir="./experiments/{}/summaries".format(self.config.exp_name), comment=self.config.model)
+        self.summary_writer = SummaryWriter(log_dir="./experiments/{}/summaries".format(self.config.exp_name), comment=self.config.label)
 
 
     def load_checkpoint(self):
