@@ -1,0 +1,16 @@
+{
+    "label":"bootstrap",
+    "exp_name":"bootstrap tester",
+    "exps":[
+        "configs/test_final_fc_resnet_bootstrap_CK+.json",
+        "configs/test_final_fc_resnet_net_in_net_bootstrap_CK+.json",
+        "configs/test_final_fc_inception_bootstrap_CK+.json",
+        "configs/test_final_fc_inception_down_bootstrap_CK+.json",
+        "configs/test_final_fc_vgg_bootstrap_CK+.json",
+        "configs/test_final_fc_vgg_down_bootstrap_CK+.json",
+        "configs/test_final_fc_xception_down_bootstrap_CK+.json",
+        "configs/test_final_fc_xception_bootstrap_CK+.json"
+    ],
+    "mode":"train",
+    "agent":"BootstrapTester"
+}
