@@ -42,7 +42,7 @@
     "valid_transform":"gray_scale_histo_equal_face",
     "train_transform":"gray_scale_all_crop",
     "train_datafolder": "./data/FER/train",
-    "test_datafolder": "./data/CK+48/test",
+    "test_datafolder": "./data/CK+48/",
     "valid_datafolder": "./data/FER/validation",
     
     "data_loader_workers": 2,
