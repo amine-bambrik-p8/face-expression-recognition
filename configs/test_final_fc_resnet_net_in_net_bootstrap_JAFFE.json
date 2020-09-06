@@ -1,0 +1,55 @@
+{
+    "label":"resnet_net_in_net_bootstrap",
+    "exp_name": "test_final",
+    "description":"vgg with avg decoder",
+    "agent": "GenericAgentLRDecay",
+
+    "model":"GoodFellowV3ResNet",
+    "loss_function":"NLLLoss",
+    "decoder":"NetInNetDecoder",
+    "in_channels":1,
+    "encoder_dropout":0.0,
+    "encoder_fn":"ReLU",
+    "encoder_fn_params":[],
+    "encoder_batch_norm":true,
+    "encoder_channels":[64,128,256],
+    "encoder_depths":[2,2,4],
+    "n_classes":7,
+    "decoder_channels":[256,256],
+    "decoder_fn":"ReLU",
+    "decoder_fn_params":[],
+    "decoder_dropout":0.2,
+    "decoder_batch_norm":true,
+    "class_fn":"LogSoftmax",
+    "optimizer":"adam",
+
+    "learning_rate": 0.001,
+    "lr_scheduler_factor":0.5,
+    "lr_scheduler_mode":"max",
+    "min_lr":0.00001,
+    "betas":[
+        0.9,
+        0.99
+    ],
+    "weight_decay":0.00008,
+    "max_epoch": 100,
+    "log_interval": 10,
+    "validate_every": 1, 
+    
+    "data_loader": "ImageFERDataLoaderBootstrap",
+    "batch_size": 128,
+    "test_transform":"gray_scale_histo_equal",
+    "valid_transform":"gray_scale_histo_equal",
+    "train_transform":"gray_scale_all_crop",
+    "train_datafolder": "./data/FER/train",
+    "test_datafolder": "./data/jaffe/",
+    "valid_datafolder": "./data/FER/validation",
+    
+    "data_loader_workers": 2,
+    "pin_memory": true,
+
+    "cuda": true,
+    "gpu_device": 0,
+    "seed": 1,
+    "checkpoint_file": "checkpoint.pth.tar"
+}
