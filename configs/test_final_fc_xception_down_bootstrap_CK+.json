@@ -38,8 +38,8 @@
     
     "data_loader": "ImageFERDataLoaderBootstrap",
     "batch_size": 128,
-    "test_transform":"gray_scale_histo_equal",
-    "valid_transform":"gray_scale_histo_equal",
+    "test_transform":"gray_scale_histo_equal_face",
+    "valid_transform":"gray_scale_histo_equal_face",
     "train_transform":"gray_scale_all_crop",
     "train_datafolder": "./data/FER/train",
     "test_datafolder": "./data/CK+48/",
