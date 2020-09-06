@@ -43,9 +43,9 @@
     "test_transform":"gray_scale_histo_equal_face",
     "valid_transform":"gray_scale_histo_equal_face",
     "train_transform":"gray_scale_all",
-    "train_datafolder": "./data/CK+/train",
-    "test_datafolder": "./data/CK+/test",
-    "valid_datafolder": "./data/CK+/validation",
+    "train_datafolder": "./data/FER/train",
+    "test_datafolder": "./data/CK+/",
+    "valid_datafolder": "./data/FER/validation",
     
     "data_loader_workers": 2,
     "pin_memory": true,
