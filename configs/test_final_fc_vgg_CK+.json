@@ -38,7 +38,7 @@
     "valid_size":0.1,
     "test_size":0.9,
     "data_mode":"imgs",
-    "data_loader": "ImageFERDataLoader",
+    "data_loader": "ImageCKDataLoader",
     "batch_size": 128,
     "test_transform":"gray_scale_histo_equal_face",
     "valid_transform":"gray_scale_histo_equal_face",
