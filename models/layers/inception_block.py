@@ -41,12 +41,12 @@ class InceptionBlock(nn.Module):
     def forward(self,x):
         out_branch1x1 = self.branch1x1(x)
         
-        out_branch5x5 = self.branch5x5_1(x)
-        out_branch5x5 = self.branch5x5_2(out_branch5x5)
-
         out_branch3x3 = self.branch3x3_1(x)
         out_branch3x3 = self.branch3x3_2(out_branch3x3)
 
+        out_branch5x5 = self.branch5x5_1(x)
+        out_branch5x5 = self.branch5x5_2(out_branch5x5)
+        
         outputs = [out_branch1x1,out_branch3x3,out_branch5x5]
         outputs = torch.cat(outputs,1)
         return outputs
