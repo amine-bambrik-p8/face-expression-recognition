@@ -23,11 +23,11 @@ def block(in_f, out_f,dropout=0.0,depth=2,activation=nn.ReLU()):
       l.append(m)
     b=nn.BatchNorm2d(out_f)
     return nn.Sequential(
-        nn.MaxPool2d(2,2),
         InceptionBlock(in_f, out_f),
         b,
         activation,
         *l,
+        nn.MaxPool2d(2,2),
         nn.Dropout2d(dropout) if(dropout>0.0) else nn.Identity()
     )
 class GoodFellowV3Inception(nn.Module):

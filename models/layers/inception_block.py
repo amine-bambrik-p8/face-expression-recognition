@@ -10,9 +10,9 @@ class XceptionBlock(nn.Module):
         super(XceptionBlock,self).__init__()
         self.branch1x1 = nn.Conv2d(in_channels,out_channels//2,kernel_size=1)
         torch.nn.init.kaiming_normal_(self.branch1x1.weight)
-        self.branch5x5_1 = nn.Conv2d(in_channels,out_channels//2,kernel_size=1)
+        self.branch5x5_1 = nn.Conv2d(in_channels,out_channels//4,kernel_size=1)
         torch.nn.init.kaiming_normal_(self.branch5x5_1.weight)
-        self.branch5x5_2 = same_conv_block(out_channels//2,out_channels//2,kernel_size=5,conv_block=nn.Conv2d,bias=False)
+        self.branch5x5_2 = same_conv_block(out_channels//4,out_channels//2,kernel_size=5,conv_block=nn.Conv2d,bias=False)
         torch.nn.init.kaiming_normal_(self.branch5x5_2.weight)
 
     def forward(self,x):
