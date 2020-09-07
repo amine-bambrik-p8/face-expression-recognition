@@ -18,7 +18,7 @@ class EncoderBNDO(nn.Module):
               kernel_size=5,
               block=same_conv_block,
               depth=depth,
-              out_gate=nn.Sequential(
+              in_gate=nn.Sequential(
                   nn.MaxPool2d(
                     kernel_size=2,
                     stride=2
