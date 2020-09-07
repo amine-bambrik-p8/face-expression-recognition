@@ -69,7 +69,9 @@ class BootstrapTesterAvg(BaseAgent):
                 for agent in self.agents:
                     data, target = data.to(agent.device), target.to(agent.device)
                     output = agent.model(data)
+                    vote = vote.to(agent.device)
                     vote += output
+                    
                 _,pred = torch.max(vote,1)
                 pred=pred.squeeze()
                 correct += pred.eq(target).sum().item()
