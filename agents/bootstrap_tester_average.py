@@ -71,7 +71,7 @@ class BootstrapTesterAvg(BaseAgent):
                     output = agent.model(data)
                     vote = vote.to(agent.device)
                     vote += output
-                    
+                vote = vote / data.size(0)
                 _,pred = torch.max(vote,1)
                 pred=pred.squeeze()
                 correct += pred.eq(target).sum().item()
