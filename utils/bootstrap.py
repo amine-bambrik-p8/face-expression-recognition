@@ -4,6 +4,7 @@ def bootstrap(length):
     np.random.shuffle(r)
     sr = r
     u = sr[:int(length * 0.63)]
+    l = sr[int(length * 0.63):]
     d = np.random.choice(u,int(length*0.37))
     b = np.concatenate((d,u))
-    return b
+    return b,l
