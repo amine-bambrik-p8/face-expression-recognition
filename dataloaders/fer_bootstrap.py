@@ -29,7 +29,7 @@ class ImageFERDataLoaderBootstrap:
             transform=train_transform
         )
         valid_dataset = torchvision.datasets.ImageFolder(
-            root=self.config.valid_datafolder,
+            root=self.config.train_datafolder,
             transform=valid_transform
         )
         test_dataset = torchvision.datasets.ImageFolder(
@@ -44,7 +44,7 @@ class ImageFERDataLoaderBootstrap:
         sampler_valid = SubsetRandomSampler(l)
         self.train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,sampler=sampler)
         self.test_loader = torch.utils.data.DataLoader(test_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory)
-        self.valid_loader = torch.utils.data.DataLoader(train_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,sampler=sampler_valid)
+        self.valid_loader = torch.utils.data.DataLoader(valid_dataset,batch_size=self.config.batch_size,num_workers=self.config.data_loader_workers,pin_memory=config.pin_memory,sampler=sampler_valid)
         self.classes =sorted(("angry","disgust","fear","happy","sad","surprise","neutral"))
     def visualize_images(self,writer):
         train_dataiter = iter(self.train_loader)
